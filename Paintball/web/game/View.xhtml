@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewGameTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewGameLabel_id}"/>
+                    <h:outputText value="#{gameController.selected.id}" title="#{bundle.ViewGameTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewGameLabel_score1}"/>
+                    <h:outputText value="#{gameController.selected.score1}" title="#{bundle.ViewGameTitle_score1}"/>
+                    <h:outputText value="#{bundle.ViewGameLabel_score2}"/>
+                    <h:outputText value="#{gameController.selected.score2}" title="#{bundle.ViewGameTitle_score2}"/>
+                    <h:outputText value="#{bundle.ViewGameLabel_teamid1}"/>
+                    <h:outputText value="#{gameController.selected.teamid1}" title="#{bundle.ViewGameTitle_teamid1}"/>
+                    <h:outputText value="#{bundle.ViewGameLabel_teamid2}"/>
+                    <h:outputText value="#{gameController.selected.teamid2}" title="#{bundle.ViewGameTitle_teamid2}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{gameController.destroyAndView}" value="#{bundle.ViewGameDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewGameEditLink}"/>
+                <br />
+                <h:commandLink action="#{gameController.prepareCreate}" value="#{bundle.ViewGameCreateLink}" />
+                <br />
+                <h:commandLink action="#{gameController.prepareList}" value="#{bundle.ViewGameShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewGameIndexLink}"/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
