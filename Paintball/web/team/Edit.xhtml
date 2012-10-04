@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:rich="http://richfaces.org/rich"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
 
@@ -16,11 +17,11 @@
             <h:form>
                 <h:panelGrid columns="2">
                     <h:outputLabel value="#{bundle.EditTeamLabel_id}" for="id" />
-                    <h:inputText id="id" value="#{teamController.selected.id}" title="#{bundle.EditTeamTitle_id}" required="true" requiredMessage="#{bundle.EditTeamRequiredMessage_id}"/>
+                    <h:inputText id="id" value="#{teamController.selected.id}" title="#{bundle.EditTeamTitle_id}" required="true" requiredMessage="#{bundle.EditTeamRequiredMessage_id}" disabled="true"/>
                     <h:outputLabel value="#{bundle.EditTeamLabel_name}" for="name" />
                     <h:inputText id="name" value="#{teamController.selected.name}" title="#{bundle.EditTeamTitle_name}" />
                     <h:outputLabel value="#{bundle.EditTeamLabel_membercount}" for="membercount" />
-                    <h:inputText id="membercount" value="#{teamController.selected.membercount}" title="#{bundle.EditTeamTitle_membercount}" />
+                    <rich:inputNumberSpinner id="membercount" value="#{teamController.selected.membercount}" title="Member count" minValue="1" maxValue="20"/>
                 </h:panelGrid>
                 <h:commandLink action="#{teamController.update}" value="#{bundle.EditTeamSaveLink}"/>
                 <br />
