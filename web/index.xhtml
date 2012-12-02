@@ -6,25 +6,27 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:rating="http://java.sun.com/jsf/composite/rating">
     <h:head>
-        <title>Facelet Title</title>
+        <h:outputStylesheet name="css/style.css"/>
+        <title>Bookstore</title>
     </h:head>
     <h:body>
         <h1>Bookstore</h1>
-        <div>
+        <h:link value="Add new" outcome="add"/><br/>
             <ui:repeat value="#{store.warehouse}" var="book">
-                <div>
-                    <h:outputText value="#{book.title}"/><br/>
+                <div class="book-item">
+                    <h:outputText value="#{book.title}" class="book-title"/><br/>
                     <h:outputText value="#{book.description}"/><br/>
                     <h:outputText value="#{book.author}"/><br/>
-                    <h:outputText value="#{book.title}"/><br/>
+                    <h:outputText value="#{book.price}"/>€
                     <rating:form
                         likeCount="#{book.likes}"
                         dislikeCount="#{book.dislikes}"
                         dislikemethod="#{book.dislike()}"
                         likemethod="#{book.like()}"/>
                 </div>
+                
             </ui:repeat>
-        </div>    
+          
         Hello from Facelets
         Vypis knih
         moznost like a dislike

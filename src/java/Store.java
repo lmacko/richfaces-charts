@@ -15,7 +15,7 @@ import javax.faces.bean.SessionScoped;
  *
  * @author Macko
  */
-@ManagedBean
+@ManagedBean(name="store")
 @SessionScoped
 public class Store {
 
@@ -30,9 +30,13 @@ public class Store {
     
     private void initWarehouse(){
         warehouse = new ArrayList<Book>();
-        warehouse.add(new Book("Title","Desc","author",2.4,0,0));
-        warehouse.add(new Book("Title1","Desc1","author",2.4,0,0));
-        warehouse.add(new Book("Title2","Desc2","author",2.4,0,0));
+        warehouse.add(new Book("A","Desc","author",2.4,0,0));
+        warehouse.add(new Book("B","Desc1","author",2.4,0,0));
+        warehouse.add(new Book("C","Desc2","author",2.4,0,0));
+    }
+    
+    public void addBook(Book b){
+        warehouse.add(b);
     }
     
     public Store() {

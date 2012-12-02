@@ -79,6 +79,14 @@ public class Book  {
         this.likes = likes;
         this.dislikes = dislikes;
     }
+    public Book() {
+        this.title = "";
+        this.description = "";
+        this.author = "";
+        this.price = 0;
+        this.likes = 0;
+        this.dislikes = 0;
+    }
 
     
 
