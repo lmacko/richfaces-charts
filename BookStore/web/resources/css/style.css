@@ -1,0 +1,26 @@
+/* 
+    Document   : style
+    Created on : Dec 2, 2012, 7:00:27 PM
+    Author     : Macko
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+body { 
+    font-family: Arial;
+    width:800px;
+    margin: 0 auto;
+}
+h1{
+    text-align: center;
+}
+.book-title{
+    font-size: 20px;
+}
+.book-item{
+    clear: both;
+}
+.book-item{
+    margin-bottom: 75px;
+}
+
