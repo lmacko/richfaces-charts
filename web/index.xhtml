@@ -12,7 +12,7 @@
     <h:body>
         <h1>Bookstore</h1>
         <h:link value="Add new" outcome="add"/><br/>
-            <ui:repeat value="#{store.warehouse}" var="book">
+            <ui:repeat value="#{store.warehouse}" var="book" >
                 <div class="book-item">
                     <h:outputText value="#{book.title}" class="book-title"/><br/>
                     <h:outputText value="#{book.description}"/><br/>
@@ -23,10 +23,14 @@
                         dislikeCount="#{book.dislikes}"
                         dislikemethod="#{book.dislike()}"
                         likemethod="#{book.like()}"/>
-                </div>
-                
+                </div>    
             </ui:repeat>
-          
+        <h:form>
+            <!-- Sortovanie -->
+            <h:selectOneListbox value="">
+                
+            </h:selectOneListbox>
+        </h:form>
         Hello from Facelets
         Vypis knih
         moznost like a dislike
