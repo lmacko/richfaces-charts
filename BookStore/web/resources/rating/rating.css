@@ -1,0 +1,23 @@
+/* 
+    Document   : rating
+    Created on : Dec 2, 2012, 7:07:25 PM
+    Author     : Macko
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.likes-count{
+    color:green;
+}
+.dislikes-count{
+    color:red;
+}
+.ratingbar{
+    width: 200px;
+    
+}
+.rate-form{
+    width:100px;
+    float: left;
+}
+
