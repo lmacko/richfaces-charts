@@ -8,9 +8,10 @@ import org.richfaces.cdk.annotations.*;
 
 @JsfComponent(
         type = "sk.lukasmacko.richfaces.chartcomponent.Chart",
-        family = "sk.lukasmacko.text",
+        family = "sk.lukasmacko.Chart",
         renderer = @JsfRenderer(type = "sk.lukasmacko.chart"),
         tag = @Tag(name="chart"))
 abstract public class AbstractChart extends javax.faces.component.UIComponentBase {
-
+    @Attribute
+    public abstract String getTitle();
 }
