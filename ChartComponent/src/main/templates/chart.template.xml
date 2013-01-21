@@ -14,13 +14,13 @@
         <cdk:resource-dependency name="richfaces-event.js"/>
         <cdk:resource-dependency name="richfaces-base-component.js"/>
         <cdk:resource-dependency name = "jquery.jqplot.min.css" />
-        <cdk:resource-dependency library="js" name = "jquery.jqplot.js" />
-        <cdk:resource-dependency library="js" name = "richfaces.chart.js"/>
+        <cdk:resource-dependency library="js" name="jquery.jqplot.js" />
+        <cdk:resource-dependency library="js" name="richfaces.chart.js"/>
     </cc:interface>
 
     <cc:implementation>
         Graf
-        <div id="#{clientId}" style="height:400px;width:300px; "></div>
+        <div id="#{clientId}" ></div>
         <script type="text/javascript">
             var schedule = new RichFaces.ui.Chart("#{clientId}",[[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]],{});
         </script>
