@@ -16,8 +16,8 @@ import org.richfaces.cdk.annotations.*;
         tag = @Tag(name="cursor"))
 abstract public class AbstractCursor extends javax.faces.component.UIComponentBase {
     
-   @Attribute
-   public abstract boolean getZoom();
+   //@Attribute
+   //public abstract boolean getZoomEn();
    
    @Attribute
    public abstract String getConstraintZoom();
