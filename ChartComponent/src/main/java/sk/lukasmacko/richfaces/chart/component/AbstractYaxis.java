@@ -1,4 +1,4 @@
-package sk.lukasmacko.richfaces.cdk.chartcomponent;
+package sk.lukasmacko.richfaces.chart.component;
 
 import org.richfaces.cdk.annotations.*;
 

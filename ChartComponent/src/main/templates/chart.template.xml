@@ -6,8 +6,9 @@
 
     <cc:interface>
         <cdk:class>sk.lukasmacko.richfaces.chart.renderkit.ChartRenderer</cdk:class>
-        <cdk:superclass>javax.faces.render.Renderer</cdk:superclass>
-        <cdk:renderer-type>sk.lukasmacko.chart</cdk:renderer-type>
+        <cdk:superclass>sk.lukasmacko.richfaces.chart.renderkit.ChartRendererBase</cdk:superclass>
+        <cdk:component-family>sk.lukasmacko.chart</cdk:component-family>
+        <cdk:renderer-type>sk.lukasmacko.chartRenderer</cdk:renderer-type>
         <cdk:resource-dependency library="javax.faces" name="jsf.js"/>
         <cdk:resource-dependency name="jquery.js"/>
         <cdk:resource-dependency name="richfaces.js"/>
@@ -26,7 +27,14 @@
             <cdk:scriptObject name="chartOptions">
                 <cdk:scriptOption attributes="title" />
             </cdk:scriptObject>
-            var schedule = new RichFaces.ui.Chart("#{clientId}",[[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]],#{toScriptArgs(chartOptions)});
+            
+            
+           
+           <cdk:scriptObject name="legendOptions">
+                <cdk:scriptOption name="show" value="true"/>
+           </cdk:scriptObject>
+            
+            var schedule = new RichFaces.ui.Chart("#{clientId}",#{toScriptArgs(chartOptions)},#{toScriptArgs(legendOptions)},[[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]);
         </script>
     </cc:implementation>
 

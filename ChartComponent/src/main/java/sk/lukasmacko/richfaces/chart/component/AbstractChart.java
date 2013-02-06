@@ -1,4 +1,4 @@
-package sk.lukasmacko.richfaces.cdk.chartcomponent;
+package sk.lukasmacko.richfaces.chart.component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,14 +9,16 @@ import org.richfaces.cdk.annotations.*;
  * A trivial hello world component
  */
 @JsfComponent(
-        type = "sk.lukasmacko.richfaces.chartcomponent.Chart",
+        type = "sk.lukasmacko.richfaces.chart.component.Chart",
 family = "sk.lukasmacko.Chart",
 renderer =
-@JsfRenderer(type = "sk.lukasmacko.chart"),
+@JsfRenderer(type = "sk.lukasmacko.chartRenderer"),
 tag =
 @Tag(name = "chart"))
 abstract public class AbstractChart extends javax.faces.component.UIComponentBase {
 
     @Attribute
     public abstract String getTitle();
+    
+    
 }

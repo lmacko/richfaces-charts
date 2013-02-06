@@ -5,17 +5,19 @@
     
     rf.ui.Chart =  rf.BaseComponent.extendClass({
         name:"Chart",
-        init:function(componentId,options,data){
+        init:function(componentId,options,legend,data){
             if(!document.getElementById(componentId)){
                 throw "Element with id '"+componentId+"' not found.";
             }
             this.options = options;
+            this.options.legend=legend
             
             $super.constructor.call(this,componentId);
             
             this.attachToDom(this.id);
             var _this = this;
             jQuery(function(){
+               
                jQuery(document.getElementById(_this.id)).jqplot(data, options); 
             });
         },
