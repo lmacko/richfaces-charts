@@ -24,17 +24,11 @@
         
         <div id="#{clientId}" ></div>
         <script type="text/javascript">
-            <cdk:scriptObject name="chartOptions">
-                <cdk:scriptOption attributes="title" />
-            </cdk:scriptObject>
             
-            
+            var schedule = new RichFaces.ui.Chart("#{clientId}",
+                <cdk:call expression="getOptions(facesContext,component)"/>
+                ,[[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]);
            
-           <cdk:scriptObject name="legendOptions">
-                <cdk:scriptOption name="show" value="true"/>
-           </cdk:scriptObject>
-            
-            var schedule = new RichFaces.ui.Chart("#{clientId}",#{toScriptArgs(chartOptions)},#{toScriptArgs(legendOptions)},[[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]);
         </script>
     </cc:implementation>
 
