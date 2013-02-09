@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sk.lukasmacko.richfaces.chart.renderkit;
 
 import java.io.IOException;
@@ -77,6 +73,8 @@ public abstract class ChartRendererBase extends RendererBase{
        JSONObject legendOpt = new JSONObject();
     
        addAttribute(legendOpt, "show", true);
+       addAttribute(legendOpt, "placement", legend.getAttributes().get("placement"));
+       addAttribute(legendOpt, "position", legend.getAttributes().get("position"));
        addAttribute(options, "legend", legendOpt); 
    }
 
