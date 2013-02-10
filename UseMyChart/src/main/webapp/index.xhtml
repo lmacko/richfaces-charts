@@ -7,7 +7,10 @@
         <title>Use my chart</title>
     </h:head>
     <h:body>
-        Hello from Facelets
-        <lm:chart/>
+        <lm:chart title="My title hey hou!">
+            <lm:series value="#{myBean.first}" type="line" label="Label_1"/>
+            <lm:series value="#{myBean.second}" type="line" label="Label_1"/>
+            <lm:legend placement="inside"/>
+        </lm:chart>
     </h:body>
 </html>
