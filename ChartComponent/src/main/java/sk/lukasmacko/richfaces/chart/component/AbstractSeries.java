@@ -1,10 +1,10 @@
 package sk.lukasmacko.richfaces.chart.component;
 
 import org.richfaces.cdk.annotations.*;
+import sk.lukasmacko.richfaces.chart.component.model.ChartModel;
+import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
 
-/**
- * A trivial hello world component
- */
+
 
 @JsfComponent(
         type = "sk.lukasmacko.richfaces.chartcomponent.Series",
@@ -14,12 +14,12 @@ abstract public class AbstractSeries extends javax.faces.component.UIComponentBa
     @Attribute
     public abstract String getLabel();
     
-    @Attribute
-    public abstract String getType();
+    @Attribute(required=true)
+    public abstract SeriesType getType();
     
-    @Attribute
-    public abstract Object getValue();
-    
+    @Attribute(required=true)
+    public abstract ChartModel getValue();
+        
     @Attribute
     public abstract String getColor();
     
@@ -35,5 +35,8 @@ abstract public class AbstractSeries extends javax.faces.component.UIComponentBa
     @Attribute 
     public abstract String getDragableConstraint();
     
+    public enum SeriesType{
+        line,bar,pie
+    }
     
 }
