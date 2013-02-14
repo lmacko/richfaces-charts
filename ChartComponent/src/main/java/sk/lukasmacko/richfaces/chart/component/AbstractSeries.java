@@ -2,7 +2,6 @@ package sk.lukasmacko.richfaces.chart.component;
 
 import org.richfaces.cdk.annotations.*;
 import sk.lukasmacko.richfaces.chart.component.model.ChartModel;
-import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
 
 
 
@@ -14,7 +13,7 @@ abstract public class AbstractSeries extends javax.faces.component.UIComponentBa
     @Attribute
     public abstract String getLabel();
     
-    @Attribute(required=true)
+    @Attribute(required=true,suggestedValue="SeriesType.line,SeriesType.bar,SeriesType.pie")
     public abstract SeriesType getType();
     
     @Attribute(required=true)
@@ -23,20 +22,30 @@ abstract public class AbstractSeries extends javax.faces.component.UIComponentBa
     @Attribute
     public abstract String getColor();
     
-    @Attribute
-    public abstract String getMarker();
+    @Attribute(defaultValue="MarkerType.filledCircle",suggestedValue="MarkerType.circle,MarkerType.diamond,"
+            + "MarkerType.square,MarkerType.x,MarkerType.plus,MarkerType.dash,"
+            + "MarkerType.filledDiamond,MarkerType.filledCircle,MarkerType.filledSquare")
+    public abstract MarkerType getMarker();
     
-    @Attribute
+    @Attribute(defaultValue="true")
     public abstract boolean isMarkerVisible();
     
-    @Attribute
+    @Attribute(defaultValue="false")
     public abstract boolean isDragable();
     
-    @Attribute 
-    public abstract String getDragableConstraint();
+    @Attribute(defaultValue="ConstraintType.none",suggestedValue="ConstraintType.x,ConstraintType.y,ConstraintType.none") 
+    public abstract ConstraintType getDragableConstraint();
     
     public enum SeriesType{
         line,bar,pie
+    }
+    
+    public enum MarkerType{
+        diamond, circle, square, x, plus, dash, filledDiamond, filledCircle, filledSquare
+    }
+    
+    public enum ConstraintType{
+        x,y,none
     }
     
 }

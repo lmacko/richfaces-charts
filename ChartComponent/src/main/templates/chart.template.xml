@@ -21,12 +21,9 @@
 
     <cc:implementation>
        
-        <div id="#{clientId}" ></div>
+        <div id="#{clientId}" class="richfaces-chart #{component.attributes['styleClass']}" ></div>
         <script type="text/javascript">
-            
-            
                 <cdk:call expression="initChart(facesContext,component)"/>
-            
         </script>
     </cc:implementation>
 

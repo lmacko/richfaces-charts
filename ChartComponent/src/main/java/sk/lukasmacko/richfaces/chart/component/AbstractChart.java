@@ -20,5 +20,8 @@ abstract public class AbstractChart extends javax.faces.component.UIComponentBas
     @Attribute
     public abstract String getTitle();
     
+    @Attribute
+    public abstract String getStyleClass();
+    
    
 }

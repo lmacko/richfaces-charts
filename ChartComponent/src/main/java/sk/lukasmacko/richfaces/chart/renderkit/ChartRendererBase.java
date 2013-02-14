@@ -8,7 +8,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import org.richfaces.json.JSONArray;
-import org.richfaces.json.JSONCollection;
 import org.richfaces.json.JSONException;
 import org.richfaces.json.JSONObject;
 import org.richfaces.renderkit.RendererBase;
@@ -19,7 +18,6 @@ import sk.lukasmacko.richfaces.chart.component.AbstractSeries;
 import sk.lukasmacko.richfaces.chart.component.AbstractXaxis;
 import sk.lukasmacko.richfaces.chart.component.AbstractYaxis;
 import sk.lukasmacko.richfaces.chart.component.model.ChartModel;
-import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
 
 /**
  *
@@ -44,45 +42,74 @@ public abstract class ChartRendererBase extends RendererBase {
         AbstractChart chart = (AbstractChart) component;
 
         options = new JSONObject();
-
+        
+        
+        //series properties
+        JSONArray seriesOptions = new JSONArray();
+        addAttribute(options, "series", seriesOptions);
+                
+        
         data = new JSONArray();
 
         //chart options
         addAttribute(options, "title", component.getAttributes().get("title"));
 
 
-
+        
         List<UIComponent> children = chart.getChildren();
-
+        //process children tags
         for (UIComponent ch : children) {
             if (ch instanceof AbstractLegend) {
-                processLegend(ch);
+                JSONObject legendOpt = processLegend(ch);
+                addAttribute(options, "legend", legendOpt);
             } else if (ch instanceof AbstractSeries) {
-                processSeries(ch);
+                JSONObject opts = processSeries(ch);
+                seriesOptions.put(opts);
+                
             } else if (ch instanceof AbstractCursor) {
+                
             } else if (ch instanceof AbstractXaxis) {
+                
             } else if (ch instanceof AbstractYaxis) {
+                
             }
         }
+        
+        
+        //output javascript intialization
         writer.write("new RichFaces.ui.Chart(\""+chart.getClientId()+"\",");
         writer.write(options.toString());
         writer.write("," + data.toString()+");");
 
     }
 
-    protected void processLegend(UIComponent legend) {
+    protected JSONObject processLegend(UIComponent legend) {
         JSONObject legendOpt = new JSONObject();
 
         addAttribute(legendOpt, "show", true);
         addAttribute(legendOpt, "placement", legend.getAttributes().get("placement"));
         addAttribute(legendOpt, "position", legend.getAttributes().get("position"));
-        addAttribute(options, "legend", legendOpt);
+        return legendOpt;
     }
 
-    protected void processSeries(UIComponent series) {
+    protected JSONObject processSeries(UIComponent series) {
         
            ChartModel model = (ChartModel) series.getAttributes().get("value");
            data.put(model.toJsonCollection());
+           
+           JSONObject seriesOpt = new JSONObject();
+           addAttribute(seriesOpt, "label", series.getAttributes().get("label"));
+           addAttribute(seriesOpt, "showMarker", series.getAttributes().get("showMarker"));
+           
+           //marker properties
+           JSONObject markerOpt = new JSONObject();
+           addAttribute(markerOpt, "style", series.getAttributes().get("marker"));
+           addAttribute(seriesOpt, "markerOptions", markerOpt);
+           
+           addAttribute(seriesOpt, "color", series.getAttributes().get("color"));
+           //TODO dragable
+           return seriesOpt;
+           
         
     }
 }
