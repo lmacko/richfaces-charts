@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
@@ -15,13 +10,7 @@ import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
 @RequestScoped
 public class MyBean {
 
-  
-
-    /**
-     * Creates a new instance of MyBean
-     */
-    
-    
+   
     private LineChartModel first;
     private LineChartModel second;
 
