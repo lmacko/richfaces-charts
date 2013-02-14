@@ -2,7 +2,6 @@ package sk.lukasmacko.richfaces.chart.component;
 
 import org.richfaces.cdk.annotations.*;
 
-
 @JsfComponent(
         type = "sk.lukasmacko.richfaces.chart.component.Chart",
 family = "sk.lukasmacko.Chart",
@@ -14,9 +13,7 @@ abstract public class AbstractChart extends javax.faces.component.UIComponentBas
 
     @Attribute
     public abstract String getTitle();
-    
+
     @Attribute
     public abstract String getStyleClass();
-    
-   
 }

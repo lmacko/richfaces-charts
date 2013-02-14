@@ -9,6 +9,15 @@
             if(!document.getElementById(componentId)){
                 throw "Element with id '"+componentId+"' not found.";
             }
+            
+            for (var i = 0; i < options.series.length; i++) {
+                if(options.series[i].renderer=="bar"){
+                    options.series[i].renderer= $.jqplot.BarRenderer;
+                }
+                else if(options.series[i].renderer=="pie"){
+                    options.series[i].renderer= $.jqplot.PieRenderer;
+                }
+            }
             this.options = options;
             
             
@@ -18,7 +27,7 @@
             var _this = this;
             jQuery(function(){
                
-               jQuery(document.getElementById(_this.id)).jqplot(data, options); 
+                jQuery(document.getElementById(_this.id)).jqplot(data, options); 
             });
         },
         //public API

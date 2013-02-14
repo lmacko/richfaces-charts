@@ -106,6 +106,19 @@ public abstract class ChartRendererBase extends RendererBase {
            addAttribute(seriesOpt, "label", series.getAttributes().get("label"));
            addAttribute(seriesOpt, "showMarker", series.getAttributes().get("showMarker"));
            
+           
+           //overwriten in javascript richfaces.chart.js
+           if(series.getAttributes().get("type").toString().equals("bar")){
+               addAttribute(seriesOpt, "renderer", "bar");
+           }else if(series.getAttributes().get("type").toString().equals("pie")){
+               addAttribute(seriesOpt, "renderer", "pie");
+               
+               JSONObject rendererOpt = new JSONObject();
+               addAttribute(rendererOpt, "showDataLabels", true);
+               addAttribute(seriesOpt, "rendererOptions", rendererOpt);
+           }
+          
+           
            //marker properties
            JSONObject markerOpt = new JSONObject();
            addAttribute(markerOpt, "style", series.getAttributes().get("marker"));
