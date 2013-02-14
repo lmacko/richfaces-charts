@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sk.lukasmacko.richfaces.chart.component;
 
 import org.richfaces.cdk.annotations.Attribute;
@@ -13,18 +9,18 @@ import org.richfaces.cdk.annotations.Attribute;
 public interface AxisAttributes {
     
     @Attribute
-    String getFormat();
+    public abstract String getFormat();
     
     @Attribute
-    String getLabel();
+    public abstract String getLabel();
     
     @Attribute
-    Double getMin();
+    public abstract Double getMin();
     
     @Attribute
-    Double getMax();
+    public abstract Double getMax();
     
     @Attribute
-    Integer getTickRotation();
+    public abstract Integer getTickRotation();
     
 }
