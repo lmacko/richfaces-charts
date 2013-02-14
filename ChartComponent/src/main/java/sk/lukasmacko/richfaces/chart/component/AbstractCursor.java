@@ -1,14 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sk.lukasmacko.richfaces.chart.component;
 
 import org.richfaces.cdk.annotations.*;
 
-/**
- * A trivial hello world component
- */
 
 @JsfComponent(
         type = "sk.lukasmacko.richfaces.chartcomponent.Cursor",
@@ -16,11 +9,15 @@ import org.richfaces.cdk.annotations.*;
         tag = @Tag(name="cursor"))
 abstract public class AbstractCursor extends javax.faces.component.UIComponentBase {
     
-   //@Attribute
-   //public abstract boolean getZoomEn();
+   @Attribute(defaultValue="false")
+   public abstract boolean isZoomEn();
    
-   @Attribute
-   public abstract String getConstraintZoom();
+   @Attribute(defaultValue="ConstraintZoomType.none")
+   public abstract ConstraintZoomType getConstraintZoom();
    
+   
+   public enum ConstraintZoomType{
+       x,y,none
+   }
 }
 

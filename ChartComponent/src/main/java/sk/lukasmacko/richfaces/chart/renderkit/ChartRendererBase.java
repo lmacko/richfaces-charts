@@ -47,7 +47,10 @@ public abstract class ChartRendererBase extends RendererBase {
         //series properties
         JSONArray seriesOptions = new JSONArray();
         addAttribute(options, "series", seriesOptions);
-                
+
+        //axis properties
+        JSONObject axisOptions = new JSONObject();
+        addAttribute(options, "axes", axisOptions);
         
         data = new JSONArray();
 
@@ -65,13 +68,15 @@ public abstract class ChartRendererBase extends RendererBase {
             } else if (ch instanceof AbstractSeries) {
                 JSONObject opts = processSeries(ch);
                 seriesOptions.put(opts);
-                
             } else if (ch instanceof AbstractCursor) {
-                
+                JSONObject cursorOpt = processCursor(ch);
+                addAttribute(options, "cursor", cursorOpt);
             } else if (ch instanceof AbstractXaxis) {
-                
+                JSONObject xaxisOpt = processAxis(ch);
+                addAttribute(axisOptions, "xaxis", xaxisOpt);
             } else if (ch instanceof AbstractYaxis) {
-                
+                JSONObject yaxisOpt = processAxis(ch);
+                addAttribute(axisOptions, "yaxis", yaxisOpt);
             }
         }
         
@@ -111,5 +116,23 @@ public abstract class ChartRendererBase extends RendererBase {
            return seriesOpt;
            
         
+    }
+    protected JSONObject processAxis(UIComponent axis){
+        JSONObject axisOpt = new JSONObject();
+        addAttribute(axisOpt, "min", axis.getAttributes().get("min"));
+        addAttribute(axisOpt, "max", axis.getAttributes().get("max"));
+        addAttribute(axisOpt, "label", axis.getAttributes().get("label"));
+      
+        //TODO format and tick rotation
+        
+        return axisOpt;
+    }
+    
+    protected JSONObject processCursor(UIComponent cursor){
+        JSONObject cursorOpt = new JSONObject();
+        addAttribute(cursorOpt, "zoom", cursor.getAttributes().get("zoomEn"));
+        addAttribute(cursorOpt, "constrainZoomTo", cursor.getAttributes().get("constraintZoom"));
+        addAttribute(cursorOpt, "show", true);
+        return cursorOpt;
     }
 }

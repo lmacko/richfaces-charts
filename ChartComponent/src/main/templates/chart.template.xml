@@ -16,6 +16,9 @@
         <cdk:resource-dependency name="richfaces-base-component.js"/>
         <cdk:resource-dependency name = "jquery.jqplot.min.css" />
         <cdk:resource-dependency library="js" name="jquery.jqplot.js" />
+        <cdk:resource-dependency library="js" name="jqplot.barRenderer.js" />
+        <cdk:resource-dependency library="js" name="jqplot.pieRenderer.js" />
+        <cdk:resource-dependency library="js" name="jqplot.cursor.js" />
         <cdk:resource-dependency library="js" name="richfaces.chart.js"/>
     </cc:interface>
 
