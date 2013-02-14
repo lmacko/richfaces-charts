@@ -5,12 +5,21 @@
       xmlns:lm="http://lukasmacko.sk/test">
     <h:head>
         <title>Use my chart</title>
+        <style type="text/css">
+            .chart{
+                width: 600px;
+                height: 400px;
+            }
+        </style>
     </h:head>
     <h:body>
-        <lm:chart title="My title hey hou!">
-            <lm:series value="#{myBean.first}" type="line" label="Label_1"/>
-            <lm:series value="#{myBean.second}" type="line" label="Label_1"/>
-            <lm:legend placement="inside"/>
+        <lm:chart title="My title hey hou!" styleClass="chart">
+            <lm:series value="#{myBean.first}" type="line" label="First" color="black" />
+            <lm:series value="#{myBean.second}" type="line" label="Second" marker="filledDiamond"/>
+            <lm:xaxis label="xaxis label"/>
+            <lm:yaxis label="yaxis label" />
+            <lm:cursor zoomEn="true" constraintZoom="x"/>
+            <lm:legend placement="outside"/>
         </lm:chart>
     </h:body>
 </html>
