@@ -14,12 +14,17 @@
     </h:head>
     <h:body>
         <lm:chart title="My title hey hou!" styleClass="chart">
-            <lm:series value="#{myBean.first}" type="line" label="First" color="black" />
+            <lm:series value="#{myBean.first}" type="bar" label="First" color="black" />
             <lm:series value="#{myBean.second}" type="line" label="Second" marker="filledDiamond"/>
             <lm:xaxis label="xaxis label"/>
             <lm:yaxis label="yaxis label" />
             <lm:cursor zoomEn="true" constraintZoom="x"/>
             <lm:legend placement="outside"/>
+        </lm:chart>
+        
+        <lm:chart title="Pie demo" styleClass="chart">
+            <lm:series value="#{myBean.barData}" type="pie"/>
+            <lm:legend/>
         </lm:chart>
     </h:body>
 </html>
