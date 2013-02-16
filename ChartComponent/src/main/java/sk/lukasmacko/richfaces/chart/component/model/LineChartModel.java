@@ -11,7 +11,8 @@ import org.richfaces.json.JSONArray;
 public class LineChartModel implements ChartModel{
 
     private Map<Double, Double> data;
-
+    
+    
     public Map<Double, Double> getData() {
         return data;
     }
@@ -43,4 +44,10 @@ public class LineChartModel implements ChartModel{
 
         return collection;
     }
+
+    @Override
+    public ChartType getChartType() {
+       return ChartType.line;
+    }
+    
 }

@@ -1,5 +1,9 @@
 package sk.lukasmacko.richfaces.chart.component;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import org.richfaces.cdk.annotations.*;
 
 
@@ -11,8 +15,8 @@ import org.richfaces.cdk.annotations.*;
 abstract public class AbstractLegend extends javax.faces.component.UIComponentBase {
      
     
-     @Attribute
-     public abstract String getPosition();
+     @Attribute(defaultValue="PositionType.right",suggestedValue="PositionType.left,PositionType.top,PositionType.bottom")
+     public abstract PositionType getPosition();
      
      @Attribute(defaultValue = "PlacementType.inside")
      public abstract PlacementType getPlacement();
@@ -20,5 +24,18 @@ abstract public class AbstractLegend extends javax.faces.component.UIComponentBa
      public static enum PlacementType {
         inside,
         outside
+     }
+     public static enum PositionType{
+         top,left,right,bottom
+     }
+     
+     public static Map<PositionType,String> positionMap;
+     static {
+        Map <PositionType,String>tmp = new HashMap<>();
+        tmp.put(PositionType.top, "n");
+        tmp.put(PositionType.left, "w");
+        tmp.put(PositionType.bottom, "s");
+        tmp.put(PositionType.right, "e");
+        positionMap=Collections.unmodifiableMap(tmp);
     }
 }

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sk.lukasmacko.richfaces.chart.component.model;
 
 import java.util.HashMap;
@@ -25,8 +21,11 @@ public class PieChartModel implements ChartModel{
         this.data = data;
     }
     
-    public void add(String x, double y) {
-        this.data.put(x, y);
+    public void add(String key, double value) {
+        if(value<0){
+            throw new IllegalArgumentException("Value must be greater than zero.");
+        }
+        this.data.put(key, value);
     }
     
     @Override
@@ -45,5 +44,12 @@ public class PieChartModel implements ChartModel{
 
         return collection;
     }
+
+    @Override
+    public ChartType getChartType() {
+       return ChartType.pie;
+    }
+    
+    
     
 }
