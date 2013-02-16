@@ -19,6 +19,7 @@
         <cdk:resource-dependency library="js" name="jqplot.barRenderer.js" />
         <cdk:resource-dependency library="js" name="jqplot.pieRenderer.js" />
         <cdk:resource-dependency library="js" name="jqplot.cursor.js" />
+        <cdk:resource-dependency library="js" name="jqplot.categoryAxisRenderer.js" />
         <cdk:resource-dependency library="js" name="richfaces.chart.js"/>
     </cc:interface>
 

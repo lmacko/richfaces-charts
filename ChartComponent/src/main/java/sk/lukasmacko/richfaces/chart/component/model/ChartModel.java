@@ -8,5 +8,11 @@ import org.richfaces.json.JSONArray;
  * @author Macko
  */
 public interface ChartModel {
-    public JSONArray toJsonCollection(); 
+    public ChartType getChartType();
+    
+    public JSONArray toJsonCollection();
+    
+    public enum ChartType{
+        line,linebar,bar,pie,donut,unknown
+    }
 }
