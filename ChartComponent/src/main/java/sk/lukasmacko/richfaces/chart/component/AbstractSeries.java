@@ -33,6 +33,9 @@ abstract public class AbstractSeries extends javax.faces.component.UIComponentBa
     @Attribute(defaultValue="false")
     public abstract boolean isDragable();
     
+    @Attribute(defaultValue="false")
+    public abstract boolean isTrendlineVisible();
+    
     @Attribute(defaultValue="ConstraintType.none",suggestedValue="ConstraintType.x,ConstraintType.y,ConstraintType.none") 
     public abstract ConstraintType getDragableConstraint();
     

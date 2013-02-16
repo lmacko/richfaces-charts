@@ -201,8 +201,11 @@ public abstract class ChartRendererBase extends RendererBase {
         //attributes for all chart types
         addAttribute(seriesOpt, "label", series.getAttributes().get("label"));
         addAttribute(seriesOpt, "color", series.getAttributes().get("color"));
+        addAttribute(seriesOpt, "isDragable", series.getAttributes().get("dragable"));
 
-
+        JSONObject trendlineOpt = new JSONObject();
+        addAttribute(trendlineOpt, "show", series.getAttributes().get("trendlineVisible"));
+        addAttribute(seriesOpt, "trendline", trendlineOpt);
         //TODO dragable
         return seriesOpt;
 
