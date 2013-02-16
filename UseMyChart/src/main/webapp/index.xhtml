@@ -14,7 +14,7 @@
     </h:head>
     <h:body>
         <lm:chart title="My title hey hou!" styleClass="chart">
-            <lm:series value="#{myBean.first}" type="bar" label="First" color="black" />
+            <lm:series value="#{myBean.first}" type="line" label="First" color="green" />
             <lm:series value="#{myBean.second}" type="line" label="Second" marker="filledDiamond"/>
             <lm:xaxis label="xaxis label"/>
             <lm:yaxis label="yaxis label" />
@@ -22,9 +22,16 @@
             <lm:legend placement="outside"/>
         </lm:chart>
         
+        <lm:chart styleClass="chart">
+            <lm:series value="#{myBean.barData}" type="bar" label="old" color="yellow"/>
+            <lm:series value="#{myBean.barData2}" type="bar" label="new"/>
+            <lm:legend position="top"/>
+        </lm:chart>
+        
+      
         <lm:chart title="Pie demo" styleClass="chart">
-            <lm:series value="#{myBean.barData}" type="pie"/>
-            <lm:legend/>
+            <lm:series value="#{myBean.pieData}" type="pie"/>
+            <lm:legend position="top"/>
         </lm:chart>
     </h:body>
 </html>

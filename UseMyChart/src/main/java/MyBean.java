@@ -1,7 +1,8 @@
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
+import sk.lukasmacko.richfaces.chart.component.model.BarChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
+import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
 
 /**
  *
@@ -14,10 +15,19 @@ public class MyBean {
    
     private LineChartModel first;
     private LineChartModel second;
-    private PieChartModel barData;
+    private PieChartModel pieData;
+    private BarChartModel barData;
+    private BarChartModel barData2;
 
-    public PieChartModel getBarData() {
+    public BarChartModel getBarData() {
         return barData;
+    }
+    public BarChartModel getBarData2() {
+        return barData2;
+    }
+
+    public PieChartModel getPieData() {
+        return pieData;
     }
 
     public LineChartModel getFirst() {
@@ -45,13 +55,20 @@ public class MyBean {
         second.add(3.0,3.0);
         second.add(5.0,1.5);
         
-        barData = new PieChartModel();
+        pieData = new PieChartModel();
+        pieData.add("June",40);
+        pieData.add("July",50);
+        pieData.add("August",60);
+        
+        
+        barData = new BarChartModel();
         barData.add("June",40);
         barData.add("July",50);
         barData.add("August",60);
         
-        
-        
-        
+        barData2 = new BarChartModel();
+        barData2.add("June",40);
+       // barData2.add("July",50);
+        barData2.add("August",60);
     }
 }
