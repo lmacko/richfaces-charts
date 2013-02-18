@@ -21,6 +21,7 @@ import sk.lukasmacko.richfaces.chart.component.model.BarChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.ChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
+import sk.lukasmacko.richfaces.chart.component.model.RawJSONString;
 
 /**
  *
@@ -132,6 +133,7 @@ public abstract class ChartRendererBase extends RendererBase {
                 }
 
                 addAttribute(xaxisOpt, "ticks", ticksJSON);
+                addAttribute(xaxisOpt, "renderer", new RawJSONString("$.jqplot.CategoryAxisRenderer"));
                 addAttribute(axisOptions, "xaxis", xaxisOpt);
             }
         }
@@ -164,7 +166,8 @@ public abstract class ChartRendererBase extends RendererBase {
                 if (!(model instanceof BarChartModel)) {
                     throw new UnsupportedOperationException("Bar chart requieres BarChartModel.");
                 }
-                addAttribute(seriesOpt, "renderer", "bar");
+                //addAttribute(seriesOpt, "renderer", "bar");
+                addAttribute(seriesOpt, "renderer", new RawJSONString("$.jqplot.BarRenderer"));
                 addAttribute(rendererOpt,"fillToZero", true);
                 addAttribute(seriesOpt, "rendererOptions", rendererOpt);
                 
@@ -200,7 +203,7 @@ public abstract class ChartRendererBase extends RendererBase {
                     throw new UnsupportedOperationException("Pie chart requieres PieChartModel.");
                 }
                 //property render will be overwriten in javascript richfaces.chart.js
-                addAttribute(seriesOpt, "renderer", "pie");
+                addAttribute(seriesOpt, "renderer", new RawJSONString("$.jqplot.PieRenderer"));
                 addAttribute(rendererOpt, "showDataLabels", true);
                 addAttribute(seriesOpt, "rendererOptions", rendererOpt);
 
