@@ -9,7 +9,9 @@
             if(!document.getElementById(componentId)){
                 throw "Element with id '"+componentId+"' not found.";
             }
+            
             var barChart=false;
+            
             for (var i = 0; i < options.series.length; i++) {
                 if(options.series[i].renderer=="bar"){
                     barChart=true;
@@ -19,6 +21,7 @@
                     options.series[i].renderer= $.jqplot.PieRenderer;
                 }
             }
+            
             if(barChart){
                 options.axes.xaxis.renderer=$.jqplot.CategoryAxisRenderer;
             }

@@ -1,8 +1,9 @@
 package sk.lukasmacko.richfaces.chart.component.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.richfaces.json.JSONArray;
 
 /**
@@ -12,10 +13,12 @@ import org.richfaces.json.JSONArray;
 public class BarChartModel implements ChartModel {
 
     private Map<String, Double> data;
-    private Set<String> outputKeys;
+    private List<String> keys; 
+    private List<String> outputKeys;
 
     public BarChartModel() {
         data = new HashMap<>();
+        keys = new ArrayList<>();
         outputKeys = null;
     }
 
@@ -25,18 +28,25 @@ public class BarChartModel implements ChartModel {
 
     public void setData(Map<String, Double> data) {
         this.data = data;
+        this.keys = new ArrayList<>();
+        keys.addAll(data.keySet());
     }
 
-    public Set<String> getKeys() {
-        return data.keySet();
+    public List<String> getKeys() {
+        return keys;
     }
 
-    public void setOutputKeys(Set<String> keys) {
-        this.outputKeys = keys;
+    public void setOutputKeys(List<String> outKeys) {
+        this.outputKeys = outKeys;
+    }
+    
+    public List<String> getOutputKeys(){
+        return this.outputKeys;
     }
 
     public void add(String key, double value) {
         data.put(key, value);
+        this.keys.add(key);
     }
 
     @Override
@@ -44,8 +54,8 @@ public class BarChartModel implements ChartModel {
         JSONArray collection = new JSONArray();
 
         if (outputKeys == null) {
-            for (Map.Entry<String, Double> e : data.entrySet()) {
-                collection.put(e.getValue());
+            for (String k : keys) {
+                collection.put(data.get(k));
             }
         } else {
             for (String key : outputKeys) {
