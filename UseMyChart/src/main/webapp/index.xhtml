@@ -14,11 +14,11 @@
     </h:head>
     <h:body>
         <lm:chart title="My title hey hou!" styleClass="chart">
-            <lm:series value="#{myBean.first}" type="line" label="First" color="green" />
+            <lm:series value="#{myBean.first}" type="line" label="Dragable" color="green" dragable="true" trendlineVisible="true"/>
             <lm:series value="#{myBean.second}" type="line" label="Second" marker="filledDiamond"/>
             <lm:xaxis label="xaxis label"/>
             <lm:yaxis label="yaxis label" />
-            <lm:cursor zoomEn="true" constraintZoom="x"/>
+            
             <lm:legend placement="outside"/>
         </lm:chart>
         
