@@ -13,6 +13,6 @@ public interface ChartModel {
     public JSONArray toJsonCollection();
     
     public enum ChartType{
-        line,linebar,bar,pie,donut,unknown
+        line,bar,pie,donut,unknown
     }
 }
