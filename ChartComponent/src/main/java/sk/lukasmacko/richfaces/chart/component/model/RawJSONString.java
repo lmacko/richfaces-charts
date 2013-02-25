@@ -4,7 +4,7 @@ package sk.lukasmacko.richfaces.chart.component.model;
 import org.richfaces.json.JSONString;
 
 /**
- *
+ * 
  * @author Macko
  */
 public class RawJSONString implements JSONString{

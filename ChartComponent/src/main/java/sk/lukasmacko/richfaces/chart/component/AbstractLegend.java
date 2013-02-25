@@ -30,7 +30,7 @@ abstract public class AbstractLegend extends javax.faces.component.UIComponentBa
      
      public static Map<PositionType,String> positionMap;
      static {
-        Map <PositionType,String>tmp = new HashMap<>();
+        Map <PositionType,String>tmp = new HashMap<PositionType,String>();
         tmp.put(PositionType.top, "n");
         tmp.put(PositionType.left, "w");
         tmp.put(PositionType.bottom, "s");

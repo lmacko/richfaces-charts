@@ -9,9 +9,7 @@
             if(!document.getElementById(componentId)){
                 throw "Element with id '"+componentId+"' not found.";
             }
-            
             this.options = options;
-            
             
             $super.constructor.call(this,componentId);
             

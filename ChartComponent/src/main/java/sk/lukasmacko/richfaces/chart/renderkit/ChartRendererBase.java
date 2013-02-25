@@ -52,7 +52,7 @@ public abstract class ChartRendererBase extends RendererBase {
      * Method sets the type of processed chart. It checks if combination of
      * series type is allowed.
      *
-     * @throws IllegalStateException if unsupported combination used
+     * @throws IllegalStateException if unsupported combination occurs
      *
      * @param type -processed series type
      */
@@ -247,4 +247,5 @@ public abstract class ChartRendererBase extends RendererBase {
         addAttribute(cursorOpt, "show", true);
         return cursorOpt;
     }
+    
 }

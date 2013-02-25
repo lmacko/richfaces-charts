@@ -22,7 +22,7 @@ public class LineChartModel implements ChartModel{
     }
 
     public LineChartModel() {
-        data = new HashMap<>();
+        data = new HashMap<Double,Double>();
     }
 
     public void add(double x, double y) {
