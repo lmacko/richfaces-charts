@@ -1,5 +1,9 @@
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
+import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
 import sk.lukasmacko.richfaces.chart.component.model.BarChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
@@ -9,7 +13,7 @@ import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
  * @author Macko
  */
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class MyBean {
 
    
@@ -18,6 +22,15 @@ public class MyBean {
     private PieChartModel pieData;
     private BarChartModel barData;
     private BarChartModel barData2;
+    private String msg;
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 
     public BarChartModel getBarData() {
         return barData;
@@ -37,12 +50,20 @@ public class MyBean {
     public LineChartModel getSecond() {
         return second;
     }
+    
+    public void updateHandler(AjaxBehaviorEvent ev){
+        setMsg("Updated from server.");
+        System.out.print("Hey hou!");
+    }
 
+    
     
 
     
     
     public MyBean() {
+        msg ="Nothing";
+        
         first = new LineChartModel();
         first.add(1.0, 2.0);
         first.add(2.0, 2.0);
@@ -70,5 +91,11 @@ public class MyBean {
         barData2.add("June",40);
        // barData2.add("July",50);
         barData2.add("August",60);
+        System.out.println("I'm alive");
+        
+    }
+    
+    public void dataclick(DataClickEvent event){
+        
     }
 }
