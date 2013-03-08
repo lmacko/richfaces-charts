@@ -20,6 +20,8 @@
         <cdk:resource-dependency library="js" name="jqplot.pieRenderer.js" />
         <cdk:resource-dependency library="js" name="jqplot.cursor.js" />
         <cdk:resource-dependency library="js" name="jqplot.categoryAxisRenderer.js" />
+        <cdk:resource-dependency library="js" name="jqplot.dragable.js"/>
+        <cdk:resource-dependency library="js" name="jqplot.trendline.js"/>
         <cdk:resource-dependency library="js" name="richfaces.chart.js"/>
     </cc:interface>
 

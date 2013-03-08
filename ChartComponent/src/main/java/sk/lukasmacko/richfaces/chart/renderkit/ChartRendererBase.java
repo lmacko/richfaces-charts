@@ -2,7 +2,6 @@ package sk.lukasmacko.richfaces.chart.renderkit;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
@@ -22,6 +21,7 @@ import sk.lukasmacko.richfaces.chart.component.model.BarChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.ChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
+import sk.lukasmacko.richfaces.chart.component.model.RawJSONString;
 
 /**
  *
@@ -30,9 +30,14 @@ import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
 public abstract class ChartRendererBase extends RendererBase {
 
     private JSONObject options;
+    
     private JSONArray data;
     private ChartModel.ChartType chartType;
-    private Set<String> keys;//for bar and piechart
+    
+    /**
+     * Stores category names for bar and pie chart
+     */
+    private List<String> keys;
 
     public static JSONObject addAttribute(JSONObject obj, String key, Object value) {
         try {
@@ -109,6 +114,8 @@ public abstract class ChartRendererBase extends RendererBase {
             }
         }
 
+        
+        //bar chart - category labels(ticks) must be part of xaxis options
         if (chartType == ChartModel.ChartType.bar) {
 
             if (axisOptions.has("xaxis")) {
@@ -126,6 +133,7 @@ public abstract class ChartRendererBase extends RendererBase {
                 }
 
                 addAttribute(xaxisOpt, "ticks", ticksJSON);
+                addAttribute(xaxisOpt, "renderer", new RawJSONString("$.jqplot.CategoryAxisRenderer"));
                 addAttribute(axisOptions, "xaxis", xaxisOpt);
             }
         }
@@ -158,14 +166,23 @@ public abstract class ChartRendererBase extends RendererBase {
                 if (!(model instanceof BarChartModel)) {
                     throw new UnsupportedOperationException("Bar chart requieres BarChartModel.");
                 }
-                addAttribute(seriesOpt, "renderer", "bar");
+                //addAttribute(seriesOpt, "renderer", "bar");
+                addAttribute(seriesOpt, "renderer", new RawJSONString("$.jqplot.BarRenderer"));
                 addAttribute(rendererOpt,"fillToZero", true);
                 addAttribute(seriesOpt, "rendererOptions", rendererOpt);
                 
-
+                //first series determine output categories
                 if (keys == null) {
-                    keys = ((BarChartModel) series.getAttributes().get("value")).getKeys();
+                    BarChartModel barmodel;
+                    barmodel = (BarChartModel) series.getAttributes().get("value");
+                    if(barmodel.getOutputKeys()!=null){
+                        keys= barmodel.getOutputKeys();
+                    }
+                    else{
+                        keys = barmodel.getKeys();
+                    }
                 } else {
+                    
                     ((BarChartModel) model).setOutputKeys(keys);
                 }
 
@@ -186,7 +203,7 @@ public abstract class ChartRendererBase extends RendererBase {
                     throw new UnsupportedOperationException("Pie chart requieres PieChartModel.");
                 }
                 //property render will be overwriten in javascript richfaces.chart.js
-                addAttribute(seriesOpt, "renderer", "pie");
+                addAttribute(seriesOpt, "renderer", new RawJSONString("$.jqplot.PieRenderer"));
                 addAttribute(rendererOpt, "showDataLabels", true);
                 addAttribute(seriesOpt, "rendererOptions", rendererOpt);
 
@@ -201,9 +218,12 @@ public abstract class ChartRendererBase extends RendererBase {
         //attributes for all chart types
         addAttribute(seriesOpt, "label", series.getAttributes().get("label"));
         addAttribute(seriesOpt, "color", series.getAttributes().get("color"));
+        addAttribute(seriesOpt, "isDragable", series.getAttributes().get("dragable"));
 
-
-        //TODO dragable
+        JSONObject trendlineOpt = new JSONObject();
+        addAttribute(trendlineOpt, "show", series.getAttributes().get("trendlineVisible"));
+        addAttribute(seriesOpt, "trendline", trendlineOpt);
+        
         return seriesOpt;
 
 
