@@ -22,15 +22,20 @@
         <cdk:resource-dependency library="js" name="jqplot.categoryAxisRenderer.js" />
         <cdk:resource-dependency library="js" name="jqplot.dragable.js"/>
         <cdk:resource-dependency library="js" name="jqplot.trendline.js"/>
+        <cdk:resource-dependency library="js" name="jqplot.highlighter.js"/>
         <cdk:resource-dependency library="js" name="richfaces.chart.js"/>
     </cc:interface>
 
     <cc:implementation>
        
-
+        <cdk:scriptObject name="events" >
+            <cdk:scriptOption attributes="ondataclick onmouseover" wrapper="eventHandler"/>
+        </cdk:scriptObject>
+        
         <div id="#{clientId}" class="richfaces-chart #{component.attributes['styleClass']}" ></div>
-        <script type="text/javascript">
-                <cdk:call expression="initChart(facesContext,component)"/>
+        
+        <script type="text/javascript">          
+                new RichFaces.ui.Chart("#{clientId}",<cdk:call expression="initChart(facesContext,component)"/>,#{toScriptArgs(events)});
         </script>
     </cc:implementation>
 

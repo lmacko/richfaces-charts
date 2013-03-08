@@ -11,6 +11,7 @@ import org.richfaces.json.JSONArray;
 import org.richfaces.json.JSONException;
 import org.richfaces.json.JSONObject;
 import org.richfaces.renderkit.RendererBase;
+import org.richfaces.skin.Skin;
 import sk.lukasmacko.richfaces.chart.component.AbstractChart;
 import sk.lukasmacko.richfaces.chart.component.AbstractCursor;
 import sk.lukasmacko.richfaces.chart.component.AbstractLegend;
@@ -43,6 +44,7 @@ public abstract class ChartRendererBase extends RendererBase {
         try {
             obj.put(key, value);
         } catch (JSONException ex) {
+            //TODO IOException
             Logger.getLogger(ChartRendererBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return obj;
@@ -138,13 +140,25 @@ public abstract class ChartRendererBase extends RendererBase {
             }
         }
 
+        //Skin test
+   
+        
+        ///////////////////////////////////////////
+        
         //output javascript intialization
-        writer.write("new RichFaces.ui.Chart(\"" + chart.getClientId() + "\",");
+  /*      writer.write("new RichFaces.ui.Chart(\"" + chart.getClientId() + "\",");
         writer.write(options.toString());
         writer.write("," + data.toString() + ");");
 
+*/        
+    
+        writer.write(options.toString());
+        writer.write("," + data.toString() );
+
     }
 
+
+    
     protected JSONObject processLegend(UIComponent legend) {
         JSONObject legendOpt = new JSONObject();
 
