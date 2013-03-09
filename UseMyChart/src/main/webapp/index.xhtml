@@ -2,7 +2,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:lm="http://lukasmacko.sk/test">
+      xmlns:lm="http://lukasmacko.sk/test"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j">
     <h:head>
         <title>Use my chart</title>
         <style type="text/css">
@@ -11,27 +14,41 @@
                 height: 400px;
             }
         </style>
+        <h:outputScript  name="script.js" />
     </h:head>
     <h:body>
-        <lm:chart title="My title hey hou!" styleClass="chart">
+
+        <lm:chart title="My title hey hou!" styleClass="chart" ondataclick="click()"  dataClickListener="#{myBean.dataclick}">
             <lm:series value="#{myBean.first}" type="line" label="Dragable" color="green" dragable="true" trendlineVisible="true"/>
             <lm:series value="#{myBean.second}" type="line" label="Second" marker="filledDiamond"/>
             <lm:xaxis label="xaxis label"/>
             <lm:yaxis label="yaxis label" />
-            
+
             <lm:legend placement="outside"/>
+
+            <a4j:ajax event="dataclick" listener="#{myBean.updateHandler}"  execute="msg" render="msg" />
         </lm:chart>
+
+        <div id="info"></div>
         
-        <lm:chart styleClass="chart">
+        <h:form>
+            <h:outputText value="#{myBean.msg}" id="msg"/>
+        </h:form>
+        
+        
+        
+        <lm:chart styleClass="chart" >
             <lm:series value="#{myBean.barData}" type="bar" label="old" color="yellow"/>
             <lm:series value="#{myBean.barData2}" type="bar" label="new"/>
             <lm:legend position="top"/>
         </lm:chart>
+
+
+        <lm:chart title="Pie demo" styleClass="chart" onmouseover="alert('highlight')">
+            <lm:series value="#{myBean.pieData}" type="pie"/>
+            <lm:legend position="left"/>
+        </lm:chart>
         
       
-        <lm:chart title="Pie demo" styleClass="chart">
-            <lm:series value="#{myBean.pieData}" type="pie"/>
-            <lm:legend position="top"/>
-        </lm:chart>
     </h:body>
 </html>
