@@ -1,3 +1,4 @@
+import java.util.Random;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
@@ -23,6 +24,7 @@ public class MyBean {
     private BarChartModel barData;
     private BarChartModel barData2;
     private String msg;
+    private Random generator;
 
     public String getMsg() {
         return msg;
@@ -55,6 +57,13 @@ public class MyBean {
         setMsg("Updated from server.");
         System.out.print("Hey hou!");
     }
+    
+    public void generateRandom(){
+        barData2 = new BarChartModel();
+        barData2.add("June",generator.nextInt(100));
+        barData2.add("July",generator.nextInt(100));
+        barData2.add("August",generator.nextInt(100));
+    }
 
     
     
@@ -63,6 +72,8 @@ public class MyBean {
     
     public MyBean() {
         msg ="Nothing";
+        
+        generator = new Random();
         
         first = new LineChartModel();
         first.add(1.0, 2.0);
@@ -89,13 +100,14 @@ public class MyBean {
         
         barData2 = new BarChartModel();
         barData2.add("June",40);
-       // barData2.add("July",50);
+        barData2.add("July",50);
         barData2.add("August",60);
         System.out.println("I'm alive");
         
     }
     
     public void dataclick(DataClickEvent event){
+        setMsg("an event occured!");
         
     }
 }
