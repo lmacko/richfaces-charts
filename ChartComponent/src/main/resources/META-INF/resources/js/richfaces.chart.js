@@ -1,4 +1,97 @@
-(function($,rf){
+(function ($, rf) {
+    // Create (for example) ui container for our component class
+    rf.ui = rf.ui || {};
+    // Default options definition if needed for the component
+    var defaultOptions = {};
+ 
+    // Create constructor and register our component class
+    rf.ui.Chart = function (componentId, options,data,events) {
+        if(!document.getElementById(componentId)){
+            throw "Element with id '"+componentId+"' not found.";
+        }
+        
+        
+        var superOpt = $.extend(options,{
+            'events':events
+        });
+        // call constructor of parent class
+        $super.constructor.call(this, componentId, superOpt, defaultOptions);   
+        
+        this.options = options;
+        this.events = events;
+                               
+        this.element = jQuery(document.getElementById(this.id));
+  
+        //init chart
+        this.element.jqplot(data, options);
+        
+    };
+ 
+    // Extending component class
+    rf.ui.Base.extend(rf.ui.Chart);
+ 
+    // define super class reference - reference to the parent prototype
+    var $super = rf.ui.Chart.$super;
+ 
+    // Add new properties and methods via extending Chart.prototype
+    $.extend(rf.ui.Chart.prototype, {
+        // class name
+        name:"Chart",
+        
+        
+        //jsf event -> javascript event 
+        __eventMap : {
+            'ondataclick':'jqplotDataClick',
+            'onhighlight':'jqplotDataHighlight',
+            'onunhighlight':'jqplotDataUnhighlight',
+            'ondragstart':'jqplotDragStart',
+            'ondragstop':'jqplotDragStop',
+            'onpointmove':'jqplotSeriesPointChange'
+                
+        },
+        
+        __bindEventHandlers:function(){
+            for (e in this.__eventMap){
+                if(this.options.events[e]){
+                    jQuery(document.getElementById(this.id)).bind(this.__eventMap[e],this.__gethandlerfunction(this.options.events,e,this.id));
+                }
+            } 
+        },
+        
+        __gethandlerfunction : function(obj,eventName,id){
+            if(eventName =='onunhighlight'){
+                return function(ev){
+                    obj[eventName].call(document.getElementById(id),ev);
+                }
+            }
+            else{
+                return function(ev,seriesIndex,pointIndex,data){
+                    ev.data = {
+                        'seriesIndex':seriesIndex,
+                        'pointIndex' :pointIndex,
+                        'x':data[0],
+                        'y':data[1]
+                    };
+                    
+                    obj[eventName].call(document.getElementById(id),ev);
+                }
+            }
+        },
+        
+        // destructor definition
+        destroy: function () {
+            // define destructor if additional cleaning is needed but
+            // in most cases its not nessesary.
+            // call parent’s destructor
+            $super.destroy.call(this);
+        }
+    });
+})(jQuery, RichFaces);
+
+
+
+
+/*(function($,rf){
     rf.ui = rf.ui || {};
     
     rf.ui.Chart =  rf.BaseComponent.extendClass({
@@ -56,7 +149,7 @@
                 }
             } 
              
-            /*if(this.events.ondataclick){
+        /*if(this.events.ondataclick){
                 this.element.bind('jqplotDataClick', 
                     __gethandlerfunction(this.events,'ondataclick',this.id));
             }
@@ -76,7 +169,7 @@
                     );
                     
                     
-            } */         
+            }         
         },
         
         
@@ -91,3 +184,4 @@
 })(jQuery,RichFaces);
 
 
+*/
