@@ -2,8 +2,6 @@ package sk.lukasmacko.richfaces.chart.renderkit;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -11,7 +9,6 @@ import org.richfaces.json.JSONArray;
 import org.richfaces.json.JSONException;
 import org.richfaces.json.JSONObject;
 import org.richfaces.renderkit.RendererBase;
-import org.richfaces.skin.Skin;
 import sk.lukasmacko.richfaces.chart.component.AbstractChart;
 import sk.lukasmacko.richfaces.chart.component.AbstractCursor;
 import sk.lukasmacko.richfaces.chart.component.AbstractLegend;
@@ -31,21 +28,21 @@ import sk.lukasmacko.richfaces.chart.component.model.RawJSONString;
 public abstract class ChartRendererBase extends RendererBase {
 
     private JSONObject options;
-    
     private JSONArray data;
     private ChartModel.ChartType chartType;
-    
+
     /**
      * Stores category names for bar and pie chart
      */
     private List<String> keys;
 
-    public static JSONObject addAttribute(JSONObject obj, String key, Object value) {
+    public static JSONObject addAttribute(JSONObject obj, String key, Object value) throws IOException {
         try {
             obj.put(key, value);
         } catch (JSONException ex) {
             //TODO IOException
-            Logger.getLogger(ChartRendererBase.class.getName()).log(Level.SEVERE, null, ex);
+            throw new IOException("JSONObject put failed.");
+            
         }
         return obj;
     }
@@ -116,7 +113,7 @@ public abstract class ChartRendererBase extends RendererBase {
             }
         }
 
-        
+
         //bar chart - category labels(ticks) must be part of xaxis options
         if (chartType == ChartModel.ChartType.bar) {
 
@@ -128,7 +125,7 @@ public abstract class ChartRendererBase extends RendererBase {
             } else {
                 JSONObject xaxisOpt = new JSONObject();
 
-                
+
                 JSONArray ticksJSON = new JSONArray();
                 for (String s : keys) {
                     ticksJSON.put(s);
@@ -141,25 +138,23 @@ public abstract class ChartRendererBase extends RendererBase {
         }
 
         //Skin test
-   
-        
+
+
         ///////////////////////////////////////////
-        
+
         //output javascript intialization
   /*      writer.write("new RichFaces.ui.Chart(\"" + chart.getClientId() + "\",");
-        writer.write(options.toString());
-        writer.write("," + data.toString() + ");");
+         writer.write(options.toString());
+         writer.write("," + data.toString() + ");");
 
-*/        
-    
+         */
+
         writer.write(options.toString());
-        writer.write("," + data.toString() );
+        writer.write("," + data.toString());
 
     }
 
-
-    
-    protected JSONObject processLegend(UIComponent legend) {
+    protected JSONObject processLegend(UIComponent legend) throws IOException {
         JSONObject legendOpt = new JSONObject();
 
         addAttribute(legendOpt, "show", true);
@@ -168,7 +163,7 @@ public abstract class ChartRendererBase extends RendererBase {
         return legendOpt;
     }
 
-    protected JSONObject processSeries(UIComponent series) {
+    protected JSONObject processSeries(UIComponent series) throws IOException {
         JSONObject seriesOpt = new JSONObject();
         JSONObject rendererOpt = new JSONObject();
 
@@ -182,21 +177,20 @@ public abstract class ChartRendererBase extends RendererBase {
                 }
                 //addAttribute(seriesOpt, "renderer", "bar");
                 addAttribute(seriesOpt, "renderer", new RawJSONString("$.jqplot.BarRenderer"));
-                addAttribute(rendererOpt,"fillToZero", true);
+                addAttribute(rendererOpt, "fillToZero", true);
                 addAttribute(seriesOpt, "rendererOptions", rendererOpt);
-                
+
                 //first series determine output categories
                 if (keys == null) {
                     BarChartModel barmodel;
                     barmodel = (BarChartModel) series.getAttributes().get("value");
-                    if(barmodel.getOutputKeys()!=null){
-                        keys= barmodel.getOutputKeys();
-                    }
-                    else{
+                    if (barmodel.getOutputKeys() != null) {
+                        keys = barmodel.getOutputKeys();
+                    } else {
                         keys = barmodel.getKeys();
                     }
                 } else {
-                    
+
                     ((BarChartModel) model).setOutputKeys(keys);
                 }
 
@@ -216,7 +210,6 @@ public abstract class ChartRendererBase extends RendererBase {
                 if (!(model instanceof PieChartModel)) {
                     throw new UnsupportedOperationException("Pie chart requieres PieChartModel.");
                 }
-                //property render will be overwriten in javascript richfaces.chart.js
                 addAttribute(seriesOpt, "renderer", new RawJSONString("$.jqplot.PieRenderer"));
                 addAttribute(rendererOpt, "showDataLabels", true);
                 addAttribute(seriesOpt, "rendererOptions", rendererOpt);
@@ -237,13 +230,13 @@ public abstract class ChartRendererBase extends RendererBase {
         JSONObject trendlineOpt = new JSONObject();
         addAttribute(trendlineOpt, "show", series.getAttributes().get("trendlineVisible"));
         addAttribute(seriesOpt, "trendline", trendlineOpt);
-        
+
         return seriesOpt;
 
 
     }
 
-    protected JSONObject processAxis(UIComponent axis) {
+    protected JSONObject processAxis(UIComponent axis) throws IOException {
         JSONObject axisOpt = new JSONObject();
         addAttribute(axisOpt, "min", axis.getAttributes().get("min"));
         addAttribute(axisOpt, "max", axis.getAttributes().get("max"));
@@ -254,12 +247,14 @@ public abstract class ChartRendererBase extends RendererBase {
         return axisOpt;
     }
 
-    protected JSONObject processCursor(UIComponent cursor) {
+    protected JSONObject processCursor(UIComponent cursor) throws IOException {
         JSONObject cursorOpt = new JSONObject();
         addAttribute(cursorOpt, "zoom", cursor.getAttributes().get("zoomEn"));
         addAttribute(cursorOpt, "constrainZoomTo", cursor.getAttributes().get("constraintZoom"));
         addAttribute(cursorOpt, "show", true);
         return cursorOpt;
     }
-    
+
+   
+  
 }
