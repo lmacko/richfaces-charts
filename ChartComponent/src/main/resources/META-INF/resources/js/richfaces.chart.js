@@ -3,22 +3,18 @@
     rf.ui = rf.ui || {};
     // Default options definition if needed for the component
     var defaultOptions = {};
+    
  
     // Create constructor and register our component class
-    rf.ui.Chart = function (componentId, options,data,events) {
+    rf.ui.Chart = function (componentId, options,data,eventHandlers) {
         if(!document.getElementById(componentId)){
             throw "Element with id '"+componentId+"' not found.";
         }
         
+        this.init(eventHandlers,options,data);
         
-        var superOpt = $.extend(options,{
-            'events':events
-        });
         // call constructor of parent class
-        $super.constructor.call(this, componentId, superOpt, defaultOptions);   
-        
-        this.options = options;
-        this.events = events;
+        $super.constructor.call(this, componentId, options, defaultOptions);   
                                
         this.element = jQuery(document.getElementById(this.id));
   
@@ -38,6 +34,11 @@
         // class name
         name:"Chart",
         
+        init: function(eventHandlers,options,data){
+            this.eventHandlers = eventHandlers;
+            this.options = options;
+            this.data = data;
+        },
         
         //jsf event -> javascript event 
         __eventMap : {
@@ -52,8 +53,8 @@
         
         __bindEventHandlers:function(){
             for (e in this.__eventMap){
-                if(this.options.events[e]){
-                    jQuery(document.getElementById(this.id)).bind(this.__eventMap[e],this.__gethandlerfunction(this.options.events,e,this.id));
+                if(this.eventHandlers[e]){
+                    jQuery(document.getElementById(this.id)).bind(this.__eventMap[e],this.__gethandlerfunction(this.eventHandlers,e,this.id));
                 }
             } 
         },

@@ -65,13 +65,14 @@ public abstract class ChartRendererBase extends RendererBase {
     }
 
     /**
-     * Process nested tags and writes javascript function to initialize a chart.
+     * Process nested tags
      *
      * @param context
      * @param component
      * @throws IOException
      */
-    protected void initChart(FacesContext context, UIComponent component) throws IOException {
+    @Override
+    public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         AbstractChart chart = (AbstractChart) component;
         chartType = ChartModel.ChartType.unknown;
@@ -137,8 +138,7 @@ public abstract class ChartRendererBase extends RendererBase {
             }
         }
 
-        //Skin test
-
+        
 
         ///////////////////////////////////////////
 
@@ -149,8 +149,8 @@ public abstract class ChartRendererBase extends RendererBase {
 
          */
 
-        writer.write(options.toString());
-        writer.write("," + data.toString());
+        //writer.write(options.toString());
+        //writer.write("," + data.toString());
 
     }
 
@@ -175,7 +175,7 @@ public abstract class ChartRendererBase extends RendererBase {
                 if (!(model instanceof BarChartModel)) {
                     throw new UnsupportedOperationException("Bar chart requieres BarChartModel.");
                 }
-                //addAttribute(seriesOpt, "renderer", "bar");
+                
                 addAttribute(seriesOpt, "renderer", new RawJSONString("$.jqplot.BarRenderer"));
                 addAttribute(rendererOpt, "fillToZero", true);
                 addAttribute(seriesOpt, "rendererOptions", rendererOpt);
@@ -204,7 +204,7 @@ public abstract class ChartRendererBase extends RendererBase {
                 addAttribute(markerOpt, "style", series.getAttributes().get("marker"));
                 addAttribute(seriesOpt, "markerOptions", markerOpt);
                 addAttribute(seriesOpt, "showMarker", series.getAttributes().get("showMarker"));
-
+                addAttribute(seriesOpt, "highlightMouseOver", true);
                 break;
             case pie:
                 if (!(model instanceof PieChartModel)) {
@@ -236,6 +236,14 @@ public abstract class ChartRendererBase extends RendererBase {
 
     }
 
+    public String getData(){
+        return data.toString();
+    }
+    
+    public String getOptions(){
+        return options.toString();
+    }
+    
     protected JSONObject processAxis(UIComponent axis) throws IOException {
         JSONObject axisOpt = new JSONObject();
         addAttribute(axisOpt, "min", axis.getAttributes().get("min"));

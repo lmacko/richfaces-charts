@@ -28,15 +28,14 @@
 
     <cc:implementation>
        
-        <cdk:scriptObject name="events" >
+        <cdk:scriptObject name="events">
             <cdk:scriptOption attributes="ondataclick onmouseover onhighlight onunhighlight ondragstart ondragstop onpointmove" wrapper="eventHandler"/>
-          
-        </cdk:scriptObject>
-        
+        </cdk:scriptObject>      
+
         <div id="#{clientId}" class="richfaces-chart #{component.attributes['styleClass']}" ></div>
         
         <script type="text/javascript">          
-                new RichFaces.ui.Chart("#{clientId}",<cdk:call expression="initChart(facesContext,component)"/>,#{toScriptArgs(events)});
+                new RichFaces.ui.Chart("#{clientId}",#{getOptions()},#{getData()},#{toScriptArgs(events)});
         </script>
     </cc:implementation>
 
