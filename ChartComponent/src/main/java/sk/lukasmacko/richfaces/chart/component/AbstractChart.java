@@ -1,9 +1,6 @@
 package sk.lukasmacko.richfaces.chart.component;
 
 import javax.el.MethodExpression;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.FacesEvent;
 import org.richfaces.cdk.annotations.*;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickListener;

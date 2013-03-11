@@ -166,6 +166,7 @@ public abstract class ChartRendererBase extends RendererBase {
     protected JSONObject processSeries(UIComponent series) throws IOException {
         JSONObject seriesOpt = new JSONObject();
         JSONObject rendererOpt = new JSONObject();
+        JSONObject dragableOpt = new JSONObject();
 
         ChartModel model = (ChartModel) series.getAttributes().get("value");
 
@@ -226,7 +227,10 @@ public abstract class ChartRendererBase extends RendererBase {
         addAttribute(seriesOpt, "label", series.getAttributes().get("label"));
         addAttribute(seriesOpt, "color", series.getAttributes().get("color"));
         addAttribute(seriesOpt, "isDragable", series.getAttributes().get("dragable"));
-
+        addAttribute(dragableOpt, "constrainTo", series.getAttributes().get("dragableConstraint"));
+        addAttribute(dragableOpt, "color", new RawJSONString("undefined"));
+        addAttribute(seriesOpt, "dragable", dragableOpt);
+        
         JSONObject trendlineOpt = new JSONObject();
         addAttribute(trendlineOpt, "show", series.getAttributes().get("trendlineVisible"));
         addAttribute(seriesOpt, "trendline", trendlineOpt);

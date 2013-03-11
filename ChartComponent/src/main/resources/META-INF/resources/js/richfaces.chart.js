@@ -1,5 +1,5 @@
 (function ($, rf) {
-    // Create (for example) ui container for our component class
+   
     rf.ui = rf.ui || {};
     // Default options definition if needed for the component
     var defaultOptions = {};
@@ -62,6 +62,19 @@
         __gethandlerfunction : function(obj,eventName,id){
             if(eventName =='onunhighlight'){
                 return function(ev){
+                    obj[eventName].call(document.getElementById(id),ev);
+                }
+            }
+            else if(eventName =='ondragstop'){
+                //!!Edit jqplot.dragable.js line 222
+                return function(ev,gridPos,dataPos,pointIndex){
+                    ev.data = {
+                        'gridPos':gridPos,
+                        'x': dataPos.xaxis,
+                        'y': dataPos.yaxis,
+                        'pointIndex':pointIndex
+                            
+                    };
                     obj[eventName].call(document.getElementById(id),ev);
                 }
             }
