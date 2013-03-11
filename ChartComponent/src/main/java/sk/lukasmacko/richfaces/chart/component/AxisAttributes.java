@@ -3,7 +3,7 @@ package sk.lukasmacko.richfaces.chart.component;
 import org.richfaces.cdk.annotations.Attribute;
 
 /**
- *
+ * 
  * @author Macko
  */
 public interface AxisAttributes {

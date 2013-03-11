@@ -14,7 +14,7 @@ public class PieChartModel implements ChartModel{
     private Map<String,Double> data;
     
     public PieChartModel(){
-        data= new HashMap<>();
+        data= new HashMap<String,Double>();
     }
     
     public PieChartModel(Map<String, Double> data) {

@@ -17,8 +17,8 @@ public class BarChartModel implements ChartModel {
     private List<String> outputKeys;
 
     public BarChartModel() {
-        data = new HashMap<>();
-        keys = new ArrayList<>();
+        data = new HashMap<String,Double>();
+        keys = new ArrayList<String>();
         outputKeys = null;
     }
 
@@ -28,7 +28,7 @@ public class BarChartModel implements ChartModel {
 
     public void setData(Map<String, Double> data) {
         this.data = data;
-        this.keys = new ArrayList<>();
+        this.keys = new ArrayList<String>();
         keys.addAll(data.keySet());
     }
 

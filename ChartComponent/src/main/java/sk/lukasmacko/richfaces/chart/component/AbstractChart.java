@@ -1,6 +1,9 @@
 package sk.lukasmacko.richfaces.chart.component;
 
+import javax.el.MethodExpression;
 import org.richfaces.cdk.annotations.*;
+import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
+import sk.lukasmacko.richfaces.chart.component.event.DataClickListener;
 
 @JsfComponent(
         type = "sk.lukasmacko.richfaces.chart.component.Chart",
@@ -8,7 +11,9 @@ family = "sk.lukasmacko.Chart",
 renderer =
 @JsfRenderer(type = "sk.lukasmacko.chartRenderer"),
 tag =
-@Tag(name = "chart"))
+@Tag(name = "chart"),
+fires = {
+    @Event(value = DataClickEvent.class, listener = DataClickListener.class)})
 abstract public class AbstractChart extends javax.faces.component.UIComponentBase {
 
     @Attribute
@@ -16,4 +21,35 @@ abstract public class AbstractChart extends javax.faces.component.UIComponentBas
 
     @Attribute
     public abstract String getStyleClass();
+
+    @Attribute(events =
+    @EventName("dataclick"))
+    public abstract String getOndataclick();
+
+    @Attribute(events =
+    @EventName("highlight"))
+    public abstract String getOnhighlight();
+    
+    @Attribute(events =
+    @EventName("unhighlight"))
+    public abstract String getOnunhighlight();
+    
+    @Attribute(events =
+    @EventName("dragstop"))
+    public abstract String getOndragstop();
+    
+    @Attribute(events =
+    @EventName("dragstart"))
+    public abstract String getOndragstart();
+    
+    
+    @Attribute(events =
+    @EventName("pointmove"))
+    public abstract String getOnpointmove();
+    
+
+    @Attribute(signature =
+    @Signature(parameters = DataClickEvent.class))
+    public abstract MethodExpression getDataClickListener();
+
 }
