@@ -1,8 +1,6 @@
 import java.util.Random;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
-import javax.faces.event.ActionEvent;
 import javax.faces.event.AjaxBehaviorEvent;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
 import sk.lukasmacko.richfaces.chart.component.model.BarChartModel;
@@ -107,7 +105,7 @@ public class MyBean {
     }
     
     public void dataclick(DataClickEvent event){
-        setMsg("an event occured!");
+        setMsg("An event occured! ");
         
     }
 }
