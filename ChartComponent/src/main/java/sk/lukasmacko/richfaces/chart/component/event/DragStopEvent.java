@@ -12,18 +12,19 @@ import javax.faces.event.FacesListener;
  *
  * @author Macko
  */
-public class DataClickEvent extends FacesEvent{
+public class DragStopEvent extends FacesEvent{
     private int seriesIndex;
     private int pointIndex;
     private String x;
     private Number y;
     
-    public DataClickEvent(UIComponent component,int seriesIndex,int pointIndex, String x, Number y){
+    
+    public DragStopEvent(UIComponent component,int seriesIndex,int pointIndex,String x, Number y){
         super(component);
-        this.seriesIndex=seriesIndex;
-        this.pointIndex=pointIndex;
-        this.x=x;
-        this.y=y;
+        this.seriesIndex = seriesIndex;
+        this.pointIndex = pointIndex;
+        this.x = x;
+        this.y = y;
     }
 
     public int getSeriesIndex() {
@@ -43,20 +44,21 @@ public class DataClickEvent extends FacesEvent{
     }
 
     @Override
-    public String toString() {
-        return "Point with index " +getPointIndex()+
-                "within series "+getSeriesIndex()+" was clicked.\n"+
-                "Point coordinates ["+getX()+","+getY()+"]";
-    }
-    
-    @Override
-    public boolean isAppropriateListener(FacesListener listener) {
-        return listener instanceof DataClickListener;
+    public boolean isAppropriateListener(FacesListener fl) {
+        return fl instanceof DragStopListener;
     }
 
     @Override
-    public void processListener(FacesListener listener) {
-        ((DataClickListener) listener).processDataClick(this);
+    public void processListener(FacesListener fl) {
+        ((DragStopListener) fl).processDragStop(this);
     }
+
+    @Override
+    public String toString() {
+        return "Point with index " +getPointIndex()+
+               "within series "+getSeriesIndex()+" was dragged to new position.\n"+
+               "Point coordinates ["+getX()+","+getY()+"]";
+    }
+    
     
 }

@@ -27,6 +27,7 @@ import sk.lukasmacko.richfaces.chart.component.AbstractSeries;
 import sk.lukasmacko.richfaces.chart.component.AbstractXaxis;
 import sk.lukasmacko.richfaces.chart.component.AbstractYaxis;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
+import sk.lukasmacko.richfaces.chart.component.event.DragStopEvent;
 import sk.lukasmacko.richfaces.chart.component.model.BarChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.ChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
@@ -50,6 +51,7 @@ public abstract class ChartRendererBase extends RendererBase {
     private static final String EVENT_TYPE="eventType";
     
     private static final String DATA_CLICK_TYPE="dataClick";
+    private static final String DRAG_STOP_TYPE="dragStop";
     /**
      * Stores category names for bar and pie chart
      */
@@ -272,8 +274,7 @@ public abstract class ChartRendererBase extends RendererBase {
         addAttribute(axisOpt, "min", axis.getAttributes().get("min"));
         addAttribute(axisOpt, "max", axis.getAttributes().get("max"));
         addAttribute(axisOpt, "label", axis.getAttributes().get("label"));
-
-        //TODO format and tick rotation
+       //TODO format and tick rotation
 
         return axisOpt;
     }
@@ -302,13 +303,21 @@ public abstract class ChartRendererBase extends RendererBase {
             String eventTypeParam = requestParameterMap.get(getFieldId(context,  component, EVENT_TYPE));
             String seriesIndexParam = requestParameterMap.get(getFieldId(context,  component, SERIES_INDEX));
             try {
+                
                 if (DATA_CLICK_TYPE.equals(eventTypeParam)) {
-                    double x = Double.parseDouble(xParam);
+                    double y = Double.parseDouble(yParam);
                     int seriesIndex = Integer.parseInt(seriesIndexParam);
                     int pointIndex = Integer.parseInt(pointIndexParam);
-                    String y = yParam;
+                    String x = xParam;
                     new DataClickEvent(component, seriesIndex, pointIndex, x, y).queue();
                 } 
+                else if(DRAG_STOP_TYPE.equals(eventTypeParam)){
+                    double y = Double.parseDouble(yParam);
+                    int seriesIndex = Integer.parseInt(seriesIndexParam);
+                    int pointIndex = Integer.parseInt(pointIndexParam);
+                    String x = xParam;
+                    new DragStopEvent(component, seriesIndex, pointIndex, x, y).queue();
+                }
             } catch (NumberFormatException ex) {
                 throw new FacesException("Cannot convert request parmeters", ex);
             }

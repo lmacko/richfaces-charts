@@ -7,6 +7,7 @@ import javax.faces.event.FacesEvent;
 import org.richfaces.cdk.annotations.*;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickListener;
+import sk.lukasmacko.richfaces.chart.component.event.DragStopEvent;
 
 @JsfComponent(
         type = "sk.lukasmacko.richfaces.chart.component.Chart",
@@ -58,10 +59,12 @@ abstract public class AbstractChart extends javax.faces.component.UIComponentBas
     @Signature(parameters = DataClickEvent.class))
     public abstract MethodExpression getDataClickListener();
     
+    @Attribute(signature =
+    @Signature(parameters = DragStopEvent.class))
+    public abstract MethodExpression getDragStopListener();
+    
     @Override
     public void broadcast(FacesEvent event) throws AbortProcessingException {
-        
-           
         if (event instanceof DataClickEvent) {
             FacesContext facesContext = getFacesContext();
             MethodExpression expression = getDataClickListener();
@@ -69,7 +72,14 @@ abstract public class AbstractChart extends javax.faces.component.UIComponentBas
                 expression.invoke(facesContext.getELContext(), new Object[]{event});
             }
             super.broadcast(event);
-         
+        }
+        else if(event instanceof DragStopEvent){
+            FacesContext facesContext= getFacesContext();
+            MethodExpression expression = getDragStopListener();
+            if(expression != null){
+                expression.invoke(facesContext.getELContext(), new Object[]{event});
+            }
+            super.broadcast(event);
         }
         else{
             super.broadcast(event);

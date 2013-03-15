@@ -1,4 +1,4 @@
-(function ($, rf) {
+ (function ($, rf) {
    
     rf.ui = rf.ui || {};
     // Default options definition if needed for the component
@@ -67,14 +67,17 @@
             }
             else if(eventName =='ondragstop'){
                 //!!Edit jqplot.dragable.js line 222
-                return function(ev,gridPos,dataPos,pointIndex){
+                return function(ev,seriesIndex,pointIndex,dataPos){
                     ev.data = {
-                        'gridPos':gridPos,
+                        'seriesIndex':seriesIndex,
                         'x': dataPos.xaxis,
                         'y': dataPos.yaxis,
                         'pointIndex':pointIndex
                             
                     };
+                    //server-side
+                    obj.ajaxFunction(ev,"dragStop",seriesIndex,pointIndex,dataPos.xaxis,dataPos.yaxis);
+                    //client-side
                     obj[eventName].call(document.getElementById(id),ev);
                 }
             }
@@ -89,10 +92,8 @@
                     //server-side
                     if(eventName=="ondataclick"){
                         obj.ajaxFunction(ev,"dataClick",seriesIndex,pointIndex,data[0],data[1]);
-                        
                     }
-                    
-                    
+                    //client-side
                     obj[eventName].call(document.getElementById(id),ev);
                 }
             }
