@@ -8,7 +8,7 @@ import org.richfaces.cdk.annotations.*;
 
 
 @JsfComponent(
-        type = "sk.lukasmacko.richfaces.chartcomponent.Legend",
+        type = "sk.lukasmacko.richfaces.chart.component.Legend",
         family = "sk.lukasmacko.Chart",
         tag = @Tag(name="legend"))
 abstract public class AbstractLegend extends javax.faces.component.UIComponentBase {

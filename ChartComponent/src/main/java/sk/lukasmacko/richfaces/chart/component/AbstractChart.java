@@ -14,7 +14,9 @@ family = "sk.lukasmacko.Chart",
 renderer =
 @JsfRenderer(type = "sk.lukasmacko.chartRenderer"),
 tag =
-@Tag(name = "chart"),
+@Tag(name = "chart",handler = "sk.lukasmacko.richfaces.facelets.html.ChartTagHandler",
+    generate = true,
+    type = TagType.Facelets),
         fires = {
     @Event(value = DataClickEvent.class, listener = DataClickListener.class)}
 )

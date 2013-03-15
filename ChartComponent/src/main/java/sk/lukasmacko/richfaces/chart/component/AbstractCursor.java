@@ -4,7 +4,7 @@ import org.richfaces.cdk.annotations.*;
 
 
 @JsfComponent(
-        type = "sk.lukasmacko.richfaces.chartcomponent.Cursor",
+        type = "sk.lukasmacko.richfaces.chart.component.Cursor",
         family = "sk.lukasmacko.Chart",
         tag = @Tag(name="cursor"))
 abstract public class AbstractCursor extends javax.faces.component.UIComponentBase {
