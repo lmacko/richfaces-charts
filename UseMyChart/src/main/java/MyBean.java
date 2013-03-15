@@ -1,8 +1,12 @@
+import java.io.Serializable;
 import java.util.Random;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
+import sk.lukasmacko.richfaces.chart.component.event.DataClickListener;
 import sk.lukasmacko.richfaces.chart.component.model.BarChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
@@ -23,6 +27,12 @@ public class MyBean {
     private BarChartModel barData2;
     private String msg;
     private Random generator;
+    
+    private DataClickListener listner = new MyListner();
+
+    public DataClickListener getListner() {
+        return listner;
+    }
 
     public String getMsg() {
         return msg;
@@ -103,9 +113,24 @@ public class MyBean {
         System.out.println("I'm alive");
         
     }
+    public void handler(){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Additional listener","df"));
+    }
     
     public void dataclick(DataClickEvent event){
-        setMsg("An event occured! ");
+        setMsg("An event occured! "+ event.toString());
+    }
+    
+    public class MyListner implements DataClickListener{
+
+        @Override
+        public void processDataClick(DataClickEvent event) {
+            System.out.println("Event");
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
         
     }
+
+
+   
 }
