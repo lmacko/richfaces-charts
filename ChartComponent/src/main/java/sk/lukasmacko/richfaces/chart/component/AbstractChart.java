@@ -1,6 +1,9 @@
 package sk.lukasmacko.richfaces.chart.component;
 
 import javax.el.MethodExpression;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.FacesEvent;
 import org.richfaces.cdk.annotations.*;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickListener;
@@ -11,9 +14,12 @@ family = "sk.lukasmacko.Chart",
 renderer =
 @JsfRenderer(type = "sk.lukasmacko.chartRenderer"),
 tag =
-@Tag(name = "chart"),
-fires = {
-    @Event(value = DataClickEvent.class, listener = DataClickListener.class)})
+@Tag(name = "chart",handler = "sk.lukasmacko.richfaces.facelets.html.ChartTagHandler",
+    generate = true,
+    type = TagType.Facelets),
+        fires = {
+    @Event(value = DataClickEvent.class, listener = DataClickListener.class)}
+)
 abstract public class AbstractChart extends javax.faces.component.UIComponentBase {
 
     @Attribute
@@ -51,5 +57,25 @@ abstract public class AbstractChart extends javax.faces.component.UIComponentBas
     @Attribute(signature =
     @Signature(parameters = DataClickEvent.class))
     public abstract MethodExpression getDataClickListener();
+    
+    @Override
+    public void broadcast(FacesEvent event) throws AbortProcessingException {
+        
+           
+        if (event instanceof DataClickEvent) {
+            FacesContext facesContext = getFacesContext();
+            MethodExpression expression = getDataClickListener();
+            if (expression != null) {
+                expression.invoke(facesContext.getELContext(), new Object[]{event});
+            }
+            super.broadcast(event);
+         
+        }
+        else{
+            super.broadcast(event);
+        }
+    }
+    
+    
 
 }

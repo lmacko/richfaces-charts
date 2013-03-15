@@ -86,6 +86,12 @@
                         'x':data[0],
                         'y':data[1]
                     };
+                    //server-side
+                    if(eventName=="ondataclick"){
+                        obj.ajaxFunction(ev,"dataClick",seriesIndex,pointIndex,data[0],data[1]);
+                        
+                    }
+                    
                     
                     obj[eventName].call(document.getElementById(id),ev);
                 }

@@ -16,10 +16,14 @@ public class DataClickEvent extends FacesEvent{
     private int seriesIndex;
     private int pointIndex;
     private Number x;
-    private Object y;
+    private String y;
     
-    public DataClickEvent(UIComponent component){
+    public DataClickEvent(UIComponent component,int seriesIndex,int pointIndex, double x, String y){
         super(component);
+        this.seriesIndex=seriesIndex;
+        this.pointIndex=pointIndex;
+        this.x=x;
+        this.y=y;
     }
 
     public int getSeriesIndex() {
@@ -34,8 +38,15 @@ public class DataClickEvent extends FacesEvent{
         return x;
     }
 
-    public Object getY() {
+    public String getY() {
         return y;
+    }
+
+    @Override
+    public String toString() {
+        return "Point with index " +getPointIndex()+
+                "within series "+getSeriesIndex()+" was clicked.\n"+
+                "Point coordinates ["+getX()+","+getY()+"]";
     }
     
     @Override

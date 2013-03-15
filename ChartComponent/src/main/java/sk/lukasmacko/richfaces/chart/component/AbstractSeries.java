@@ -6,7 +6,7 @@ import sk.lukasmacko.richfaces.chart.component.model.ChartModel;
 
 
 @JsfComponent(
-        type = "sk.lukasmacko.richfaces.chartcomponent.Series",
+        type = "sk.lukasmacko.richfaces.chart.component.Series",
         family = "sk.lukasmacko.Chart",
         tag = @Tag(name="series"))
 abstract public class AbstractSeries extends javax.faces.component.UIComponentBase {

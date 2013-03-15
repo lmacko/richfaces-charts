@@ -30,6 +30,7 @@
        
         <cdk:scriptObject name="events">
             <cdk:scriptOption attributes="ondataclick onmouseover onhighlight onunhighlight ondragstart ondragstop onpointmove" wrapper="eventHandler"/>
+            <cdk:scriptOption name="ajaxFunction" value="#{createSubmitEventFunction(facesContext,component)}"/>
         </cdk:scriptObject>      
 
         <div id="#{clientId}" class="richfaces-chart #{component.attributes['styleClass']}" ></div>
