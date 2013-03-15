@@ -6,7 +6,7 @@
     
  
     // Create constructor and register our component class
-    rf.ui.Chart = function (componentId, options,data,eventHandlers) {
+    rf.ui.Chart = function (componentId, options, data, eventHandlers) {
         if(!document.getElementById(componentId)){
             throw "Element with id '"+componentId+"' not found.";
         }
@@ -48,18 +48,17 @@
             'ondragstart':'jqplotDragStart',
             'ondragstop':'jqplotDragStop',
             'onpointmove':'jqplotSeriesPointChange'
-                
-        },
+       },
         
         __bindEventHandlers:function(){
             for (e in this.__eventMap){
                 if(this.eventHandlers[e]){
-                    jQuery(document.getElementById(this.id)).bind(this.__eventMap[e],this.__gethandlerfunction(this.eventHandlers,e,this.id));
+                    jQuery(document.getElementById(this.id)).bind(this.__eventMap[e],this.__gethandlerfunction(this.eventHandlers,e,this.id,this.options));
                 }
             } 
         },
         
-        __gethandlerfunction : function(obj,eventName,id){
+        __gethandlerfunction : function(obj,eventName,id,options){
             if(eventName =='onunhighlight'){
                 return function(ev){
                     obj[eventName].call(document.getElementById(id),ev);
@@ -86,12 +85,16 @@
                     ev.data = {
                         'seriesIndex':seriesIndex,
                         'pointIndex' :pointIndex,
-                        'x':data[0],
-                        'y':data[1]
+                        'y':data[1],
+                        'x':data[0]
                     };
+                    
+                    if(options.chartType=="bar"){//bar chart label are stored in options
+                       ev.data.x = options.axes.xaxis.ticks[data[0]-1];    
+                    }
                     //server-side
                     if(eventName=="ondataclick"){
-                        obj.ajaxFunction(ev,"dataClick",seriesIndex,pointIndex,data[0],data[1]);
+                        obj.ajaxFunction(ev,"dataClick",seriesIndex,pointIndex,data[1],data[0]);
                     }
                     //client-side
                     obj[eventName].call(document.getElementById(id),ev);
@@ -109,100 +112,3 @@
     });
 })(jQuery, RichFaces);
 
-
-
-
-/*(function($,rf){
-    rf.ui = rf.ui || {};
-    
-    rf.ui.Chart =  rf.BaseComponent.extendClass({
-        name:"Chart",
-        
-        init:function(componentId,options,data,events){
-            
-            if(!document.getElementById(componentId)){
-                throw "Element with id '"+componentId+"' not found.";
-            }
-            
-            this.options = options;
-            this.events = events;
-           
-            $super.constructor.call(this,componentId);
-            
-            this.__element = this.attachToDom(this.id);
-                           
-            this.element = jQuery(document.getElementById(this.id));
-            
-            var _this = this;
-            //init chart
-            this.element.jqplot(data, options);
-            
-            
-            //Client-side event binding
-            
-            //jsf event -> javascript event 
-            var eventMap = {
-                'ondataclick':'jqplotDataClick',
-                'onhighlight':'jqplotDataHighlight',
-                'onunhighlight':'jqplotDataUnhighlight',
-                'ondragstart':'jqplotDragStart',
-                'ondragstop':'jqplotDragStop',
-                'onpointmove':'jqplotSeriesPointChange'
-                
-            }
-           
-            var __gethandlerfunction = function(obj,eventName,id){
-                return function(ev,seriesIndex,pointIndex,data){
-                    ev.data = {
-                        'seriesIndex':seriesIndex,
-                        'pointIndex' :pointIndex,
-                        'x':data[0],
-                        'y':data[1]
-                    };
-                    
-                    obj[eventName].call(document.getElementById(id),ev);
-                }
-            };
-             
-            for (e in eventMap){
-                if(this.events[e]){
-                    this.element.bind(eventMap[e],__gethandlerfunction(this.events,e,this.id));
-                }
-            } 
-             
-        /*if(this.events.ondataclick){
-                this.element.bind('jqplotDataClick', 
-                    __gethandlerfunction(this.events,'ondataclick',this.id));
-            }
-            
-            if(this.events.onmouseover){
-                this.element.bind('jqplotDataHighlight', 
-                    function (ev, seriesIndex, pointIndex, data) {
-                        ev.data = {
-                            'seriesIndex':seriesIndex,
-                            'pointIndex' :pointIndex,
-                            'x':data[0],
-                            'y':data[1]
-                        };
-                    
-                        _this.events.onmouseover.call(document.getElementById(_this.id),ev);
-                    }
-                    );
-                    
-                    
-            }         
-        },
-        
-        
-            
-        destroy: function(){
-            $super.destroy.call(this);
-   
-        }
-        
-    });
-    var $super = rf.ui.Chart.$super;
-})(jQuery,RichFaces);
-
-
-*/
