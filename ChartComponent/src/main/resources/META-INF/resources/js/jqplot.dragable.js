@@ -219,7 +219,7 @@
             plot.drawSeries({preventJqPlotSeriesDrawTrigger:true}, dp.seriesIndex);
             dc._neighbor = null;
             ev.target.style.cursor = dc._cursors.pop();
-            plot.target.trigger('jqplotDragStop', [gridpos, datapos,dp.pointIndex]);
+            plot.target.trigger('jqplotDragStop', [dp.seriesIndex, dp.pointIndex,datapos]);
         }
     }
 })(jQuery);

@@ -7,19 +7,15 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 import org.ajax4jsf.javascript.JSFunctionDefinition;
 import org.ajax4jsf.javascript.JSReference;
-import org.ajax4jsf.javascript.ScriptString;
 import org.richfaces.json.JSONArray;
 import org.richfaces.json.JSONException;
 import org.richfaces.json.JSONObject;
 import org.richfaces.renderkit.AjaxFunction;
 import org.richfaces.renderkit.RendererBase;
 import org.richfaces.renderkit.util.AjaxRendererUtils;
-import org.richfaces.renderkit.util.RendererUtils;
 import sk.lukasmacko.richfaces.chart.component.AbstractChart;
 import sk.lukasmacko.richfaces.chart.component.AbstractCursor;
 import sk.lukasmacko.richfaces.chart.component.AbstractLegend;
@@ -27,6 +23,7 @@ import sk.lukasmacko.richfaces.chart.component.AbstractSeries;
 import sk.lukasmacko.richfaces.chart.component.AbstractXaxis;
 import sk.lukasmacko.richfaces.chart.component.AbstractYaxis;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
+import sk.lukasmacko.richfaces.chart.component.event.DragStopEvent;
 import sk.lukasmacko.richfaces.chart.component.model.BarChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.ChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
@@ -50,6 +47,7 @@ public abstract class ChartRendererBase extends RendererBase {
     private static final String EVENT_TYPE="eventType";
     
     private static final String DATA_CLICK_TYPE="dataClick";
+    private static final String DRAG_STOP_TYPE="dragStop";
     /**
      * Stores category names for bar and pie chart
      */
@@ -59,9 +57,7 @@ public abstract class ChartRendererBase extends RendererBase {
         try {
             obj.put(key, value);
         } catch (JSONException ex) {
-            //TODO IOException
             throw new IOException("JSONObject put failed.");
-
         }
         return obj;
     }
@@ -92,7 +88,7 @@ public abstract class ChartRendererBase extends RendererBase {
      */
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
+        
         AbstractChart chart = (AbstractChart) component;
         chartType = ChartModel.ChartType.unknown;
         keys = null;
@@ -138,6 +134,7 @@ public abstract class ChartRendererBase extends RendererBase {
         if (chartType == ChartModel.ChartType.bar) {
 
             if (axisOptions.has("xaxis")) {
+                
                 try {
                     ((JSONObject) axisOptions.get("xaxis")).put("ticks", keys);
                 } catch (JSONException e) {
@@ -156,23 +153,16 @@ public abstract class ChartRendererBase extends RendererBase {
                 addAttribute(axisOptions, "xaxis", xaxisOpt);
             }
         }
-
-
-
-        ///////////////////////////////////////////
-
-        //output javascript intialization
-  /*      writer.write("new RichFaces.ui.Chart(\"" + chart.getClientId() + "\",");
-         writer.write(options.toString());
-         writer.write("," + data.toString() + ");");
-
-         */
-
-        //writer.write(options.toString());
-        //writer.write("," + data.toString());
+        addAttribute(options, "chartType", chartType);
 
     }
-
+    
+    /**
+     * Process legend tag and its attributes 
+     * @param legend
+     * @return
+     * @throws IOException 
+     */
     protected JSONObject processLegend(UIComponent legend) throws IOException {
         JSONObject legendOpt = new JSONObject();
 
@@ -182,6 +172,12 @@ public abstract class ChartRendererBase extends RendererBase {
         return legendOpt;
     }
 
+    /**
+     * Process series tag and its attributes
+     * @param series
+     * @return
+     * @throws IOException 
+     */
     protected JSONObject processSeries(UIComponent series) throws IOException {
         JSONObject seriesOpt = new JSONObject();
         JSONObject rendererOpt = new JSONObject();
@@ -259,31 +255,50 @@ public abstract class ChartRendererBase extends RendererBase {
 
     }
 
-    public String getData() {
-        return data.toString();
-    }
-
-    public String getOptions() {
-        return options.toString();
-    }
-
+    /**
+     * Process xaxis and yaxis tag 
+     * @param axis
+     * @return
+     * @throws IOException 
+     */
     protected JSONObject processAxis(UIComponent axis) throws IOException {
         JSONObject axisOpt = new JSONObject();
         addAttribute(axisOpt, "min", axis.getAttributes().get("min"));
         addAttribute(axisOpt, "max", axis.getAttributes().get("max"));
         addAttribute(axisOpt, "label", axis.getAttributes().get("label"));
-
-        //TODO format and tick rotation
+       //TODO format and tick rotation
 
         return axisOpt;
     }
 
+    /**
+     * Process cursor tag
+     * @param cursor
+     * @return
+     * @throws IOException 
+     */
     protected JSONObject processCursor(UIComponent cursor) throws IOException {
         JSONObject cursorOpt = new JSONObject();
         addAttribute(cursorOpt, "zoom", cursor.getAttributes().get("zoomEn"));
         addAttribute(cursorOpt, "constrainZoomTo", cursor.getAttributes().get("constraintZoom"));
         addAttribute(cursorOpt, "show", true);
         return cursorOpt;
+    }
+    
+    /**
+     * 
+     * @return chart data 
+     */
+    public String getData() {
+        return data.toString();
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public String getOptions() {
+        return options.toString();
     }
 
     @Override
@@ -296,33 +311,47 @@ public abstract class ChartRendererBase extends RendererBase {
         
         Map<String, String> requestParameterMap = context.getExternalContext().getRequestParameterMap();
         if (requestParameterMap.get(component.getClientId(context)) != null) {
-            String yParam = requestParameterMap.get(getFieldId(context,  component, X_VALUE));
-            String xParam = requestParameterMap.get(getFieldId(context, component, Y_VALUE));
-            String pointIndexParam = requestParameterMap.get(getFieldId(context,  component, POINT_INDEX));
-            String eventTypeParam = requestParameterMap.get(getFieldId(context,  component, EVENT_TYPE));
-            String seriesIndexParam = requestParameterMap.get(getFieldId(context,  component, SERIES_INDEX));
+            String yParam = requestParameterMap.get(getFieldId(component, X_VALUE));
+            String xParam = requestParameterMap.get(getFieldId(component, Y_VALUE));
+            String pointIndexParam = requestParameterMap.get(getFieldId(component, POINT_INDEX));
+            String eventTypeParam = requestParameterMap.get(getFieldId(component, EVENT_TYPE));
+            String seriesIndexParam = requestParameterMap.get(getFieldId(component, SERIES_INDEX));
             try {
+                
                 if (DATA_CLICK_TYPE.equals(eventTypeParam)) {
-                    double x = Double.parseDouble(xParam);
+                    double y = Double.parseDouble(yParam);
                     int seriesIndex = Integer.parseInt(seriesIndexParam);
                     int pointIndex = Integer.parseInt(pointIndexParam);
-                    String y = yParam;
+                    String x = xParam;
                     new DataClickEvent(component, seriesIndex, pointIndex, x, y).queue();
                 } 
+                else if(DRAG_STOP_TYPE.equals(eventTypeParam)){
+                    double y = Double.parseDouble(yParam);
+                    int seriesIndex = Integer.parseInt(seriesIndexParam);
+                    int pointIndex = Integer.parseInt(pointIndexParam);
+                    String x = xParam;
+                    new DragStopEvent(component, seriesIndex, pointIndex, x, y).queue();
+                }
             } catch (NumberFormatException ex) {
                 throw new FacesException("Cannot convert request parmeters", ex);
             }
         }
     }
     
+    /**
+     * Creates function for server-side event processing
+     * @param context
+     * @param component
+     * @return 
+     */
     protected Object createSubmitEventFunction(FacesContext context, UIComponent component) {
         
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put(getFieldId(context, component, SERIES_INDEX), new JSReference(SERIES_INDEX));
-        params.put(getFieldId(context, component, POINT_INDEX), new JSReference(POINT_INDEX));
-        params.put(getFieldId(context, component, X_VALUE), new JSReference(X_VALUE));
-        params.put(getFieldId(context, component, Y_VALUE), new JSReference(Y_VALUE));
-        params.put(getFieldId(context, component, EVENT_TYPE), new JSReference(EVENT_TYPE));
+        params.put(getFieldId(component, SERIES_INDEX), new JSReference(SERIES_INDEX));
+        params.put(getFieldId(component, POINT_INDEX), new JSReference(POINT_INDEX));
+        params.put(getFieldId(component, X_VALUE), new JSReference(X_VALUE));
+        params.put(getFieldId(component, Y_VALUE), new JSReference(Y_VALUE));
+        params.put(getFieldId(component, EVENT_TYPE), new JSReference(EVENT_TYPE));
         String clientId = component.getClientId();
         params.put(clientId, clientId);
         
@@ -335,8 +364,14 @@ public abstract class ChartRendererBase extends RendererBase {
             X_VALUE, Y_VALUE).addToBody(ajaxFunction);
     }
 
-    protected String getFieldId(FacesContext context, UIComponent component, String attribute) {
-        return RendererUtils.getInstance().clientId(context, component) + UINamingContainer.getSeparatorChar(context)
-            + attribute;
+    /**
+     * 
+     * @param context
+     * @param component
+     * @param attribute
+     * @return 
+     */
+    protected String getFieldId(UIComponent component, String attribute) {
+        return component.getClientId() + "-" + attribute;
     }
 }
