@@ -7,6 +7,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickListener;
+import sk.lukasmacko.richfaces.chart.component.event.DragStopEvent;
 import sk.lukasmacko.richfaces.chart.component.model.BarChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
@@ -26,16 +27,20 @@ public class MyBean {
     private BarChartModel barData;
     private BarChartModel barData2;
     private String msg;
+    private String dragLog;
     private Random generator;
     
-    private DataClickListener listner = new MyListner();
+   
 
-    public DataClickListener getListner() {
-        return listner;
-    }
-
+   
     public String getMsg() {
         return msg;
+    }
+    public String getDragLog(){
+        return dragLog;
+    }
+    public void setDragLog(String log){
+        this.dragLog = log;
     }
 
     public void setMsg(String msg) {
@@ -80,6 +85,7 @@ public class MyBean {
     
     public MyBean() {
         msg ="Nothing";
+        dragLog ="Nothing dragged yet.";
         
         generator = new Random();
         
@@ -121,14 +127,8 @@ public class MyBean {
         setMsg("An event occured! "+ event.toString());
     }
     
-    public class MyListner implements DataClickListener{
-
-        @Override
-        public void processDataClick(DataClickEvent event) {
-            System.out.println("Event");
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-        
+    public void dragStopHandler(DragStopEvent event){
+        setDragLog(this.dragLog+'\n'+event.toString());
     }
 
 
