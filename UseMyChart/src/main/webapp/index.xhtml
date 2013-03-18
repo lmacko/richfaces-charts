@@ -48,9 +48,14 @@
                       onhighlight="highlight(event)" onunhighlight="unhighlight(event)"
                       ondragstart="log(event,'dragStart')" ondragstop="log(event,'dragStop')" onpointmove="log(event,'move')"
                       dataClickListener="#{myBean.dataclick}"
-                      dragStopListener="#{myBean.dragStopHandler}">
+                      dragStopListener="#{myBean.dragStopHandler}" >
                 <lm:series value="#{myBean.first}" type="line" label="Dragable" color="green" dragable="true" dragableConstraint="y" trendlineVisible="true"/>
                 <lm:series value="#{myBean.second}" type="line" label="Second" marker="filledDiamond"/>
+                <lm:series type="line" label="a4jrepeat">
+                    <a4j:repeat value="#{myBean.points}" var="point">
+                        <lm:point x="#{point.x}" y="#{point.y}"/>
+                    </a4j:repeat>
+                </lm:series>
                 <lm:xaxis label="xaxis label"/>
                 <lm:yaxis label="yaxis label" />
                 <lm:legend placement="outside"/>
