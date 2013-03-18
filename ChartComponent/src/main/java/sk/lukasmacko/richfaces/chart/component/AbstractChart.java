@@ -1,6 +1,8 @@
 package sk.lukasmacko.richfaces.chart.component;
 
 import javax.el.MethodExpression;
+import javax.faces.component.visit.VisitCallback;
+import javax.faces.component.visit.VisitContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
@@ -62,7 +64,7 @@ abstract public class AbstractChart extends javax.faces.component.UIComponentBas
     @Attribute(signature =
     @Signature(parameters = DragStopEvent.class))
     public abstract MethodExpression getDragStopListener();
-    
+        
     @Override
     public void broadcast(FacesEvent event) throws AbortProcessingException {
         if (event instanceof DataClickEvent) {
@@ -85,7 +87,8 @@ abstract public class AbstractChart extends javax.faces.component.UIComponentBas
             super.broadcast(event);
         }
     }
-    
+
+       
     
 
 }

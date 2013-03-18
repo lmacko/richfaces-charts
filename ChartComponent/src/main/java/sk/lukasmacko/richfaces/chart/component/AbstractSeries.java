@@ -16,7 +16,7 @@ abstract public class AbstractSeries extends javax.faces.component.UIComponentBa
     @Attribute(required=true,suggestedValue="SeriesType.line,SeriesType.bar,SeriesType.pie")
     public abstract SeriesType getType();
     
-    @Attribute(required=true)
+    @Attribute()
     public abstract ChartModel getValue();
         
     @Attribute

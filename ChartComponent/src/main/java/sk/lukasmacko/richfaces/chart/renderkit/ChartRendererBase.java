@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.visit.VisitContext;
 import javax.faces.context.FacesContext;
 import org.ajax4jsf.javascript.JSFunctionDefinition;
 import org.ajax4jsf.javascript.JSReference;
@@ -156,6 +157,8 @@ public abstract class ChartRendererBase extends RendererBase {
         addAttribute(options, "chartType", chartType);
 
     }
+
+    
     
     /**
      * Process legend tag and its attributes 
@@ -164,11 +167,12 @@ public abstract class ChartRendererBase extends RendererBase {
      * @throws IOException 
      */
     protected JSONObject processLegend(UIComponent legend) throws IOException {
+        AbstractLegend l = (AbstractLegend) legend;
         JSONObject legendOpt = new JSONObject();
-
+        
         addAttribute(legendOpt, "show", true);
-        addAttribute(legendOpt, "placement", legend.getAttributes().get("placement"));
-        addAttribute(legendOpt, "location", AbstractLegend.positionMap.get((AbstractLegend.PositionType) legend.getAttributes().get("position")));
+        addAttribute(legendOpt, "placement", l.getPlacement());
+        addAttribute(legendOpt, "location", AbstractLegend.positionMap.get((AbstractLegend.PositionType) l.getPosition()));
         return legendOpt;
     }
 
@@ -212,7 +216,7 @@ public abstract class ChartRendererBase extends RendererBase {
 
                 break;
             case line:
-                if (!(model instanceof LineChartModel)) {
+                if (model!=null && !(model instanceof LineChartModel)) {
                     throw new UnsupportedOperationException("Line chart requieres LineChartModel.");
                 }
                 //marker properties
@@ -233,7 +237,18 @@ public abstract class ChartRendererBase extends RendererBase {
                 break;
 
         }
-
+        
+        //TODO check !!!!!!!!!!!
+        if(model==null){
+            VisitPointCallback callback = new VisitPointCallback();
+                series.visitTree(VisitContext.createVisitContext(
+                        FacesContext.getCurrentInstance()),
+                        callback);
+                if(callback.getModel()!=null && !callback.getModel().getData().isEmpty()){
+                    model = callback.getModel();
+                }
+        }
+        
         setChartType(model.getChartType());
         data.put(model.toJsonCollection());
 
@@ -271,6 +286,7 @@ public abstract class ChartRendererBase extends RendererBase {
         return axisOpt;
     }
 
+    
     /**
      * Process cursor tag
      * @param cursor
