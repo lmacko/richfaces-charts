@@ -47,19 +47,23 @@
             <lm:chart id="lineChart" title="My title hey hou!" styleClass="chart" ondataclick="click(event,'line')" 
                       onhighlight="highlight(event)" onunhighlight="unhighlight(event)"
                       ondragstart="log(event,'dragStart')" ondragstop="log(event,'dragStop')" onpointmove="log(event,'move')"
-                      dataClickListener="#{myBean.dataclick}">
+                      dataClickListener="#{myBean.dataclick}"
+                      dragStopListener="#{myBean.dragStopHandler}">
                 <lm:series value="#{myBean.first}" type="line" label="Dragable" color="green" dragable="true" dragableConstraint="y" trendlineVisible="true"/>
                 <lm:series value="#{myBean.second}" type="line" label="Second" marker="filledDiamond"/>
                 <lm:xaxis label="xaxis label"/>
                 <lm:yaxis label="yaxis label" />
                 <lm:legend placement="outside"/>
                 <a4j:ajax event="dataclick" render="msg" execute="msg"/>
+                <a4j:ajax event="dragstop" render="draglog" execute="draglog"/>
             </lm:chart>
 
             <div id="info"></div>
+            
 
             <h:form>
                 <h:outputText value="#{myBean.msg}" id="msg"/>
+                <h:outputText value="#{myBean.dragLog}" id="draglog"/>
             </h:form>
 
             <h:form>
@@ -74,9 +78,12 @@
 
             <div id="mouseover-info"></div>
 
-            <lm:chart id="pieChart" title="Pie demo" styleClass="chart" ondataclick="click(event,'pie')" onhighlight="highlight(event)" onunhighlight="unhighlight(event)">
+            <lm:chart id="pieChart" title="Pie demo" styleClass="chart" ondataclick="click(event,'pie')"
+                      onhighlight="highlight(event)" onunhighlight="unhighlight(event)"
+                      dataClickListener="#{myBean.dataclick}">
                 <lm:series value="#{myBean.pieData}" type="pie" />
                 <lm:legend position="left"/>
+                <a4j:ajax event="dataclick" render="msg" execute="msg"/>
             </lm:chart>
     </h:body>
 </html>
