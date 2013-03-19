@@ -1,4 +1,6 @@
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -29,10 +31,21 @@ public class MyBean {
     private String msg;
     private String dragLog;
     private Random generator;
+    private DataClickListener listener=new ClickListner();
+    
+    private List<Point> points;
     
    
+    public DataClickListener getListener(){
+        return listener;
+    }
 
    
+    public List<Point> getPoints(){
+       return points;
+    }
+    
+    
     public String getMsg() {
         return msg;
     }
@@ -116,6 +129,10 @@ public class MyBean {
         barData2.add("June",40);
         barData2.add("July",50);
         barData2.add("August",60);
+        
+        points = new LinkedList<Point>();
+        points.add(new Point(1.0, 2.0));
+        points.add(new Point(5.0, 5.0));
         System.out.println("I'm alive");
         
     }
@@ -131,6 +148,32 @@ public class MyBean {
         setDragLog(this.dragLog+'\n'+event.toString());
     }
 
+    public class Point{
+        private Number x;
+        private Number y;
+        public Point(Number x, Number y){
+            this.x = x;
+            this.y = y;
+        }
+
+        public Number getX() {
+            return x;
+        }
+
+        public Number getY() {
+            return y;
+        }
+        
+    }
+    
+    public class ClickListner implements DataClickListener{
+
+        @Override
+        public void processDataClick(DataClickEvent event) {
+            setMsg("!"+event.toString());
+        }
+        
+    }
 
    
 }
