@@ -31,10 +31,14 @@ public class MyBean {
     private String msg;
     private String dragLog;
     private Random generator;
+    private DataClickListener listener=new ClickListner();
     
     private List<Point> points;
     
    
+    public DataClickListener getListener(){
+        return listener;
+    }
 
    
     public List<Point> getPoints(){
@@ -158,6 +162,15 @@ public class MyBean {
 
         public Number getY() {
             return y;
+        }
+        
+    }
+    
+    public class ClickListner implements DataClickListener{
+
+        @Override
+        public void processDataClick(DataClickEvent event) {
+            setMsg("!"+event.toString());
         }
         
     }
