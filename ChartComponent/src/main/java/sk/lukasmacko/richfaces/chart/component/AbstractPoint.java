@@ -4,8 +4,6 @@
  */
 package sk.lukasmacko.richfaces.chart.component;
 
-import javax.el.ValueExpression;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import org.richfaces.cdk.annotations.Attribute;
 import org.richfaces.cdk.annotations.JsfComponent;
