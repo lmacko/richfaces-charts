@@ -44,52 +44,68 @@
         <a4j:outputPanel ajaxRendered="true" >
             <h:messages/>
         </a4j:outputPanel>
+
+
+        <lm:chart id="lineChart" title="My title hey hou!" styleClass="chart" >
+            <lm:series value="#{myBean.lineChartModel}" type="line" label="Dragable" color="green" dragable="true" dragableConstraint="y" trendlineVisible="true"/>
+            <lm:series type="line" label="a4jrepeat">
+                <a4j:repeat value="#{myBean.points}" var="point">
+                    <lm:point x="#{point.x}" y="#{point.y}"/>
+                </a4j:repeat>
+            </lm:series>
+            <lm:xaxis/>
+            <lm:yaxis min="0"/>
+            <lm:legend/>
+        </lm:chart>
         
-            <lm:chart id="lineChart" title="My title hey hou!" styleClass="chart" ondataclick="click(event,'line')" 
-                      onhighlight="highlight(event)" onunhighlight="unhighlight(event)"
-                      ondragstart="log(event,'dragStart')" ondragstop="log(event,'dragStop')" onpointmove="log(event,'move')"
-                      dragStopListener="#{myBean.dragStopHandler}" >
-                <lm:series value="#{myBean.first}" type="line" label="Dragable" color="green" dragable="true" dragableConstraint="y" trendlineVisible="true"/>
-                <lm:series value="#{myBean.second}" type="line" label="Second" marker="filledDiamond"/>
-                <lm:series type="line" label="a4jrepeat">
-                    <a4j:repeat value="#{myBean.points}" var="point">
-                        <lm:point x="#{point.x}" y="#{point.y}"/>
-                    </a4j:repeat>
-                </lm:series>
-                <lm:xaxis label="xaxis label"/>
-                <lm:yaxis label="yaxis label" />
-                <lm:legend placement="outside"/>
+        <lm:chart title="Date demo" styleClass="chart">
+            <lm:series value="#{myBean.dateModel}" type="line"/>
+            <lm:series type="line">
+                <a4j:repeat value="#{myBean.datePoints}" var="p">
+                    <lm:point x="#{p.x}" y="#{p.y}"/>
+                </a4j:repeat>
+            </lm:series>
+            <lm:legend/>
+        </lm:chart>
         
-                <a4j:ajax event="dataclick" listener="#{myBean.listener}" render="msg" execute="msg"/>
-                <a4j:ajax event="dragstop" render="draglog" execute="draglog"/>
-            </lm:chart>
+    
+
+
+        <lm:chart id="barChart" title="Bar Chart" styleClass="chart">
+            <lm:series value ="#{myBean.barChartModel}" type="bar" label="first"/>
+            <lm:series value ="#{myBean.barChartModel2}" type="bar" label="second"/>
+            <lm:legend/>
+        </lm:chart>
         
-            <div id="info"></div>
-            
+        <lm:chart id="barChart2" title="Bar Chart" styleClass="chart">
+            <lm:series value ="#{myBean.barChartModel3}" type="bar" label="first"/>
 
-            <h:form>
-                <h:outputText value="#{myBean.msg}" id="msg"/>
-                <h:outputText value="#{myBean.dragLog}" id="draglog"/>
-            </h:form>
-
-            <h:form>
-                <a4j:poll id="poll" interval="5000" enabled="false" render="barChart" actionListener="#{myBean.generateRandom()}"/>
-            </h:form>
-
-            <lm:chart id="barChart" styleClass="chart"  ondataclick="click(event,'bar')" onhighlight="highlight(event)" onunhighlight="unhighlight(event)">
-                <lm:series value="#{myBean.barData}" type="bar" label="old" color="yellow" dragable="true" dragableConstraint="y"/>
-                <lm:series value="#{myBean.barData2}" type="bar" label="new"/>
-                <lm:legend position="top"/>
-            </lm:chart>
-
-            <div id="mouseover-info"></div>
-
-            <lm:chart id="pieChart" title="Pie demo" styleClass="chart" ondataclick="click(event,'pie')"
-                      onhighlight="highlight(event)" onunhighlight="unhighlight(event)"
-                      dataClickListener="#{myBean.dataclick}">
-                <lm:series value="#{myBean.pieData}" type="pie" />
-                <lm:legend position="left"/>
-                <a4j:ajax event="dataclick" render="msg" execute="msg"/>
-            </lm:chart>
+            <lm:legend/>
+        </lm:chart>
+        
+        <lm:chart id="barChart3" styleClass="chart">
+            <lm:series type="bar">
+                <a4j:repeat value="#{myBean.stringPoints}" var="p">
+                    <lm:point x="#{p.x}" y="#{p.y}"/>
+                </a4j:repeat>
+            </lm:series>
+            <lm:legend/>
+        </lm:chart>
+        
+        <lm:chart id="pie2" title="Pie iteration" styleClass="chart">
+            <lm:series type="pie">
+                <a4j:repeat value="#{myBean.stringPoints}" var="p">
+                    <lm:point x="#{p.x}" y="#{p.y}"/>
+                </a4j:repeat>
+            </lm:series>
+            <lm:legend/>
+        </lm:chart>
+        
+        <lm:chart id="pieChart" title="Bar Chart" styleClass="chart">
+            <lm:series value ="#{myBean.pieChartModel}" type="pie" label="first"/>
+            <lm:legend/>
+        </lm:chart>
+        
+        
     </h:body>
 </html>
