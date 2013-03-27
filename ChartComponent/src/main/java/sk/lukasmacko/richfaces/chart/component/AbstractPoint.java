@@ -20,7 +20,7 @@ import org.richfaces.cdk.annotations.Tag;
 public abstract class AbstractPoint extends UIComponentBase{
     
     @Attribute(required=true)
-    public abstract double getX();
+    public abstract Object getX();
     
     @Attribute(required=true)
     public abstract Number getY();

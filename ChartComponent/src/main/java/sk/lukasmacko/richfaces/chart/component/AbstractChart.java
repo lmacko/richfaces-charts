@@ -1,8 +1,6 @@
 package sk.lukasmacko.richfaces.chart.component;
 
 import javax.el.MethodExpression;
-import javax.faces.component.visit.VisitCallback;
-import javax.faces.component.visit.VisitContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
@@ -13,15 +11,13 @@ import sk.lukasmacko.richfaces.chart.component.event.DragStopEvent;
 
 @JsfComponent(
         type = "sk.lukasmacko.richfaces.chart.component.Chart",
-family = "sk.lukasmacko.Chart",
-renderer =
-@JsfRenderer(type = "sk.lukasmacko.chartRenderer"),
-tag =
-@Tag(name = "chart",handler = "sk.lukasmacko.richfaces.facelets.html.ChartTagHandler",
-    generate = true,
-    type = TagType.Facelets),
+        family = "sk.lukasmacko.Chart",
+        renderer = @JsfRenderer(type = "sk.lukasmacko.chartRenderer"),
+        tag = @Tag(name = "chart",handler = "sk.lukasmacko.richfaces.facelets.html.ChartTagHandler",
+            generate = true,
+            type = TagType.Facelets),
         fires = {
-    @Event(value = DataClickEvent.class, listener = DataClickListener.class)}
+            @Event(value = DataClickEvent.class, listener = DataClickListener.class)}
 )
 abstract public class AbstractChart extends javax.faces.component.UIComponentBase {
 

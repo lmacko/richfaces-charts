@@ -1,7 +1,7 @@
 package sk.lukasmacko.richfaces.chart.renderkit;
 
-
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +25,7 @@ import sk.lukasmacko.richfaces.chart.component.AbstractXaxis;
 import sk.lukasmacko.richfaces.chart.component.AbstractYaxis;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
 import sk.lukasmacko.richfaces.chart.component.event.DragStopEvent;
-import sk.lukasmacko.richfaces.chart.component.model.BarChartModel;
-import sk.lukasmacko.richfaces.chart.component.model.ChartModel;
-import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
-import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
+import sk.lukasmacko.richfaces.chart.component.model.ChartDataModel;
 import sk.lukasmacko.richfaces.chart.component.model.RawJSONString;
 
 /**
@@ -39,16 +36,15 @@ public abstract class ChartRendererBase extends RendererBase {
 
     private JSONObject options;
     private JSONArray data;
-    private ChartModel.ChartType chartType;
-    
-    private static final String X_VALUE="x";
-    private static final String Y_VALUE="y";
-    private static final String POINT_INDEX="pointIndex";
-    private static final String SERIES_INDEX="seriesIndex";
-    private static final String EVENT_TYPE="eventType";
-    
-    private static final String DATA_CLICK_TYPE="dataClick";
-    private static final String DRAG_STOP_TYPE="dragStop";
+    private ChartDataModel.ChartType chartType;
+    private Class classType;
+    private static final String X_VALUE = "x";
+    private static final String Y_VALUE = "y";
+    private static final String POINT_INDEX = "pointIndex";
+    private static final String SERIES_INDEX = "seriesIndex";
+    private static final String EVENT_TYPE = "eventType";
+    private static final String DATA_CLICK_TYPE = "dataClick";
+    private static final String DRAG_STOP_TYPE = "dragStop";
     /**
      * Stores category names for bar and pie chart
      */
@@ -71,12 +67,15 @@ public abstract class ChartRendererBase extends RendererBase {
      *
      * @param type -processed series type
      */
-    private void setChartType(ChartModel.ChartType type) {
+    private void setChartType(ChartDataModel model) {
 
-        if (chartType == ChartModel.ChartType.unknown) {
-            chartType = type;
-        } else if (chartType != type) {
-            throw new IllegalStateException("Combination of " + chartType + " and " + type + " is not supported");
+        if (chartType == ChartDataModel.ChartType.unknown) {
+            classType = model.getKeyType();
+            chartType = model.getChartType();
+        } else if (chartType != model.getChartType()) {
+            throw new IllegalStateException("Use of the same charType parameter in ChartDataModels required.");
+        } else if (classType != model.getKeyType()) {
+            throw new IllegalStateException("Use of the same type parameter in ChartDataModels required.");
         }
     }
 
@@ -89,9 +88,10 @@ public abstract class ChartRendererBase extends RendererBase {
      */
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
-        
+        super.encodeBegin(context, component);
+
         AbstractChart chart = (AbstractChart) component;
-        chartType = ChartModel.ChartType.unknown;
+        chartType = ChartDataModel.ChartType.unknown;
         keys = null;
         options = new JSONObject();
 
@@ -132,10 +132,10 @@ public abstract class ChartRendererBase extends RendererBase {
 
 
         //bar chart - category labels(ticks) must be part of xaxis options
-        if (chartType == ChartModel.ChartType.bar) {
+        if (chartType == ChartDataModel.ChartType.bar && classType != Number.class) {
 
             if (axisOptions.has("xaxis")) {
-                
+
                 try {
                     ((JSONObject) axisOptions.get("xaxis")).put("ticks", keys);
                 } catch (JSONException e) {
@@ -145,12 +145,28 @@ public abstract class ChartRendererBase extends RendererBase {
 
 
                 JSONArray ticksJSON = new JSONArray();
-                for (String s : keys) {
-                    ticksJSON.put(s);
+
+                for (String key : keys) {
+                   ticksJSON.put(key);
                 }
+
+
 
                 addAttribute(xaxisOpt, "ticks", ticksJSON);
                 addAttribute(xaxisOpt, "renderer", new RawJSONString("$.jqplot.CategoryAxisRenderer"));
+                addAttribute(axisOptions, "xaxis", xaxisOpt);
+            }
+        }
+        if (classType == Date.class) {
+            if (axisOptions.has("xaxis")) {
+
+                try {
+                    ((JSONObject) axisOptions.get("xaxis")).put("renderer", new RawJSONString("$.jqplot.DateAxisRenderer"));
+                } catch (JSONException e) {
+                }
+            } else {
+                JSONObject xaxisOpt = new JSONObject();
+                addAttribute(xaxisOpt, "renderer", new RawJSONString("$.jqplot.DateAxisRenderer"));
                 addAttribute(axisOptions, "xaxis", xaxisOpt);
             }
         }
@@ -158,18 +174,17 @@ public abstract class ChartRendererBase extends RendererBase {
 
     }
 
-    
-    
     /**
-     * Process legend tag and its attributes 
+     * Process legend tag and its attributes
+     *
      * @param legend
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     protected JSONObject processLegend(UIComponent legend) throws IOException {
         AbstractLegend l = (AbstractLegend) legend;
         JSONObject legendOpt = new JSONObject();
-        
+
         addAttribute(legendOpt, "show", true);
         addAttribute(legendOpt, "placement", l.getPlacement());
         addAttribute(legendOpt, "location", AbstractLegend.positionMap.get((AbstractLegend.PositionType) l.getPosition()));
@@ -178,22 +193,43 @@ public abstract class ChartRendererBase extends RendererBase {
 
     /**
      * Process series tag and its attributes
+     *
      * @param series
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     protected JSONObject processSeries(UIComponent series) throws IOException {
         JSONObject seriesOpt = new JSONObject();
         JSONObject rendererOpt = new JSONObject();
         JSONObject dragableOpt = new JSONObject();
 
-        ChartModel model = (ChartModel) series.getAttributes().get("value");
+        AbstractSeries s = (AbstractSeries) series;
+
+        ChartDataModel model = (ChartDataModel) series.getAttributes().get("value");
+
+        if (model == null) {
+            VisitPointCallback callback = new VisitPointCallback(s.getType());
+            series.visitTree(VisitContext.createVisitContext(
+                    FacesContext.getCurrentInstance()),
+                    callback);
+            if (callback.getModel() != null && !callback.getModel().getData().isEmpty()) {
+                model = callback.getModel();
+            }
+        }
+
+        if (model == null) {
+            throw new IllegalStateException("Series has no data");
+        }
+
+        setChartType(model);
+
+
 
         //process type dependent attributes
-        switch ((AbstractSeries.SeriesType) series.getAttributes().get("type")) {
+        switch (s.getType()) {
             case bar:
-                if (!(model instanceof BarChartModel)) {
-                    throw new UnsupportedOperationException("Bar chart requieres BarChartModel.");
+                if (model.getChartType() != ChartDataModel.ChartType.bar) {
+                    throw new UnsupportedOperationException("Bar chart requieres proper chartType in ChartDataModel.");
                 }
 
                 addAttribute(seriesOpt, "renderer", new RawJSONString("$.jqplot.BarRenderer"));
@@ -202,22 +238,19 @@ public abstract class ChartRendererBase extends RendererBase {
 
                 //first series determine output categories
                 if (keys == null) {
-                    BarChartModel barmodel;
-                    barmodel = (BarChartModel) series.getAttributes().get("value");
-                    if (barmodel.getOutputKeys() != null) {
-                        keys = barmodel.getOutputKeys();
+                    if (model.getOutputKeys() != null) {
+                        keys = model.getOutputKeys();
                     } else {
-                        keys = barmodel.getKeys();
+                        keys = model.getKeys();
                     }
                 } else {
-
-                    ((BarChartModel) model).setOutputKeys(keys);
+                    model.setOutputKeys(keys);
                 }
 
                 break;
             case line:
-                if (model!=null && !(model instanceof LineChartModel)) {
-                    throw new UnsupportedOperationException("Line chart requieres LineChartModel.");
+                if (model.getChartType() != ChartDataModel.ChartType.line) {
+                    throw new UnsupportedOperationException("ChartDataModel requieres proper chartType.");
                 }
                 //marker properties
                 JSONObject markerOpt = new JSONObject();
@@ -227,7 +260,7 @@ public abstract class ChartRendererBase extends RendererBase {
                 addAttribute(seriesOpt, "highlightMouseOver", true);
                 break;
             case pie:
-                if (!(model instanceof PieChartModel)) {
+                if (model.getChartType() != ChartDataModel.ChartType.pie) {
                     throw new UnsupportedOperationException("Pie chart requieres PieChartModel.");
                 }
                 addAttribute(seriesOpt, "renderer", new RawJSONString("$.jqplot.PieRenderer"));
@@ -237,20 +270,10 @@ public abstract class ChartRendererBase extends RendererBase {
                 break;
 
         }
-        
-        //TODO check !!!!!!!!!!!
-        if(model==null){
-            VisitPointCallback callback = new VisitPointCallback();
-                series.visitTree(VisitContext.createVisitContext(
-                        FacesContext.getCurrentInstance()),
-                        callback);
-                if(callback.getModel()!=null && !callback.getModel().getData().isEmpty()){
-                    model = callback.getModel();
-                }
-        }
-        
-        setChartType(model.getChartType());
-        data.put(model.toJsonCollection());
+
+
+
+        data.put(model.toJson());
 
 
         //attributes for all chart types
@@ -271,27 +294,28 @@ public abstract class ChartRendererBase extends RendererBase {
     }
 
     /**
-     * Process xaxis and yaxis tag 
+     * Process xaxis and yaxis tag
+     *
      * @param axis
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     protected JSONObject processAxis(UIComponent axis) throws IOException {
         JSONObject axisOpt = new JSONObject();
         addAttribute(axisOpt, "min", axis.getAttributes().get("min"));
         addAttribute(axisOpt, "max", axis.getAttributes().get("max"));
         addAttribute(axisOpt, "label", axis.getAttributes().get("label"));
-       //TODO format and tick rotation
+        //TODO format and tick rotation
 
         return axisOpt;
     }
 
-    
     /**
      * Process cursor tag
+     *
      * @param cursor
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     protected JSONObject processCursor(UIComponent cursor) throws IOException {
         JSONObject cursorOpt = new JSONObject();
@@ -300,18 +324,18 @@ public abstract class ChartRendererBase extends RendererBase {
         addAttribute(cursorOpt, "show", true);
         return cursorOpt;
     }
-    
+
     /**
-     * 
-     * @return chart data 
+     *
+     * @return chart data
      */
     public String getData() {
         return data.toString();
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getOptions() {
         return options.toString();
@@ -324,7 +348,7 @@ public abstract class ChartRendererBase extends RendererBase {
         if (!component.isRendered()) {
             return;
         }
-        
+
         Map<String, String> requestParameterMap = context.getExternalContext().getRequestParameterMap();
         if (requestParameterMap.get(component.getClientId(context)) != null) {
             String yParam = requestParameterMap.get(getFieldId(component, X_VALUE));
@@ -333,15 +357,14 @@ public abstract class ChartRendererBase extends RendererBase {
             String eventTypeParam = requestParameterMap.get(getFieldId(component, EVENT_TYPE));
             String seriesIndexParam = requestParameterMap.get(getFieldId(component, SERIES_INDEX));
             try {
-                
+
                 if (DATA_CLICK_TYPE.equals(eventTypeParam)) {
                     double y = Double.parseDouble(yParam);
                     int seriesIndex = Integer.parseInt(seriesIndexParam);
                     int pointIndex = Integer.parseInt(pointIndexParam);
                     String x = xParam;
                     new DataClickEvent(component, seriesIndex, pointIndex, x, y).queue();
-                } 
-                else if(DRAG_STOP_TYPE.equals(eventTypeParam)){
+                } else if (DRAG_STOP_TYPE.equals(eventTypeParam)) {
                     double y = Double.parseDouble(yParam);
                     int seriesIndex = Integer.parseInt(seriesIndexParam);
                     int pointIndex = Integer.parseInt(pointIndexParam);
@@ -353,15 +376,16 @@ public abstract class ChartRendererBase extends RendererBase {
             }
         }
     }
-    
+
     /**
      * Creates function for server-side event processing
+     *
      * @param context
      * @param component
-     * @return 
+     * @return
      */
     protected Object createSubmitEventFunction(FacesContext context, UIComponent component) {
-        
+
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(getFieldId(component, SERIES_INDEX), new JSReference(SERIES_INDEX));
         params.put(getFieldId(component, POINT_INDEX), new JSReference(POINT_INDEX));
@@ -370,22 +394,22 @@ public abstract class ChartRendererBase extends RendererBase {
         params.put(getFieldId(component, EVENT_TYPE), new JSReference(EVENT_TYPE));
         String clientId = component.getClientId();
         params.put(clientId, clientId);
-        
+
         AjaxFunction ajaxFunction = AjaxRendererUtils.buildAjaxFunction(context, component);
         ajaxFunction.getOptions().getParameters().putAll(params);
         //ajaxFunction.getOptions().set("complete", new JSReference(CALLBACK));
-        
-        
+
+
         return new JSFunctionDefinition("event", EVENT_TYPE, SERIES_INDEX, POINT_INDEX,
-            X_VALUE, Y_VALUE).addToBody(ajaxFunction);
+                X_VALUE, Y_VALUE).addToBody(ajaxFunction);
     }
 
     /**
-     * 
+     *
      * @param context
      * @param component
      * @param attribute
-     * @return 
+     * @return
      */
     protected String getFieldId(UIComponent component, String attribute) {
         return component.getClientId() + "-" + attribute;

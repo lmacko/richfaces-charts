@@ -1,7 +1,7 @@
 package sk.lukasmacko.richfaces.chart.component;
 
 import org.richfaces.cdk.annotations.*;
-import sk.lukasmacko.richfaces.chart.component.model.ChartModel;
+import sk.lukasmacko.richfaces.chart.component.model.ChartDataModel;
 
 
 
@@ -13,11 +13,11 @@ abstract public class AbstractSeries extends javax.faces.component.UIComponentBa
     @Attribute
     public abstract String getLabel();
     
-    @Attribute(required=true,suggestedValue="SeriesType.line,SeriesType.bar,SeriesType.pie")
-    public abstract SeriesType getType();
+    @Attribute(required=true,suggestedValue="ChartDataModel.ChartType.line,ChartDataModel.ChartType.bar,ChartDataModel.ChartType.pie")
+    public abstract ChartDataModel.ChartType getType();
     
     @Attribute()
-    public abstract ChartModel getValue();
+    public abstract ChartDataModel getValue();
         
     @Attribute
     public abstract String getColor();
@@ -39,9 +39,7 @@ abstract public class AbstractSeries extends javax.faces.component.UIComponentBa
     @Attribute(defaultValue="ConstraintType.none",suggestedValue="ConstraintType.x,ConstraintType.y,ConstraintType.none") 
     public abstract ConstraintType getDragableConstraint();
     
-    public enum SeriesType{
-        line,bar,pie
-    }
+    
     
     public enum MarkerType{
         diamond, circle, square, x, plus, dash, filledDiamond, filledCircle, filledSquare
