@@ -29,20 +29,24 @@ public class PieStrategy<T> implements ChartStrategy<T> {
             Iterator it = model.data.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry entry = (Map.Entry) it.next();
-                collection.put(model.data.get(entry.getKey()));
-                collection.put(model.data.get(entry.getValue()));
+                JSONArray point = new JSONArray();
+                point.put(entry.getKey());
+                point.put(entry.getValue());
+                collection.put(point);
             }
         } else {
             Iterator it = model.outputKeys.iterator();
             while (it.hasNext()) {
                 Object key = it.next();
+                JSONArray point = new JSONArray();
                 if (model.data.get(key) != null) {
-                    collection.put(key);
-                    collection.put(model.data.get(key));
+                    point.put(key);
+                    point.put(model.data.get(key));
                 } else {
-                    collection.put(key);
-                    collection.put(0);
+                    point.put(key);
+                    point.put(0);
                 }
+                collection.put(point);
             }
         }
         return collection;

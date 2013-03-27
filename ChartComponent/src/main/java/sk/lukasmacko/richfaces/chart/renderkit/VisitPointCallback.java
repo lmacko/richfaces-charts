@@ -59,7 +59,7 @@ public class VisitPointCallback implements VisitCallback {
             } else if (x instanceof Date) {
                 model.add((Date)x, p.getY());
             } else {
-                throw new IllegalArgumentException("Not supported type");
+                throw new IllegalArgumentException("Not supported type" + x.getClass());
             }
 
 
