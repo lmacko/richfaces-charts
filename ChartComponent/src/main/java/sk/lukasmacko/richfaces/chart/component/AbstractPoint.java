@@ -4,8 +4,6 @@
  */
 package sk.lukasmacko.richfaces.chart.component;
 
-import javax.el.ValueExpression;
-import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import org.richfaces.cdk.annotations.Attribute;
 import org.richfaces.cdk.annotations.JsfComponent;
@@ -22,7 +20,7 @@ import org.richfaces.cdk.annotations.Tag;
 public abstract class AbstractPoint extends UIComponentBase{
     
     @Attribute(required=true)
-    public abstract double getX();
+    public abstract Object getX();
     
     @Attribute(required=true)
     public abstract Number getY();
