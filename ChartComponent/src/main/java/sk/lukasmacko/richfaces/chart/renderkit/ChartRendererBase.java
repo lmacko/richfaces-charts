@@ -23,6 +23,7 @@ import sk.lukasmacko.richfaces.chart.component.AbstractLegend;
 import sk.lukasmacko.richfaces.chart.component.AbstractSeries;
 import sk.lukasmacko.richfaces.chart.component.AbstractXaxis;
 import sk.lukasmacko.richfaces.chart.component.AbstractYaxis;
+import sk.lukasmacko.richfaces.chart.component.AxisAttributes;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
 import sk.lukasmacko.richfaces.chart.component.event.DragStopEvent;
 import sk.lukasmacko.richfaces.chart.component.model.ChartDataModel;
@@ -147,7 +148,7 @@ public abstract class ChartRendererBase extends RendererBase {
                 JSONArray ticksJSON = new JSONArray();
 
                 for (String key : keys) {
-                   ticksJSON.put(key);
+                    ticksJSON.put(key);
                 }
 
 
@@ -300,11 +301,20 @@ public abstract class ChartRendererBase extends RendererBase {
      * @return
      * @throws IOException
      */
-    protected JSONObject processAxis(UIComponent axis) throws IOException {
+    protected JSONObject processAxis(UIComponent ax) throws IOException {
+        AxisAttributes axis = (AxisAttributes) ax;
         JSONObject axisOpt = new JSONObject();
-        addAttribute(axisOpt, "min", axis.getAttributes().get("min"));
-        addAttribute(axisOpt, "max", axis.getAttributes().get("max"));
-        addAttribute(axisOpt, "label", axis.getAttributes().get("label"));
+        addAttribute(axisOpt, "min", axis.getMin());
+        addAttribute(axisOpt, "max", axis.getMax());
+        addAttribute(axisOpt, "pad", axis.getPad());
+        addAttribute(axisOpt, "label", axis.getPad());
+        JSONObject tickOpt = new JSONObject();
+        if (axis.getTickRotation() != null) {
+            addAttribute(axisOpt, "tickRenderer", new RawJSONString("$.jqplot.CanvasAxisTickRenderer"));
+            addAttribute(tickOpt, "angle", axis.getTickRotation());
+        }
+        addAttribute(tickOpt, "formatString", axis.getFormat());
+        addAttribute(axisOpt, "tickOptions",tickOpt);
         //TODO format and tick rotation
 
         return axisOpt;
