@@ -53,7 +53,7 @@
                     <lm:point x="#{point.x}" y="#{point.y}"/>
                 </a4j:repeat>
             </lm:series>
-            <lm:xaxis/>
+            <lm:xaxis tickRotation="-30"/>
             <lm:yaxis min="0"/>
             <lm:legend/>
         </lm:chart>
@@ -66,6 +66,8 @@
                 </a4j:repeat>
             </lm:series>
             <lm:legend/>
+            <lm:yaxis format="$%d"/>
+            <lm:xaxis format="%m/%d/%Y"/>
         </lm:chart>
         
     
