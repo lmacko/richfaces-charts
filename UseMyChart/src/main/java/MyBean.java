@@ -1,5 +1,8 @@
-import java.io.Serializable;
-import java.util.LinkedList;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 import javax.faces.application.FacesMessage;
@@ -8,11 +11,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
-import sk.lukasmacko.richfaces.chart.component.event.DataClickListener;
 import sk.lukasmacko.richfaces.chart.component.event.DragStopEvent;
-import sk.lukasmacko.richfaces.chart.component.model.BarChartModel;
-import sk.lukasmacko.richfaces.chart.component.model.LineChartModel;
-import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
+import sk.lukasmacko.richfaces.chart.component.model.ChartDataModel;
+import sk.lukasmacko.richfaces.chart.component.model.DateChartModel;
+import sk.lukasmacko.richfaces.chart.component.model.NumberChartModel;
+import sk.lukasmacko.richfaces.chart.component.model.StringChartModel;
 
 /**
  *
@@ -22,37 +25,65 @@ import sk.lukasmacko.richfaces.chart.component.model.PieChartModel;
 @ViewScoped
 public class MyBean {
 
-   
-    private LineChartModel first;
-    private LineChartModel second;
-    private PieChartModel pieData;
-    private BarChartModel barData;
-    private BarChartModel barData2;
+ 
     private String msg;
     private String dragLog;
     private Random generator;
-    private DataClickListener listener=new ClickListner();
+    private List<Point<Number>> points;
+    private List<Point<Date>> datePoints;
+
+    public List<Point<Date>> getDatePoints() {
+        return datePoints;
+    }
+
+    public List<Point<String>> getStringPoints() {
+        return stringPoints;
+    }
+    private List<Point<String>> stringPoints;
+    private NumberChartModel lineChartModel;
+    private NumberChartModel barChartModel3;
+    private StringChartModel barChartModel;
+    private StringChartModel barChartModel2;
+    private StringChartModel pieChartModel;
     
-    private List<Point> points;
-    
-   
-    public DataClickListener getListener(){
-        return listener;
+    private DateChartModel dateModel;
+    private DateChartModel dateModel2;
+
+    public DateChartModel getDateModel() {
+        return dateModel;
+    }
+
+    public StringChartModel getPieChartModel() {
+        return pieChartModel;
     }
 
    
-    public List<Point> getPoints(){
-       return points;
+
+    public List<Point<Number>> getPoints() {
+        return points;
     }
-    
-    
+
     public String getMsg() {
         return msg;
     }
-    public String getDragLog(){
+
+    public String getDragLog() {
         return dragLog;
     }
-    public void setDragLog(String log){
+
+    public StringChartModel getBarChartModel() {
+        return barChartModel;
+    }
+
+    public StringChartModel getBarChartModel2() {
+        return barChartModel2;
+    }
+
+    public NumberChartModel getBarChartModel3() {
+        return barChartModel3;
+    }
+    
+    public void setDragLog(String log) {
         this.dragLog = log;
     }
 
@@ -60,119 +91,102 @@ public class MyBean {
         this.msg = msg;
     }
 
-    public BarChartModel getBarData() {
-        return barData;
-    }
-    public BarChartModel getBarData2() {
-        return barData2;
-    }
-
-    public PieChartModel getPieData() {
-        return pieData;
-    }
-
-    public LineChartModel getFirst() {
-        return first;
-    }
-
-    public LineChartModel getSecond() {
-        return second;
-    }
     
-    public void updateHandler(AjaxBehaviorEvent ev){
+    public void updateHandler(AjaxBehaviorEvent ev) {
         setMsg("Updated from server.");
         System.out.print("Hey hou!");
     }
-    
-    public void generateRandom(){
-        barData2 = new BarChartModel();
-        barData2.add("June",generator.nextInt(100));
-        barData2.add("July",generator.nextInt(100));
-        barData2.add("August",generator.nextInt(100));
+
+    public DateChartModel getDateModel2() {
+        return dateModel2;
     }
 
-    
-    
 
-    
-    
+
     public MyBean() {
-        msg ="Nothing";
-        dragLog ="Nothing dragged yet.";
+        msg = "Nothing";
+        dragLog = "Nothing dragged yet.";
+
+
+        lineChartModel = new NumberChartModel(ChartDataModel.ChartType.line);
+        lineChartModel.add(2.0, 6.0);
+        lineChartModel.add(3.0, 5.0);
+        lineChartModel.add(4.0, 6.0);
         
-        generator = new Random();
+        barChartModel3 = new NumberChartModel(ChartDataModel.ChartType.bar);
+        barChartModel3.add(2.0, 6.0);
+        barChartModel3.add(3.0, 5.0);
+        barChartModel3.add(4.0, 6.0);
         
-        first = new LineChartModel();
-        first.add(1.0, 2.0);
-        first.add(2.0, 2.0);
-        first.add(3.0,4.0);
-        first.add(5.0,1.0);
+        barChartModel = new StringChartModel(ChartDataModel.ChartType.bar);
+        barChartModel.add("aha", 5.0);
+        barChartModel.add("mmm", 5.0);
+        barChartModel.add("aaa", 5.0);
         
-        second = new LineChartModel();
-        second.add(1.0, 4.0);
-        second.add(2.0, 3.0);
-        second.add(3.0,3.0);
-        second.add(5.0,1.5);
+        barChartModel2 = new StringChartModel(ChartDataModel.ChartType.bar);
+        barChartModel2.add("aha", 5.0);
+        barChartModel2.add("aaa", 5.0);
         
-        pieData = new PieChartModel();
-        pieData.add("June",40);
-        pieData.add("July",50);
-        pieData.add("August",60);
+        pieChartModel = new StringChartModel(ChartDataModel.ChartType.pie);
+        pieChartModel.add("aha", 5.0);
+        pieChartModel.add("aaa", 5.0);
         
+        points = new ArrayList<Point<Number>>();
+        points.add(new Point(4.0, 5.0));
+        points.add(new Point(3.0, 5.0));
+        points.add(new Point(1.0, 5.0));
         
-        barData = new BarChartModel();
-        barData.add("June",40);
-        barData.add("July",50);
-        barData.add("August",60);
+        datePoints = new ArrayList<Point<Date>>();
+        datePoints.add(new Point<Date>(new Date(),5));
+        datePoints.add(new Point<Date>(new GregorianCalendar(2013, 4, 1).getTime(),5));
+        datePoints.add(new Point<Date>(new GregorianCalendar(2013, 5, 1).getTime(),6));
         
-        barData2 = new BarChartModel();
-        barData2.add("June",40);
-        barData2.add("July",50);
-        barData2.add("August",60);
+        stringPoints = new ArrayList<Point<String>>();
+        stringPoints.add(new Point<String>("hey", 5));
+        stringPoints.add(new Point<String>("hou", 5));
+        stringPoints.add(new Point<String>("lets", 5));
         
-        points = new LinkedList<Point>();
-        points.add(new Point(1.0, 2.0));
-        points.add(new Point(5.0, 5.0));
-        System.out.println("I'm alive");
+        dateModel = new DateChartModel(ChartDataModel.ChartType.line);
+        dateModel.add(new Date(), 4);
         
-    }
-    public void handler(){
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Additional listener","df"));
-    }
-    
-    public void dataclick(DataClickEvent event){
-        setMsg("An event occured! "+ event.toString());
-    }
-    
-    public void dragStopHandler(DragStopEvent event){
-        setDragLog(this.dragLog+'\n'+event.toString());
+       
+
     }
 
-    public class Point{
-        private Number x;
+    public NumberChartModel getLineChartModel() {
+        return lineChartModel;
+    }
+
+    public void handler() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Additional listener", "df"));
+        setMsg("handler");
+    }
+
+    public void dataclick(DataClickEvent event) {
+        setMsg("An event occured! " + event.toString());
+    }
+
+    public void dragStopHandler(DragStopEvent event) {
+        setDragLog(this.dragLog + '\n' + event.toString());
+    }
+
+    public class Point<T> {
+
+        private T x;
         private Number y;
-        public Point(Number x, Number y){
+
+        public Point(T x, Number y) {
             this.x = x;
             this.y = y;
         }
 
-        public Number getX() {
+        public T getX() {
             return x;
         }
 
         public Number getY() {
             return y;
         }
-        
-    }
-    
-    public class ClickListner implements DataClickListener{
-
-        @Override
-        public void processDataClick(DataClickEvent event) {
-            setMsg("!"+event.toString());
-        }
-        
     }
 
    
