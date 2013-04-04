@@ -20,7 +20,11 @@
 
 
         <lm:chart id="lineChart" title="My title hey hou!" styleClass="chart" >
-            <lm:series value="#{myBean.model}" type="line" />
+            <lm:series  type="line" >
+               <a4j:repeat value="#{myBean.points}" var="point">
+                   <lm:point x="#{point.x}" y="#{point.y}"/>
+               </a4j:repeat>
+            </lm:series>
             <lm:xaxis tickRotation="-30"/>
             <lm:yaxis min="0"/>
             <lm:legend/>

@@ -8,4 +8,7 @@
             <property name="jbossHome">/home/Macko/jboss-as-7.1.1.Final</property>
         </configuration>
     </container>
+    <extension qualifier="selenium">
+        <property name="browser">*googlechrome</property>
+    </extension>
 </arquillian>

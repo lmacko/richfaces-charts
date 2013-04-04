@@ -36,13 +36,15 @@ public class FirstTest{
 	
 	@Deployment(testable=false)
 	public static WebArchive createDeployment(){
-		return ShrinkWrap.create(WebArchive.class,"first.war")
+		return ShrinkWrap.create(WebArchive.class)
 				.addClass(FirstTest.class)
 				.addClass(MyBean.class)
 				.addAsWebResource(new File(BEAN_SRC,"index.xhtml"))
 				.addAsWebInfResource(
                 new StringAsset("<faces-config version=\"2.0\"/>"),
-                "faces-config.xml");
+                "faces-config.xml")
+                .addAsWebInfResource(new File(BEAN_SRC,"web.xml"));
+		
                 
 	}
 	
