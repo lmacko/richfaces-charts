@@ -1,4 +1,3 @@
-
 package sk.lukasmacko.richfaces.chart.component.model;
 
 import java.util.ArrayList;

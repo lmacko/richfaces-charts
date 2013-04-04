@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sk.lukasmacko.richfaces.chart.renderkit;
 
 import java.util.Date;
@@ -17,7 +13,7 @@ import sk.lukasmacko.richfaces.chart.component.model.NumberChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.StringChartModel;
 
 /**
- *
+ * 
  * @author Macko
  */
 public class VisitPointCallback implements VisitCallback {
@@ -29,6 +25,12 @@ public class VisitPointCallback implements VisitCallback {
         this.chartType = chartType;
     }
 
+    /**
+     * The method collects data from nested point tags. 
+     * @param context
+     * @param target
+     * @return 
+     */
     @Override
     public VisitResult visit(VisitContext context, UIComponent target) {
 
@@ -38,6 +40,7 @@ public class VisitPointCallback implements VisitCallback {
 
             Object x = p.getX();
 
+            //the first point determine type of dat model 
             if (model == null) {
                 if (x instanceof Number) {
                     model = new NumberChartModel(chartType);
