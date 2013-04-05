@@ -10,44 +10,49 @@ import javax.inject.Named;
 
 import sk.lukasmacko.richfaces.chart.component.model.NumberChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.ChartDataModel.ChartType;
+import sk.lukasmacko.richfaces.chart.component.model.StringChartModel;
 
 
 
 @Named
 @ViewScoped
 public class MyBean{
-	List<Point> points;
-	NumberChartModel model;
+	List<Point<String>> points;
+	StringChartModel model;
 	
-	public NumberChartModel getModel() {
+	public StringChartModel getModel() {
 		return model;
 	}
 	
 	@PostConstruct
 	public void init(){
-		points = new ArrayList<Point>();
-		points.add(new Point(1,2));
-		points.add(new Point(2,2));
+		points = new ArrayList<Point<String>>();
+		points.add(new Point<String>("hey",5));
+		points.add(new Point<String>("hou",5));
+		points.add(new Point<String>("lets",5));
 		
-		model = new NumberChartModel(ChartType.line);
-		model.add(1, 2);
-		model.add(2, 2);
+		
+		model = new StringChartModel(ChartType.pie);
+		model.add("a", 5);
+		model.add("b", 5);
+		model.add("c", 5);
 	}
 	
-	public List<Point> getPoints() {
+	public List<Point<String>> getPoints() {
 		return points;
 	}
  
-	public class Point{
-		private Number x;
+	
+	public class Point<T>{
+		private T x;
 		private Number y;
 		
-		public Point(Number x,Number y){
+		public Point(T x,Number y){
 			this.x=x;
 			this.y=y;
 		}
 		
-		public Number getX() {
+		public T getX() {
 			return x;
 		}
 		public Number getY() {

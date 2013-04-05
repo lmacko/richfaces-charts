@@ -1,5 +1,6 @@
 package sk.lukasmacko.richfaces.chart;
 
+
 import java.io.File;
 import java.net.URL;
 
@@ -17,7 +18,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
+
+import com.thoughtworks.selenium.DefaultSelenium;
+
 import sk.lukasmacko.richfaces.chart.beans.MyBean;
 
 @RunWith(Arquillian.class)
@@ -26,12 +34,12 @@ public class FirstTest {
 	private static final String WEBAPP_PATH = "src/test/webapp";
 
 	@Drone
-	WebDriver browser;
+	DefaultSelenium browser;
 
 	@ArquillianResource
 	URL deploymentUrl;
 
-	@Deployment(testable = false)
+	@Deployment(testable=false)
 	public static WebArchive createDeployment() {
 		return ShrinkWrap
 				.create(WebArchive.class)
@@ -56,9 +64,20 @@ public class FirstTest {
 	
 	@Test
 	public void chartCreated() {
-		browser.get(deploymentUrl.toExternalForm());
-		System.out.println(browser.getPageSource());
-		Assert.assertNotNull(browser.findElement(By.id("lineChart")));
+		browser.open(deploymentUrl.toExternalForm());
+		System.out.println(browser.getHtmlSource());
+		Assert.assertTrue("Chart shoul be on page",browser.isElementPresent("xpath=//div[@id='lineChart']"));
+	}
+	
+	@Test
+	public void testClick() throws InterruptedException{
+		browser.open(deploymentUrl.toExternalForm());
+		System.out.println(browser.getClass());
+	
+		Assert.assertTrue(browser.isElementPresent("xpath=//canvas[@class='jqplot-event-canvas']"));
+		
+		browser.clickAt("xpath=//canvas[@class='jqplot-event-canvas']", "200,100");
+		Assert.assertTrue(browser.isElementPresent("xpath=//span[contains(text(), 'clicked1')]"));
 	}
 	
 	
