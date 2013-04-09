@@ -9,6 +9,10 @@ import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickListener;
 import sk.lukasmacko.richfaces.chart.component.event.DragStopEvent;
 
+/**
+ * 
+ * @author Lukas Macko
+ */
 @JsfComponent(
         type = "sk.lukasmacko.richfaces.chart.component.Chart",
         family = "sk.lukasmacko.Chart",
@@ -19,11 +23,18 @@ import sk.lukasmacko.richfaces.chart.component.event.DragStopEvent;
         fires = {
             @Event(value = DataClickEvent.class, listener = DataClickListener.class)}
 )
-abstract public class AbstractChart extends javax.faces.component.UIComponentBase {
+abstract public class AbstractChart extends javax.faces.component.UIComponentBase{
 
+    /**
+     * Text shown above the chart 
+     */
     @Attribute
     public abstract String getTitle();
 
+    /**
+     * 
+     *  
+     */
     @Attribute
     public abstract String getStyleClass();
 
@@ -56,6 +67,7 @@ abstract public class AbstractChart extends javax.faces.component.UIComponentBas
     @Attribute(signature =
     @Signature(parameters = DataClickEvent.class))
     public abstract MethodExpression getDataClickListener();
+    
     
     @Attribute(signature =
     @Signature(parameters = DragStopEvent.class))

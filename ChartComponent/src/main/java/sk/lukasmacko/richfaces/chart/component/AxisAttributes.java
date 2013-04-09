@@ -21,6 +21,9 @@ public interface AxisAttributes {
     public abstract Double getMax();
     
     @Attribute
+    public abstract Double getPad();
+    
+    @Attribute
     public abstract Integer getTickRotation();
     
 }

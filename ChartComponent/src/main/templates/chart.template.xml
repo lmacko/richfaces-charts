@@ -24,7 +24,10 @@
         <cdk:resource-dependency library="js" name="jqplot.trendline.js"/>
         <cdk:resource-dependency library="js" name="jqplot.highlighter.js"/>
         <cdk:resource-dependency library="js" name="jqplot.dateAxisRenderer.js"/>
+        <cdk:resource-dependency library="js" name="jqplot.canvasAxisTickRenderer.js"/>
+        <cdk:resource-dependency library="js" name="jqplot.canvasTextRenderer.js"/>
         <cdk:resource-dependency library="js" name="richfaces.chart.js"/>
+        
     </cc:interface>
 
     <cc:implementation>

@@ -22,6 +22,10 @@ abstract public class AbstractSeries extends javax.faces.component.UIComponentBa
     @Attribute
     public abstract String getColor();
     
+    /**
+     * 
+     *  
+     */
     @Attribute(defaultValue="MarkerType.filledCircle",suggestedValue="MarkerType.circle,MarkerType.diamond,"
             + "MarkerType.square,MarkerType.x,MarkerType.plus,MarkerType.dash,"
             + "MarkerType.filledDiamond,MarkerType.filledCircle,MarkerType.filledSquare")
