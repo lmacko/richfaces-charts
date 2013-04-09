@@ -8,5 +8,8 @@
             <property name="jbossHome">/home/Macko/jboss-as-7.1.1.Final</property>
         </configuration>
     </container>
+    <extension qualifier="webdriver">
+    	<property name="browserCapabilities">firefox</property>
+    </extension>
 
 </arquillian>

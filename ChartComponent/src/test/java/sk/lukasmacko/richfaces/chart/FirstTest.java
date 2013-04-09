@@ -5,6 +5,7 @@ import java.io.File;
 import java.net.URL;
 
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -26,7 +27,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import com.thoughtworks.selenium.DefaultSelenium;
 
-import sk.lukasmacko.richfaces.chart.beans.MyBean;
+import sk.lukasmacko.richfaces.chart.MyBean;
 
 @RunWith(Arquillian.class)
 public class FirstTest {
@@ -63,6 +64,7 @@ public class FirstTest {
 
 	
 	@Test
+	@RunAsClient
 	public void chartCreated() {
 		browser.get(deploymentUrl.toExternalForm());
 		System.out.println(browser.getPageSource());

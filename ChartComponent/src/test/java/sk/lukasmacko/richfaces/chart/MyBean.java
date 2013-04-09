@@ -1,4 +1,4 @@
-package sk.lukasmacko.richfaces.chart.beans;
+package sk.lukasmacko.richfaces.chart;
 
 import java.util.ArrayList;
 import java.util.List;
