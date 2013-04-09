@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:lm="http://lukasmacko.sk/test"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition template="features.xhtml">
+        <ui:define name="javascript">
+
+        </ui:define>
+        <ui:define name="title">Server-side listeners</ui:define>
+        <ui:define name="content">
+            <lm:chart dataClickListener="#{charts.listner}">
+                <lm:series type="bar" value="#{charts.barModel}"/>
+                <a4j:ajax event="dataclick" render="click" execute="click"/>
+            </lm:chart>
+            <h:form>
+                <h:outputText value="#{charts.msg}" id="click"/>
+            </h:form>
+        </ui:define>
+        <ui:define name="code">
+            <div class="code">
+                &lt;<span class="tag">lm:chart</span>&nbsp;<span class="attr">dataClickListener</span>="<span>#</span>{charts.listner}"&gt;<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:series</span>&nbsp;<span class="attr">type</span>="bar"&nbsp;<span class="attr">value</span>="<span>#</span>{charts.barModel}"/&gt;<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">a4j:ajax</span>&nbsp;<span class="attr">event</span>="dataclick"&nbsp;<span class="attr">render</span>="click"&nbsp;<span class="attr">execute</span>="click"/&gt;<br/>
+                &lt;<span class="tag">/lm:chart</span>&gt;<br/>
+                &lt;<span class="tag">h:form</span>&gt;<br/>
+                &nbsp;&nbsp;&lt;<span class="tag">h:output</span>Text&nbsp;<span class="attr">value</span>="<span>#</span>{charts.msg}"&nbsp;<span class="attr">id</span>="click"/&gt;<br/>
+                &lt;<span class="tag">/h:form</span>&gt;<br/>
+            </div>
+
+        </ui:define>
+    </ui:composition>
+</html>
+
