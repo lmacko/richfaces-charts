@@ -53,8 +53,9 @@ public class VisitPointCallback implements VisitCallback {
                 }
             }
 
-            double numberX;
+            
             if (x instanceof Number) {
+                double numberX;
                 numberX = ((Number) x).doubleValue();
                 model.add(numberX, p.getY());
             } else if (x instanceof String) {

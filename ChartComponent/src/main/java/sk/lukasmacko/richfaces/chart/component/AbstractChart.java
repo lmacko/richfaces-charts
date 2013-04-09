@@ -32,8 +32,7 @@ abstract public class AbstractChart extends javax.faces.component.UIComponentBas
     public abstract String getTitle();
 
     /**
-     * 
-     *  
+     * css class 
      */
     @Attribute
     public abstract String getStyleClass();
@@ -95,8 +94,5 @@ abstract public class AbstractChart extends javax.faces.component.UIComponentBas
             super.broadcast(event);
         }
     }
-
-       
-    
 
 }

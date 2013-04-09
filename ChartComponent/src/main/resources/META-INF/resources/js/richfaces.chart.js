@@ -2,7 +2,13 @@
    
     rf.ui = rf.ui || {};
     // Default options definition if needed for the component
-    var defaultOptions = {};
+    var defaultOptions = {
+        legend : { show:true}
+       /* seriesColors: [
+   
+
+        ]*/
+    };
     
  
     // Create constructor and register our component class
@@ -11,15 +17,20 @@
             throw "Element with id '"+componentId+"' not found.";
         }
         
-        this.init(eventHandlers,options,data);
+        var mergedOptions = $.extend({}, defaultOptions, options);
+        
+        this.init(eventHandlers,mergedOptions,data);
         
         // call constructor of parent class
-        $super.constructor.call(this, componentId, options, defaultOptions);   
+        
+        
+        $super.constructor.call(this, componentId, mergedOptions);   
                                
         this.element = jQuery(document.getElementById(this.id));
   
         //init chart
-        this.element.jqplot(data, options);
+        
+        this.element.jqplot(data, mergedOptions);
         
     };
  

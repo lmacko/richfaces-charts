@@ -40,7 +40,7 @@
         <div id="#{clientId}" class="richfaces-chart #{component.attributes['styleClass']}" ></div>
         
         <script type="text/javascript">          
-                new RichFaces.ui.Chart("#{clientId}",#{getOptions()},#{getData()},#{toScriptArgs(events)});
+              var #{clientId}js =  new RichFaces.ui.Chart("#{clientId}",#{getOptions()},#{getData()},#{toScriptArgs(events)});
         </script>
     </cc:implementation>
 

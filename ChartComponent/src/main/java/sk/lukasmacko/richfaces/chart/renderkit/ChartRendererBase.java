@@ -146,6 +146,7 @@ public abstract class ChartRendererBase extends RendererBase {
                 try {
                     ((JSONObject) axisOptions.get("xaxis")).put("ticks", keys);
                 } catch (JSONException e) {
+                    throw new IOException("An error occured during processing options"+e);
                 }
             } else {
                 JSONObject xaxisOpt = new JSONObject();
@@ -170,6 +171,7 @@ public abstract class ChartRendererBase extends RendererBase {
                 try {
                     ((JSONObject) axisOptions.get("xaxis")).put("renderer", new RawJSONString("$.jqplot.DateAxisRenderer"));
                 } catch (JSONException e) {
+                    throw new IOException("An error occured during processing options"+e);
                 }
             } else {
                 JSONObject xaxisOpt = new JSONObject();
@@ -180,6 +182,7 @@ public abstract class ChartRendererBase extends RendererBase {
         addAttribute(options, "chartType", chartType);
     }
 
+    
     @Override
     public boolean getRendersChildren() {
         return true;
@@ -400,8 +403,6 @@ public abstract class ChartRendererBase extends RendererBase {
 
         AjaxFunction ajaxFunction = AjaxRendererUtils.buildAjaxFunction(context, component);
         ajaxFunction.getOptions().getParameters().putAll(params);
-        //ajaxFunction.getOptions().set("complete", new JSReference(CALLBACK));
-
 
         return new JSFunctionDefinition("event", EVENT_TYPE, SERIES_INDEX, POINT_INDEX,
                 X_VALUE, Y_VALUE).addToBody(ajaxFunction);

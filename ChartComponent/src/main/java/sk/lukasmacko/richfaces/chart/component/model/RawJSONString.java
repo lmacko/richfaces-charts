@@ -22,8 +22,7 @@ public class RawJSONString implements JSONString{
     public void setString(String string) {
         this.string = string;
     }
-    
-    
+       
     @Override
     public String toJSONString() {
         return getString();
