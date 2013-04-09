@@ -77,6 +77,16 @@ public class FirstTest {
 	
 	@Test
 	public void testClick() throws InterruptedException{
+		browser.get(deploymentUrl.toExternalForm());
+		Actions builder = new Actions(browser);
+		WebElement canvas = browser.findElement(By.className("jqplot-event-canvas"));
+		Assert.assertNotNull(canvas);
+		Action click = builder.moveToElement(canvas, 200, 100).click().build();
+		click.perform();
+		WebElement infospan = browser.findElement(By.id("msg"));
+		Assert.assertNotNull(infospan);
+		System.out.println(infospan.getText());
+		Assert.assertTrue(infospan.getText().equals("clicked1"));
 		/*browser.open(deploymentUrl.toExternalForm());
 		System.out.println(browser.getClass());
 	    Assert.assertTrue(browser.isElementPresent("xpath=//canvas[@class='jqplot-event-canvas']"));
