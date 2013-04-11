@@ -1,16 +1,18 @@
 <arquillian xmlns="http://jboss.org/schema/arquillian"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
         http://jboss.org/schema/arquillian
         http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
-    <container qualifier="jbossas-managed" default="true">
-        <configuration>
-            <property name="jbossHome">/home/Macko/jboss-as-7.1.1.Final</property>
-        </configuration>
-    </container>
-    <extension qualifier="webdriver">
-    	<property name="browserCapabilities">chrome</property>
-    	<property name="chromeDriverBinary">/home/Macko/Downloads/chromedriver</property>
-    </extension>
+	<container qualifier="jbossas-managed" default="true">
+		<configuration>
+			<property name="jbossHome">/home/Macko/jboss-as-7.1.1.Final</property>
+		</configuration>
+	</container>
+	<extension qualifier="webdriver">
+	 <property name="browserCapabilities">chrome</property>
+	 <property name="chromeDriverBinary">/home/Macko/Downloads/chromedriver</property>
+	  
+	</extension>
+	
 
 </arquillian>

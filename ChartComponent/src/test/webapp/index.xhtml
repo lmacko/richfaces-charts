@@ -9,29 +9,42 @@
 <h:head>
 	<title>Use my chart</title>
 	<style type="text/css">
-.chart {
+.richfaces-chart {
 	width: 600px;
 	height: 400px;
 }
 </style>
-<script type="text/javascript">
+	<script type="text/javascript">
 //<![CDATA[
-     function click(ev){
-    	 $("#msg").html("clicked"+ev.data.pointIndex);
+     function click(ev,spanId){
+    	 $("#"+spanId).html("clicked"+ev.data.pointIndex);
      }      
-
+    
 //]]>
 </script>
 </h:head>
 <h:body>
 
 
-	<lm:chart id="lineChart" title="My title hey hou!" styleClass="chart" ondataclick="click(event)">
-		
-		<lm:series type="pie" value="#{myBean.model}"/>
-		<a4j:ajax event="dataclick"/>
+	<lm:chart id="pieChart" title="My title hey hou!" styleClass="chart"
+		ondataclick="click(event,'msg')"
+		>
+		<lm:series type="pie" value="#{myBean.model}" />
+		<a4j:ajax event="dataclick" />
 		<lm:legend />
 	</lm:chart>
-    <span id="msg"/>
+	<span id="msg" />
+	<span id="highlight"/>
+
+	<lm:chart id="lineChart" title="Chart" ondataclick="click(event,'line')">
+		<lm:series type="line" value="#{myBean.lineModel}" label="Product" />
+	</lm:chart>
+    <span id="line" />
+
+	<lm:chart id="barChart" ondataclick="click(event,'bar')">
+		<lm:series type="bar" value="#{myBean.barModel}" />
+		<a4j:ajax event="dataclick"/>
+	</lm:chart>
+	<span id="bar" />
 </h:body>
 </html>

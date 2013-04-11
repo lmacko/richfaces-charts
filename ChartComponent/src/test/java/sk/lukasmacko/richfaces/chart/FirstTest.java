@@ -7,6 +7,8 @@ import java.net.URL;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
+import org.jboss.arquillian.graphene.enricher.findby.FindBy;
+import static org.jboss.arquillian.graphene.Graphene.*;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -67,32 +69,84 @@ public class FirstTest {
 	@RunAsClient
 	public void chartCreated() {
 		browser.get(deploymentUrl.toExternalForm());
-		System.out.println(browser.getPageSource());
-		Assert.assertNotNull("Chart should be on the page",browser.findElement(By.id("lineChart")));
-		/*browser.open(deploymentUrl.toExternalForm());
-		System.out.println(browser.getHtmlSource());
-		Assert.assertTrue("Chart shoul be on page",browser.isElementPresent("xpath=//div[@id='lineChart']"));
-		*/
+		Assert.assertNotNull("The chart should be on the page",browser.findElement(By.id("pieChart")));
 	}
 	
+	
+	/**********************************************************************************************
+	 * 
+	 *                          Click tests for each chart type
+	 * 
+	 * test have same structure:
+	 *    find canvas element which will be clicked and span which will be changed after click  
+	 *    click at proper chart position - magic numbers
+	 *    assert span change
+	 *   
+	 ***********************************************************************************************/
+	
+	
+	@FindBy(jquery="#pieChart>.jqplot-event-canvas")
+	WebElement pieCanvas;
+	
+	@FindBy(jquery="#msg")
+	WebElement pieSpan;
+	
 	@Test
-	public void testClick() throws InterruptedException{
+	public void testPieClick() throws InterruptedException{
 		browser.get(deploymentUrl.toExternalForm());
 		Actions builder = new Actions(browser);
-		WebElement canvas = browser.findElement(By.className("jqplot-event-canvas"));
-		Assert.assertNotNull(canvas);
-		Action click = builder.moveToElement(canvas, 200, 100).click().build();
+					
+		//WebElement canvas = browser.findElement(By.xpath("//div[@id='pieChart']/canvas[@class='jqplot-event-canvas']"));
+		Assert.assertNotNull(pieCanvas);
+		
+		
+		Action click = builder.moveToElement(pieCanvas, 200, 100).click().build();
 		click.perform();
-		WebElement infospan = browser.findElement(By.id("msg"));
-		Assert.assertNotNull(infospan);
-		System.out.println(infospan.getText());
-		Assert.assertTrue(infospan.getText().equals("clicked1"));
-		/*browser.open(deploymentUrl.toExternalForm());
-		System.out.println(browser.getClass());
-	    Assert.assertTrue(browser.isElementPresent("xpath=//canvas[@class='jqplot-event-canvas']"));
-		browser.clickAt("xpath=//canvas[@class='jqplot-event-canvas']", "200,100");
-		Assert.assertTrue(browser.isElementPresent("xpath=//span[contains(text(), 'clicked1')]"));*/
+		
+		Assert.assertTrue(pieSpan.getText().equals("clicked1"));
+		 
 	}
+	
+	
+
+	@FindBy(jquery="#barChart>.jqplot-event-canvas")
+	WebElement barCanvas;
+	
+	@FindBy(jquery="#bar")
+	WebElement barSpan;
+		
+	@Test
+	public void testBarClick(){
+		browser.get(deploymentUrl.toExternalForm());
+		Actions builder = new Actions(browser);
+		
+		Action click = builder.moveToElement(barCanvas, 87, 202).click().build();
+		click.perform();
+		
+		Assert.assertTrue(barSpan.getText().equals("clicked0"));
+		
+	}
+	
+	
+	@FindBy(jquery="#lineChart>.jqplot-event-canvas")
+	WebElement lineCanvas;
+	
+	@FindBy(jquery="#line")
+	WebElement lineSpan;
+	
+	@Test
+	public void testLineClick(){
+		browser.get(deploymentUrl.toExternalForm());
+		Actions builder = new Actions(browser);
+		
+		Action click = builder.moveToElement(lineCanvas, 73, 301).click().build();
+		click.perform();
+		
+		Assert.assertTrue(lineSpan.getText().equals("clicked0"));
+		
+	}
+	/*******************                 END of click tests            ****************************/
+	
 	
 	
 }
