@@ -85,14 +85,14 @@ public abstract class ChartRendererBase extends RendererBase {
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
         super.encodeBegin(context, component);
-
+      
 
         chartType = ChartDataModel.ChartType.unknown;
         keys = null;
         options = new JSONObject();
 
         //chart options
-        addAttribute(options, "title", component.getAttributes().get("title"));
+        addAttribute(options, "title", ((AbstractChart)component).getTitle());
 
         //series properties
         seriesOptions = new JSONArray();
@@ -200,7 +200,7 @@ public abstract class ChartRendererBase extends RendererBase {
         AbstractLegend l = (AbstractLegend) legend;
         JSONObject legendOpt = new JSONObject();
 
-        addAttribute(legendOpt, "show", true);
+        addAttribute(legendOpt, "show", l.isVisible());
         addAttribute(legendOpt, "placement", l.getPlacement());
         addAttribute(legendOpt, "location", AbstractLegend.positionMap.get((AbstractLegend.PositionType) l.getPosition()));
         return legendOpt;
@@ -220,7 +220,7 @@ public abstract class ChartRendererBase extends RendererBase {
 
         AbstractSeries s = (AbstractSeries) series;
 
-        ChartDataModel model = (ChartDataModel) series.getAttributes().get("value");
+        ChartDataModel model = (ChartDataModel) s.getValue();
 
         if (model == null) {
             VisitPointCallback callback = new VisitPointCallback(s.getType());
@@ -269,9 +269,9 @@ public abstract class ChartRendererBase extends RendererBase {
                 }
                 //marker properties
                 JSONObject markerOpt = new JSONObject();
-                addAttribute(markerOpt, "style", series.getAttributes().get("marker"));
+                addAttribute(markerOpt, "style", s.getMarker());
                 addAttribute(seriesOpt, "markerOptions", markerOpt);
-                addAttribute(seriesOpt, "showMarker", series.getAttributes().get("showMarker"));
+                addAttribute(seriesOpt, "showMarker", s.isMarkerVisible());
                 addAttribute(seriesOpt, "highlightMouseOver", true);
                 break;
             case pie:
@@ -289,15 +289,15 @@ public abstract class ChartRendererBase extends RendererBase {
         data.put(model.toJson());
 
         //attributes for all chart types
-        addAttribute(seriesOpt, "label", series.getAttributes().get("label"));
-        addAttribute(seriesOpt, "color", series.getAttributes().get("color"));
-        addAttribute(seriesOpt, "isDragable", series.getAttributes().get("dragable"));
-        addAttribute(dragableOpt, "constrainTo", series.getAttributes().get("dragableConstraint"));
+        addAttribute(seriesOpt, "label", s.getLabel());
+        addAttribute(seriesOpt, "color", s.getColor());
+        addAttribute(seriesOpt, "isDragable", s.isDragable());
+        addAttribute(dragableOpt, "constrainTo", s.getDragableConstraint());
         addAttribute(dragableOpt, "color", new RawJSONString("undefined"));
         addAttribute(seriesOpt, "dragable", dragableOpt);
 
         JSONObject trendlineOpt = new JSONObject();
-        addAttribute(trendlineOpt, "show", series.getAttributes().get("trendlineVisible"));
+        addAttribute(trendlineOpt, "show", s.isTrendlineVisible());
         addAttribute(seriesOpt, "trendline", trendlineOpt);
 
         return seriesOpt;
@@ -338,9 +338,10 @@ public abstract class ChartRendererBase extends RendererBase {
      * @throws IOException
      */
     protected JSONObject processCursor(UIComponent cursor) throws IOException {
+        AbstractCursor c = (AbstractCursor)cursor;
         JSONObject cursorOpt = new JSONObject();
-        addAttribute(cursorOpt, "zoom", cursor.getAttributes().get("zoomEn"));
-        addAttribute(cursorOpt, "constrainZoomTo", cursor.getAttributes().get("constraintZoom"));
+        addAttribute(cursorOpt, "zoom", c.isZoomEn());
+        addAttribute(cursorOpt, "constrainZoomTo", c.getConstraintZoom());
         addAttribute(cursorOpt, "show", true);
         return cursorOpt;
     }
