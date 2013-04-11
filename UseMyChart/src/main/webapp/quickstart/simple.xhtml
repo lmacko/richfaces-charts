@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:lm="http://lukasmacko.sk/test"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition template="features.xhtml">
+        <ui:define name="title">Simple example</ui:define>
+        <ui:define name="content">
+            <lm:chart id="first" title="Chart">
+                <lm:series type="line" value="#{charts.lineModel}" label="Product"/>
+            </lm:chart>
+        </ui:define>
+        <ui:define name="code">
+            <div class="code">
+            &lt;<span class="tag">lm:chart</span>&nbsp;<span class="attr">id</span>="first"&nbsp;<span class="attr">title</span>="Chart"&gt;<br/>
+            &nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:series</span>&nbsp;<span class="attr">type</span>="line"&nbsp;<span class="attr">value</span>="<span>#</span>{charts.lineModel}"&nbsp;<span class="attr">label</span>="Product"/&gt;<br/>
+            &lt;<span class="tag">/lm:chart</span>&gt;<br/>
+            </div>
+
+        </ui:define>
+    </ui:composition>
+</html>

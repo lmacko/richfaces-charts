@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:lm="http://lukasmacko.sk/test"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title><ui:insert name="title"></ui:insert> Chart features</title>
+        <ui:insert name="javascript"/>
+        <style type="text/css">
+            .code{
+                font-family: Courier New;
+            }
+            .tag{
+                color:blue;
+            }
+            .attr{
+                color:green;
+            }
+            .richfaces-chart{
+                width: 600px;
+                height: 400px;
+                margin-bottom: 50px;
+                
+            }
+            .menu{
+                list-style-type: none;
+            }
+            .menu li{float:left; margin-left: 30px;}
+            body{
+                width: 1000px;
+                margin: auto;
+                
+            }
+            h1{
+                clear: both;
+                
+                
+            }
+        </style>
+    </h:head>
+    <h:body>
+        
+        <ul class="menu">
+            <li>
+                <h:link outcome="simple">Simple</h:link>
+            </li>
+            <li>
+                <h:link outcome="charttypes" >Chart types</h:link>
+            </li>
+            <li>
+                <h:link outcome="clientbehavior" >Client behavior</h:link>
+            </li>
+            <li>
+                <h:link outcome="serverside">Server-side listeners</h:link>
+            </li>
+            <li>
+                <h:link outcome="data">Passing data</h:link>
+            </li>
+            <li>
+                <h:link outcome="attr">Zoom, legend, format and other attributes</h:link>
+            </li>
+        </ul>
+        
+        <h1><ui:insert name="title"/></h1>
+        <ui:insert name="content">
+            Chart component features.
+        </ui:insert>
+        <ui:insert name="code"/>
+    </h:body>
+</html>

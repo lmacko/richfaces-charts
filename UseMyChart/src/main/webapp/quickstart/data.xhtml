@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:lm="http://lukasmacko.sk/test"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition template="features.xhtml">
+        <ui:define name="javascript">
+            
+        </ui:define>
+        <ui:define name="title">Passing data</ui:define>
+        <ui:define name="content">
+            <lm:chart id="lineChart">
+                <lm:series type="line" value="#{charts.lineModel}"/>
+                <lm:series type="line">
+                    <a4j:repeat value="#{charts.points}" var="point">
+                        <lm:point x="#{point.x}" y="#{point.y}" />
+                    </a4j:repeat>
+                </lm:series>
+            </lm:chart>
+        </ui:define>
+        <ui:define name="code">
+            <div class="code">
+                &lt;<span class="tag">lm:chart</span>&nbsp;<span class="attr">id</span>="lineChart"&gt;<br/>
+                &nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:series</span>&nbsp;<span class="attr">type</span>="line"&nbsp;<span class="attr">value</span>="<span>#</span>{charts.lineModel}"/&gt;<br/>
+                &nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:series</span>&nbsp;<span class="attr">type</span>="line"&gt;<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">a4j:repeat</span>&nbsp;<span class="attr">value</span>="<span>#</span>{charts.points}"&nbsp;<span class="attr">var</span>="point"&gt;<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:point</span>&nbsp;<span class="attr">x</span>="<span>#</span>{point.x}"&nbsp;<span class="attr">y</span>="<span>#</span>{point.y}"&nbsp;/&gt;<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">/a4j:repeat</span>&gt;<br/>
+                &nbsp;&nbsp;&nbsp;&lt;<span class="tag">/lm:series</span>&gt;<br/>
+                &lt;<span class="tag">/lm:chart</span>&gt;<br/>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>
+
