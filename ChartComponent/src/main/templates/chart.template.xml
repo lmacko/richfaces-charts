@@ -26,6 +26,7 @@
         <cdk:resource-dependency library="js" name="jqplot.dateAxisRenderer.js"/>
         <cdk:resource-dependency library="js" name="jqplot.canvasAxisTickRenderer.js"/>
         <cdk:resource-dependency library="js" name="jqplot.canvasTextRenderer.js"/>
+        <cdk:resource-dependency library="js" name="jqplot.donutRenderer.js"/>
         <cdk:resource-dependency library="js" name="richfaces.chart.js"/>
         
     </cc:interface>
