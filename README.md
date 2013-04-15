@@ -1,14 +1,13 @@
-Bookstore
-=========
-ukážka vytvorenia a použitia composite componenty
-
 Chart component
 =========
-jsf komponenta, pre vykresľovanie grafov,vytvorená pomocou component development kit(cdk), ktorý je súčasťou 
-[richfaces] (http://www.jboss.org/richfaces).
-
+- custom JSF component for chart plotting
+- encapsulate [jqplot](http://www.jqplot.com/index.php ) javascript library
+- features:
+  + line, bar, pie chart types
+  + client behavior, server-side listeners
+  + data source: instance ChartDataModel or \<a4j:reapeat> facelet iteration
 
 
 UseMyChart
 =========
-Ukážka použitia komponenty
+usage of a component
