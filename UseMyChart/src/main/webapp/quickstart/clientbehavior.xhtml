@@ -15,32 +15,30 @@
                 }
      
                 function unhighlight(){
-                    $("#info").html("");
+                    $("#info").html("-");
                 }
             </script>
         </ui:define>
         <ui:define name="title">Client behavior</ui:define>
         <ui:define name="content">
+            <h:form>
+                <lm:chart id="lineChart" title="Line chart" onhighlight="highlight(event)" onunhighlight="unhighlight()" >
+                    <lm:series type="line" value="#{myBean.lineChartModel}"/>
+                </lm:chart>
+            </h:form>
+            <span id="info"/>
+
+        </ui:define>
+
+        <ui:define name="code">
             <div class="code">
-                &lt;<span class="tag">h:form</span>&gt;<br/>
-                &nbsp;&nbsp;&lt;<span class="tag">lm:chart</span>&nbsp;<span class="attr">id</span>="lineChart"&nbsp;<span class="attr">title</span>="Line&nbsp;chart"&nbsp;<span class="attr">onhighlight</span>="highlight(event)"&nbsp;<span class="attr">onunhighlight</span>="unhighlight()"&nbsp;&gt;<br/>
+                &lt;<span class="tag">lm:chart</span>&nbsp;<span class="attr">title</span>="Line&nbsp;chart"&nbsp;<span class="attr">onhighlight</span>="highlight(event)"&nbsp;<span class="attr">onunhighlight</span>="unhighlight()"&gt;<br/>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:series</span>&nbsp;<span class="attr">type</span>="line"&nbsp;<span class="attr">value</span>="<span>#</span>{myBean.lineChartModel}"/&gt;<br/>
-                &nbsp;&nbsp;&lt;<span class="tag">/lm:chart</span>&gt;<br/>
-                &lt;<span class="tag">/h:form</span>&gt;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">a4j:ajax</span>&nbsp;<span class="attr">event</span>="highlight"/&gt;<br/>
+                &lt;<span class="tag">/lm:chart</span>&gt;<br/>
                 &lt;<span class="tag">span</span>&nbsp;<span class="attr">id</span>="info"/&gt;<br/>
             </div>
-
-         </ui:define>
-        
-         <ui:define name="code">
-           <div class="code">
-            &lt;<span class="tag">lm:chart</span>&nbsp;<span class="attr">title</span>="Line&nbsp;chart"&nbsp;<span class="attr">onhighlight</span>="highlight(event)"&nbsp;<span class="attr">onunhighlight</span>="unhighlight()"&gt;<br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:series</span>&nbsp;<span class="attr">type</span>="line"&nbsp;<span class="attr">value</span>="<span>#</span>{myBean.lineChartModel}"/&gt;<br/>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">a4j:ajax</span>&nbsp;<span class="attr">event</span>="highlight"/&gt;<br/>
-            &lt;<span class="tag">/lm:chart</span>&gt;<br/>
-            &lt;<span class="tag">span</span>&nbsp;<span class="attr">id</span>="info"/&gt;<br/>
-           </div>
-         </ui:define>    
+        </ui:define>    
 
     </ui:composition>
 </html>
