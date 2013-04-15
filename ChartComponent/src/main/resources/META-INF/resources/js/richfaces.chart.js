@@ -4,8 +4,13 @@
     // Default options definition if needed for the component
     var defaultOptions = {
         legend : { show:true}
-       /* seriesColors: [
-   
+        /*seriesColors: [
+           'yellowgreen',
+           'steelblue',
+           'chocolate',
+           'teal',
+           'gold',
+           'lightsteelblue'
 
         ]*/
     };
@@ -13,7 +18,8 @@
  
     // Create constructor and register our component class
     rf.ui.Chart = function (componentId, options, data, eventHandlers) {
-        if(!document.getElementById(componentId)){
+        var escId = RichFaces.escapeCSSMetachars(componentId);
+        if($("#"+escId)==[]){
             throw "Element with id '"+componentId+"' not found.";
         }
         
@@ -24,13 +30,13 @@
         // call constructor of parent class
         
         
-        $super.constructor.call(this, componentId, mergedOptions);   
+        $super.constructor.call(this, escId, mergedOptions);   
                                
-        this.element = jQuery(document.getElementById(this.id));
+        this.element = $("#"+escId);
   
         //init chart
         
-        this.element.jqplot(data, mergedOptions);
+       $.jqplot(escId,data, mergedOptions);
         
     };
  
@@ -64,7 +70,7 @@
         __bindEventHandlers:function(){
             for (e in this.__eventMap){
                 if(this.eventHandlers[e]){
-                    jQuery(document.getElementById(this.id)).bind(this.__eventMap[e],this.__gethandlerfunction(this.eventHandlers,e,this.id,this.options));
+                    $("#"+this.id).bind(this.__eventMap[e],this.__gethandlerfunction(this.eventHandlers,e,this.id,this.options));
                 }
             } 
         },
@@ -72,7 +78,7 @@
         __gethandlerfunction : function(obj,eventName,id,options){
             if(eventName =='onunhighlight'){
                 return function(ev){
-                    obj[eventName].call(document.getElementById(id),ev);
+                    obj[eventName].call($('#'+id),ev);
                 }
             }
             else if(eventName =='ondragstop'){
@@ -88,7 +94,7 @@
                     //server-side
                     obj.ajaxFunction(ev,"dragStop",seriesIndex,pointIndex,dataPos.xaxis,dataPos.yaxis);
                     //client-side
-                    obj[eventName].call(document.getElementById(id),ev);
+                    obj[eventName].call($('#'+id),ev);
                 }
             }
             else{
@@ -108,7 +114,7 @@
                         obj.ajaxFunction(ev,"dataClick",seriesIndex,pointIndex,data[1],data[0]);
                     }
                     //client-side
-                    obj[eventName].call(document.getElementById(id),ev);
+                    obj[eventName].call($('#'+id),ev);
                 }
             }
         },

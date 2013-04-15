@@ -38,11 +38,18 @@
             <cdk:scriptOption name="ajaxFunction" value="#{createSubmitEventFunction(facesContext,component)}"/>
         </cdk:scriptObject>      
 
-        <div id="#{clientId}" class="richfaces-chart #{component.attributes['styleClass']}" ></div>
+        <div id="#{clientId}" class="richfaces-chart #{component.attributes['styleClass']}" >
         
-        <script type="text/javascript">          
-              var #{clientId}js =  new RichFaces.ui.Chart("#{clientId}",#{getOptions()},#{getData()},#{toScriptArgs(events)});
-        </script>
+        <script type="text/javascript">      
+            
+              var #{getJsVar(component,facesContext)} = new RichFaces.ui.Chart( "#{clientId}",
+                                            #{getOptions()},
+                                            #{getData()},
+                                            #{toScriptArgs(events)}
+                                           );
+            
+         </script>
+        </div>
     </cc:implementation>
 
 </cdk:root>

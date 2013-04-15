@@ -475,4 +475,10 @@ public abstract class ChartRendererBase extends RendererBase {
     public String getOptions() {
         return options.toString();
     }
+    /**
+     * Create js var name for chart
+     */
+    public String getJsVar(UIComponent component,FacesContext context){
+        return component.getClientId().replace(":", "_");
+    }
 }
