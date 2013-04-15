@@ -21,11 +21,15 @@
         </ui:define>
         <ui:define name="title">Client behavior</ui:define>
         <ui:define name="content">
-            <lm:chart title="Line chart" onhighlight="highlight(event)" onunhighlight="unhighlight()">
-                <lm:series type="line" value="#{myBean.lineChartModel}"/>
-                <a4j:ajax event="highlight"/>
-            </lm:chart>
-            <span id="info"/>
+            <div class="code">
+                &lt;<span class="tag">h:form</span>&gt;<br/>
+                &nbsp;&nbsp;&lt;<span class="tag">lm:chart</span>&nbsp;<span class="attr">id</span>="lineChart"&nbsp;<span class="attr">title</span>="Line&nbsp;chart"&nbsp;<span class="attr">onhighlight</span>="highlight(event)"&nbsp;<span class="attr">onunhighlight</span>="unhighlight()"&nbsp;&gt;<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:series</span>&nbsp;<span class="attr">type</span>="line"&nbsp;<span class="attr">value</span>="<span>#</span>{myBean.lineChartModel}"/&gt;<br/>
+                &nbsp;&nbsp;&lt;<span class="tag">/lm:chart</span>&gt;<br/>
+                &lt;<span class="tag">/h:form</span>&gt;&nbsp;&nbsp;&nbsp;&nbsp;<br/>
+                &lt;<span class="tag">span</span>&nbsp;<span class="attr">id</span>="info"/&gt;<br/>
+            </div>
+
          </ui:define>
         
          <ui:define name="code">
