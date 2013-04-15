@@ -14,12 +14,23 @@ import org.richfaces.json.JSONArray;
 public abstract class ChartDataModel<T> {
 
     
-    
+    /**
+     * 
+     */
     Map<T, Number> data;
+    /**
+     * 
+     */
     List<T> keys; 
+    /**
+     * 
+     */
     List<T> outputKeys;
-    
+    /**
+     * Chart type based behavior
+     */
     protected ChartStrategy strategy;
+    
     private ChartType chartType;
 
     public ChartDataModel(ChartType type) {
@@ -43,10 +54,22 @@ public abstract class ChartDataModel<T> {
         }
    }
 
+    /**
+     * Method delegates point adding to strategy.
+     * @param key
+     * @param value 
+     */
     public void add(T key, Number value) {
         strategy.add(key, value, this);
     }
 
+    /**
+     * Method delegates conversion of data to JSON representation.
+     * At first, it checks whether T type(class generic type) used
+     * is supported by ChartType,if not UnsupportedOperationException
+     * is thrown.
+     * @return JSON collection 
+     */
     public JSONArray toJson() {
         if(!isAllowedForChartType(chartType)){
             throw new UnsupportedOperationException("Unsupported key type "+getKeyType()+" for"+chartType);
@@ -54,6 +77,11 @@ public abstract class ChartDataModel<T> {
         return strategy.toJSON(this);
     }
 
+    /**
+     * 
+     * @param type
+     * @return 
+     */
     public boolean isAllowedForChartType(ChartType type) {
         switch (type) {
             case line:
@@ -82,6 +110,11 @@ public abstract class ChartDataModel<T> {
         return chartType;
     }
     
+    /**
+     * Concrete subclass overrides this method
+     * determine its type.
+     * @return T.class 
+     */
     public abstract Class getKeyType();
 
     public List<T> getKeys() {

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.visit.VisitContext;
@@ -41,6 +43,10 @@ public abstract class ChartRendererBase extends RendererBase {
     private JSONObject axisOptions;
     private ChartDataModel.ChartType chartType;
     private Class classType;
+    /**
+     * Following properties identifier HTTP request parameters
+     *
+     */
     private static final String X_VALUE = "x";
     private static final String Y_VALUE = "y";
     private static final String POINT_INDEX = "pointIndex";
@@ -53,6 +59,15 @@ public abstract class ChartRendererBase extends RendererBase {
      */
     private List<String> keys;
 
+    /**
+     * Method adds key-value pair to object.
+     *
+     * @param obj
+     * @param key
+     * @param value
+     * @return
+     * @throws IOException if put to JSONObject fails
+     */
     public static JSONObject addAttribute(JSONObject obj, String key, Object value) throws IOException {
         try {
             obj.put(key, value);
@@ -82,6 +97,12 @@ public abstract class ChartRendererBase extends RendererBase {
         }
     }
 
+    /**
+     *
+     * @param context
+     * @param component
+     * @throws IOException
+     */
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
         super.encodeBegin(context, component);
@@ -92,7 +113,7 @@ public abstract class ChartRendererBase extends RendererBase {
         options = new JSONObject();
 
         //chart options
-        addAttribute(options, "title", component.getAttributes().get("title"));
+        addAttribute(options, "title", ((AbstractChart) component).getTitle());
 
         //series properties
         seriesOptions = new JSONArray();
@@ -146,6 +167,7 @@ public abstract class ChartRendererBase extends RendererBase {
                 try {
                     ((JSONObject) axisOptions.get("xaxis")).put("ticks", keys);
                 } catch (JSONException e) {
+                    throw new IOException("An error occured during processing options" + e);
                 }
             } else {
                 JSONObject xaxisOpt = new JSONObject();
@@ -163,6 +185,22 @@ public abstract class ChartRendererBase extends RendererBase {
                 addAttribute(xaxisOpt, "renderer", new RawJSONString("$.jqplot.CategoryAxisRenderer"));
                 addAttribute(axisOptions, "xaxis", xaxisOpt);
             }
+        } else if (chartType == ChartDataModel.ChartType.pie) {
+            //if there are more than one series in pie chart
+            //change rednerer to donut
+            if (seriesOptions.length() > 1) {
+                for (int i = 0; i < seriesOptions.length(); i++) {
+                    try {
+                        JSONObject s = (JSONObject) seriesOptions.get(i);
+                        s.remove("renderer");
+                        addAttribute(s, "renderer", new RawJSONString("$.jqplot.DonutRenderer"));
+                        ((JSONObject)s.get("rendererOptions")).put("sliceMargin", 3);
+                    } catch (JSONException ex) {
+                        throw new IOException("");
+                    }
+                }
+            }
+
         }
         if (classType == Date.class) {
             if (axisOptions.has("xaxis")) {
@@ -170,6 +208,7 @@ public abstract class ChartRendererBase extends RendererBase {
                 try {
                     ((JSONObject) axisOptions.get("xaxis")).put("renderer", new RawJSONString("$.jqplot.DateAxisRenderer"));
                 } catch (JSONException e) {
+                    throw new IOException("An error occured during processing options" + e);
                 }
             } else {
                 JSONObject xaxisOpt = new JSONObject();
@@ -185,7 +224,6 @@ public abstract class ChartRendererBase extends RendererBase {
         return true;
     }
 
-    
     /**
      * Process legend tag and its attributes
      *
@@ -197,7 +235,7 @@ public abstract class ChartRendererBase extends RendererBase {
         AbstractLegend l = (AbstractLegend) legend;
         JSONObject legendOpt = new JSONObject();
 
-        addAttribute(legendOpt, "show", true);
+        addAttribute(legendOpt, "show", l.isVisible());
         addAttribute(legendOpt, "placement", l.getPlacement());
         addAttribute(legendOpt, "location", AbstractLegend.positionMap.get((AbstractLegend.PositionType) l.getPosition()));
         return legendOpt;
@@ -217,7 +255,7 @@ public abstract class ChartRendererBase extends RendererBase {
 
         AbstractSeries s = (AbstractSeries) series;
 
-        ChartDataModel model = (ChartDataModel) series.getAttributes().get("value");
+        ChartDataModel model = (ChartDataModel) s.getValue();
 
         if (model == null) {
             VisitPointCallback callback = new VisitPointCallback(s.getType());
@@ -266,9 +304,9 @@ public abstract class ChartRendererBase extends RendererBase {
                 }
                 //marker properties
                 JSONObject markerOpt = new JSONObject();
-                addAttribute(markerOpt, "style", series.getAttributes().get("marker"));
+                addAttribute(markerOpt, "style", s.getMarker());
                 addAttribute(seriesOpt, "markerOptions", markerOpt);
-                addAttribute(seriesOpt, "showMarker", series.getAttributes().get("showMarker"));
+                addAttribute(seriesOpt, "showMarker", s.isMarkerVisible());
                 addAttribute(seriesOpt, "highlightMouseOver", true);
                 break;
             case pie:
@@ -286,15 +324,15 @@ public abstract class ChartRendererBase extends RendererBase {
         data.put(model.toJson());
 
         //attributes for all chart types
-        addAttribute(seriesOpt, "label", series.getAttributes().get("label"));
-        addAttribute(seriesOpt, "color", series.getAttributes().get("color"));
-        addAttribute(seriesOpt, "isDragable", series.getAttributes().get("dragable"));
-        addAttribute(dragableOpt, "constrainTo", series.getAttributes().get("dragableConstraint"));
+        addAttribute(seriesOpt, "label", s.getLabel());
+        addAttribute(seriesOpt, "color", s.getColor());
+        addAttribute(seriesOpt, "isDragable", s.isDragable());
+        addAttribute(dragableOpt, "constrainTo", s.getDragableConstraint());
         addAttribute(dragableOpt, "color", new RawJSONString("undefined"));
         addAttribute(seriesOpt, "dragable", dragableOpt);
 
         JSONObject trendlineOpt = new JSONObject();
-        addAttribute(trendlineOpt, "show", series.getAttributes().get("trendlineVisible"));
+        addAttribute(trendlineOpt, "show", s.isTrendlineVisible());
         addAttribute(seriesOpt, "trendline", trendlineOpt);
 
         return seriesOpt;
@@ -335,15 +373,20 @@ public abstract class ChartRendererBase extends RendererBase {
      * @throws IOException
      */
     protected JSONObject processCursor(UIComponent cursor) throws IOException {
+        AbstractCursor c = (AbstractCursor) cursor;
         JSONObject cursorOpt = new JSONObject();
-        addAttribute(cursorOpt, "zoom", cursor.getAttributes().get("zoomEn"));
-        addAttribute(cursorOpt, "constrainZoomTo", cursor.getAttributes().get("constraintZoom"));
+        addAttribute(cursorOpt, "zoom", c.isZoomEn());
+        addAttribute(cursorOpt, "constrainZoomTo", c.getConstraintZoom());
         addAttribute(cursorOpt, "show", true);
         return cursorOpt;
     }
 
-    
-
+    /**
+     * Method process request parameters and creates events.
+     *
+     * @param context
+     * @param component
+     */
     @Override
     public void decode(FacesContext context, UIComponent component) {
         super.decode(context, component);
@@ -381,7 +424,8 @@ public abstract class ChartRendererBase extends RendererBase {
     }
 
     /**
-     * Creates function for server-side event processing
+     * Creates function for server-side event processing. Function is passed to
+     * client javascript. It creates HTTP request to server when event occurs.
      *
      * @param context
      * @param component
@@ -400,14 +444,13 @@ public abstract class ChartRendererBase extends RendererBase {
 
         AjaxFunction ajaxFunction = AjaxRendererUtils.buildAjaxFunction(context, component);
         ajaxFunction.getOptions().getParameters().putAll(params);
-        //ajaxFunction.getOptions().set("complete", new JSReference(CALLBACK));
-
 
         return new JSFunctionDefinition("event", EVENT_TYPE, SERIES_INDEX, POINT_INDEX,
                 X_VALUE, Y_VALUE).addToBody(ajaxFunction);
     }
 
     /**
+     * Method creates unique identifier for request parameter.
      *
      * @param component
      * @param attribute
@@ -416,7 +459,7 @@ public abstract class ChartRendererBase extends RendererBase {
     protected String getFieldId(UIComponent component, String attribute) {
         return component.getClientId() + "-" + attribute;
     }
-    
+
     /**
      *
      * @return chart data
@@ -426,10 +469,16 @@ public abstract class ChartRendererBase extends RendererBase {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public String getOptions() {
         return options.toString();
+    }
+    /**
+     * Create js var name for chart
+     */
+    public String getJsVar(UIComponent component,FacesContext context){
+        return component.getClientId().replace(":", "_");
     }
 }

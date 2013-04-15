@@ -26,6 +26,7 @@
         <cdk:resource-dependency library="js" name="jqplot.dateAxisRenderer.js"/>
         <cdk:resource-dependency library="js" name="jqplot.canvasAxisTickRenderer.js"/>
         <cdk:resource-dependency library="js" name="jqplot.canvasTextRenderer.js"/>
+        <cdk:resource-dependency library="js" name="jqplot.donutRenderer.js"/>
         <cdk:resource-dependency library="js" name="richfaces.chart.js"/>
         
     </cc:interface>
@@ -37,11 +38,18 @@
             <cdk:scriptOption name="ajaxFunction" value="#{createSubmitEventFunction(facesContext,component)}"/>
         </cdk:scriptObject>      
 
-        <div id="#{clientId}" class="richfaces-chart #{component.attributes['styleClass']}" ></div>
+        <div id="#{clientId}" class="richfaces-chart #{component.attributes['styleClass']}" >
         
-        <script type="text/javascript">          
-                new RichFaces.ui.Chart("#{clientId}",#{getOptions()},#{getData()},#{toScriptArgs(events)});
-        </script>
+        <script type="text/javascript">      
+            
+              var #{getJsVar(component,facesContext)} = new RichFaces.ui.Chart( "#{clientId}",
+                                            #{getOptions()},
+                                            #{getData()},
+                                            #{toScriptArgs(events)}
+                                           );
+            
+         </script>
+        </div>
     </cc:implementation>
 
 </cdk:root>
