@@ -1,7 +1,7 @@
 Chart component
 =========
 - custom JSF component for chart plotting
-- encapsulate [jqplot](http://www.jqplot.com/index.php ) javascript library
+- encapsulates [jqplot](http://www.jqplot.com/index.php ) javascript library
 - features:
   + line, bar, pie chart types
   + client behavior, server-side listeners
