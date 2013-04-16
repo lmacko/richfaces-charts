@@ -36,7 +36,7 @@
   
         //init chart
         
-       $.jqplot(escId,data, mergedOptions);
+        this.plot = $.jqplot(escId,data, mergedOptions);
         
     };
  

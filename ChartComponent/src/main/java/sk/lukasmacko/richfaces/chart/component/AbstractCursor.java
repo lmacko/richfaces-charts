@@ -25,6 +25,17 @@ abstract public class AbstractCursor extends javax.faces.component.UIComponentBa
    @Attribute(defaultValue="ConstraintZoomType.none")
    public abstract ConstraintZoomType getConstraintZoom();
    
+   /**
+    * Cursor CSS property
+    */
+   @Attribute(defaultValue="pointer")
+   public abstract String getCursorStyle();
+   
+   /**
+    * Attribute whether to show tooltip or not
+    */
+   @Attribute(defaultValue="false")
+   public abstract boolean isTooltipVisible();
    
    public enum ConstraintZoomType{
        x,y,none

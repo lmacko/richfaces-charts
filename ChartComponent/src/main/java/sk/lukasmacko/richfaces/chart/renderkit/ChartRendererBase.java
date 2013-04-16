@@ -375,6 +375,9 @@ public abstract class ChartRendererBase extends RendererBase {
     protected JSONObject processCursor(UIComponent cursor) throws IOException {
         AbstractCursor c = (AbstractCursor) cursor;
         JSONObject cursorOpt = new JSONObject();
+        addAttribute(cursorOpt, "style", c.getCursorStyle());
+        addAttribute(cursorOpt, "showTooltip", c.isTooltipVisible());
+        addAttribute(cursorOpt, "followMouse", true);
         addAttribute(cursorOpt, "zoom", c.isZoomEn());
         addAttribute(cursorOpt, "constrainZoomTo", c.getConstraintZoom());
         addAttribute(cursorOpt, "show", true);
