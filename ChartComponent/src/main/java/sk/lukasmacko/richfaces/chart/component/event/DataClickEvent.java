@@ -5,13 +5,34 @@ import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 
 /**
- *
- * @author Macko
+ * The class represents dataclick event fired 
+ * by the chart component, when user clicks a point
+ * in a chart.
+ * @author Lukas Macko
  */
 public class DataClickEvent extends FacesEvent{
+    /**
+     * Index into chart series. The first
+     * series has index 0.
+     */
     private int seriesIndex;
+    
+    /**
+     * Index into list of points inside series.
+     * The first point has index 0.
+     */
     private int pointIndex;
+    
+    /**
+     * The value independent variable of the clicked point.
+     * x-coordinate
+     */
     private String x;
+    
+    /**
+     * Dependent variable.
+     * y-coordinate
+     */
     private Number y;
     
     public DataClickEvent(UIComponent component,int seriesIndex,int pointIndex, String x, Number y){

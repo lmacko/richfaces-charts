@@ -14,7 +14,7 @@ import sk.lukasmacko.richfaces.chart.component.model.StringChartModel;
 
 /**
  * 
- * @author Macko
+ * @author Lukas Macko
  */
 public class VisitPointCallback implements VisitCallback {
 

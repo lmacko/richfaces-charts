@@ -3,8 +3,8 @@ package sk.lukasmacko.richfaces.chart.component.event;
 import javax.faces.event.FacesListener;
 
 /**
- *
- * @author Macko
+ * Define listener for DataClickEvent.
+ * @author Lukas Macko
  */
 public interface DataClickListener extends FacesListener{
     
