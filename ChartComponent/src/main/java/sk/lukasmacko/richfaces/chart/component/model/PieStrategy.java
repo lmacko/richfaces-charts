@@ -5,11 +5,18 @@ import java.util.Map;
 import org.richfaces.json.JSONArray;
 
 /**
- *
+ * Class implements Pie chart specific behavior.
  * @author Macko
  */
 public class PieStrategy<T> implements ChartStrategy<T> {
 
+    /**
+     * The method adds key-value pair into model's data.
+     * Value must be greater than zero.
+     * @param key
+     * @param value
+     * @param model 
+     */
     @Override
     public void add(T key, Number value, ChartDataModel model) {
         if (value.doubleValue() > 0) {
@@ -21,6 +28,14 @@ public class PieStrategy<T> implements ChartStrategy<T> {
         }
     }
 
+    /**
+     * The method creates output JSON with a following form
+     * [[x1,y1],[x2,y2],...]. If there are more than one series 
+     * in a chart output values are determined in the same way as
+     * in @see"bar strategy".
+     * @param model
+     * @return 
+     */
     @Override
     public JSONArray toJSON(ChartDataModel model) {
         JSONArray collection = new JSONArray();

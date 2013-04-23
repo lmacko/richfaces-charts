@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sk.lukasmacko.richfaces.chart.component.event;
 
 import javax.faces.event.FacesListener;
 
 /**
- *
- * @author Macko
+ * Interface define listener for DragStopEvent.
+ * @author Lukas Macko
  */
 public interface DragStopListener extends FacesListener{
     

@@ -4,8 +4,9 @@ package sk.lukasmacko.richfaces.chart.component.model;
 import org.richfaces.json.JSONString;
 
 /**
- * 
- * @author Macko
+ * <p> The aim of this class <b>RawJSONString</b> is to output content
+ * into JSON without quotes</p>
+ * @author Lukas Macko
  */
 public class RawJSONString implements JSONString{
     
@@ -22,8 +23,7 @@ public class RawJSONString implements JSONString{
     public void setString(String string) {
         this.string = string;
     }
-    
-    
+       
     @Override
     public String toJSONString() {
         return getString();
