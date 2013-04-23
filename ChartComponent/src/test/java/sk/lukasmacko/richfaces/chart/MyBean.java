@@ -3,11 +3,11 @@ package sk.lukasmacko.richfaces.chart;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
 
+import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
 import sk.lukasmacko.richfaces.chart.component.model.NumberChartModel;
 import sk.lukasmacko.richfaces.chart.component.model.ChartDataModel.ChartType;
 import sk.lukasmacko.richfaces.chart.component.model.StringChartModel;
@@ -21,13 +21,19 @@ public class MyBean{
 	StringChartModel model;
 	NumberChartModel lineModel;
 	StringChartModel barModel;
+	String msg;
 	
 	public StringChartModel getModel() {
 		return model;
 	}
 	
+	public String getMsg() {
+		return msg;
+	}
+	
 	@PostConstruct
 	public void init(){
+		msg="-";
 		points = new ArrayList<Point<String>>();
 		points.add(new Point<String>("hey",5));
 		points.add(new Point<String>("hou",5));
@@ -48,6 +54,10 @@ public class MyBean{
 		barModel.add("June", 100);
 		barModel.add("July", 80);
 		barModel.add("August", 120);
+	}
+	
+	public void dataClickHandler(DataClickEvent e){
+		msg=e.toString();
 	}
 	
 	public List<Point<String>> getPoints() {

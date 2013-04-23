@@ -17,6 +17,7 @@
 		<version.org.jboss.arquillian.drone>1.2.0.Alpha1</version.org.jboss.arquillian.drone>
 		<version.org.jboss.arquillian.graphene>1.0.0.Final</version.org.jboss.arquillian.graphene>
 		<version.org.jboss.arquillian.graphene2>2.0.0.Alpha3</version.org.jboss.arquillian.graphene2>
+		<version.org.jboss.arquillian.qunit.impl>1.0.0-SNAPSHOT</version.org.jboss.arquillian.qunit.impl>
 	</properties>
 
 
@@ -95,7 +96,6 @@
 			<scope>test</scope>
 		</dependency>
 
-            
 
 	</dependencies>
 	<profiles>
