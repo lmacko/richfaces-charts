@@ -4,7 +4,7 @@ import org.richfaces.json.JSONArray;
 
 /**
  *
- * @author Macko
+ * @author Lukas Macko
  */
 public interface ChartStrategy<T> {
     

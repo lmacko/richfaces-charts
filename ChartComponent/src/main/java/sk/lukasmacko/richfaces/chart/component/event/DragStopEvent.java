@@ -5,13 +5,34 @@ import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 
 /**
- *
- * @author Macko
+ * The class represents dragstop event fired
+ * by the chart component, when user stops point dragging.
+ * @author Lukas Macko
  */
 public class DragStopEvent extends FacesEvent{
+    /**
+     * Index into chart series . The first
+     * series has index 0.
+     */
     private int seriesIndex;
+    
+    /**
+     * An Index into list of points inside series.
+     * The index points to an altered point.
+     * The first point has index 0.
+     */
     private int pointIndex;
+    
+    /**
+     * The new value independent variable of the dragged point.
+     * x-coordinate 
+     */
     private String x;
+    
+    /**
+     * Dependent variable - altered value.
+     * y-coordinate
+     */
     private Number y;
     
     

@@ -1,7 +1,8 @@
 package sk.lukasmacko.richfaces.chart.component.model;
 
 /**
- *
+ * Concrete class derived from ChartDataModel. Independent
+ * variable is instance of Number.
  * @author Macko
  */
 public class NumberChartModel extends ChartDataModel<Number> {
