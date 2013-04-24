@@ -2,11 +2,15 @@ package sk.lukasmacko.richfaces.chart;
 
 import java.io.File;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
+import org.jboss.arquillian.graphene.condition.element.ElementIsPresent;
 import org.jboss.arquillian.graphene.enricher.findby.FindBy;
+import org.jboss.arquillian.graphene.wait.WebDriverWait;
+
 import static org.jboss.arquillian.graphene.Graphene.*;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -34,6 +38,7 @@ import sk.lukasmacko.richfaces.chart.MyBean;
 public class FirstTest {
 
 	private static final String WEBAPP_PATH = "src/test/webapp";
+	private static final String SERVER_SIDE = "faces/server-side.xhtml";
 
 	@Drone
 	WebDriver browser;
@@ -41,14 +46,17 @@ public class FirstTest {
 	@ArquillianResource
 	URL deploymentUrl;
 
-	@Deployment(testable = false)
+	@Deployment()
 	public static WebArchive createDeployment() {
 		return ShrinkWrap
 				.create(WebArchive.class)
 				.addClass(FirstTest.class)
 				.addClass(MyBean.class)
+				.addClass(Charts.class)
 				.addAsWebResource(new File(WEBAPP_PATH, "index.xhtml"))
 				.addAsWebResource(new File(WEBAPP_PATH, "server-side.xhtml"))
+				.addAsWebResource(new File(WEBAPP_PATH, "serverside.xhtml"))
+				.addAsWebResource(new File(WEBAPP_PATH, "features.xhtml"))
 				.addAsWebInfResource(
 						new StringAsset("<faces-config version=\"2.0\"/>"),
 						"faces-config.xml")
@@ -92,16 +100,14 @@ public class FirstTest {
 	WebElement pieSpan;
 
 	@Test
+	@RunAsClient
 	public void testPieClick() throws InterruptedException {
 		browser.get(deploymentUrl.toExternalForm());
 		Actions builder = new Actions(browser);
-
-		// WebElement canvas =
-		// browser.findElement(By.xpath("//div[@id='pieChart']/canvas[@class='jqplot-event-canvas']"));
+		
 		Assert.assertNotNull(pieCanvas);
 
-		Action click = builder.moveToElement(pieCanvas, 200, 100).click()
-				.build();
+		Action click = builder.moveToElement(pieCanvas, 200, 100).click().build();
 		click.perform();
 
 		Assert.assertTrue(pieSpan.getText().equals("clicked1"));
@@ -115,6 +121,7 @@ public class FirstTest {
 	WebElement barSpan;
 
 	@Test
+	@RunAsClient
 	public void testBarClick() {
 		browser.get(deploymentUrl.toExternalForm());
 		Actions builder = new Actions(browser);
@@ -134,6 +141,7 @@ public class FirstTest {
 	WebElement lineSpan;
 
 	@Test
+	@RunAsClient
 	public void testLineClick() {
 		browser.get(deploymentUrl.toExternalForm());
 		Actions builder = new Actions(browser);
@@ -146,25 +154,61 @@ public class FirstTest {
 
 	}
 
-	/******************* END of click tests ****************************/
+	/******************* END of client-side click tests ****************************/
 
 
+	
+	/********************* Server-side test ****************************************/
+	@FindBy(id="frm:msg-text")
+	WebElement msgText;
 
-	/*@Test
+	@Test
+	@RunAsClient
 	public void testServerSidePieClick() {
-		browser.get(deploymentUrl.toExternalForm() + "faces/server-side.xhtml");
-		
+		browser.get(deploymentUrl.toExternalForm() + SERVER_SIDE);
 		
 		Actions builder = new Actions(browser);
 
-		Action click = builder.moveToElement(pieCanvas, 200, 100).click()
-				.build();
+		Action click = builder.moveToElement(pieCanvas, 200, 100).click().build();
 		click.perform();
-		WebElement msgText =
-				 browser.findElement(By.xpath("//form[@id='info-form']/span[@id='info-form:msg-text']"));
+        
+		waitAjax().until().element(msgText).is().present();	
 		Assert.assertNotNull(msgText);
-        System.out.println(msgText.getText());
+		System.out.println(msgText.getText());
+		Assert.assertTrue(msgText.getText().equals("1"));
+	}
+	
+	@Test
+	@RunAsClient
+	public void testServerSideBarClick() {
+		browser.get(deploymentUrl.toExternalForm()+ SERVER_SIDE);
+		Actions builder = new Actions(browser);
+
+		Action click = builder.moveToElement(barCanvas, 87, 202).click().build();
+		click.perform();
+		
+		waitAjax().until().element(msgText).is().present();	
+		Assert.assertNotNull(msgText);
+		System.out.println(msgText.getText());
 		Assert.assertTrue(msgText.getText().equals("0"));
-	}*/
+
+	}
+	
+	@Test
+	@RunAsClient
+	public void testServerSideLineClick() {
+		browser.get(deploymentUrl.toExternalForm()+ SERVER_SIDE);
+		Actions builder = new Actions(browser);
+
+		Action click = builder.moveToElement(lineCanvas, 73, 301).click().build();
+		click.perform();
+		
+		waitAjax().until().element(msgText).is().present();	
+		Assert.assertNotNull(msgText);
+		System.out.println(msgText.getText());
+		Assert.assertTrue(msgText.getText().equals("0"));
+
+	}
+	/************************************************************************************/
 
 }

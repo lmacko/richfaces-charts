@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
 
@@ -14,7 +15,7 @@ import sk.lukasmacko.richfaces.chart.component.model.StringChartModel;
 
 
 
-@Named
+@ManagedBean
 @ViewScoped
 public class MyBean{
 	List<Point<String>> points;
@@ -33,7 +34,7 @@ public class MyBean{
 	
 	@PostConstruct
 	public void init(){
-		msg="-";
+		msg=new String("-");
 		points = new ArrayList<Point<String>>();
 		points.add(new Point<String>("hey",5));
 		points.add(new Point<String>("hou",5));
@@ -57,8 +58,11 @@ public class MyBean{
 	}
 	
 	public void dataClickHandler(DataClickEvent e){
-		msg=e.toString();
+		msg=""+e.getPointIndex();
 	}
+	public void listner(DataClickEvent event){
+        msg = event.toString();
+    }
 	
 	public List<Point<String>> getPoints() {
 		return points;
