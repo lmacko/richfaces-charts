@@ -30,7 +30,7 @@ import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 
 @RunWith(Arquillian.class)
-public class FirstTest {
+public class ClickTest {
 
 	private static final String WEBAPP_PATH = "src/test/webapp";
 	private static final String SERVER_SIDE_PAGE = "faces/server-side.xhtml";
@@ -48,7 +48,7 @@ public class FirstTest {
 	public static WebArchive createDeployment() {
 		return ShrinkWrap
 				.create(WebArchive.class)
-				.addClass(FirstTest.class)
+				.addClass(ClickTest.class)
 				.addClass(MyBean.class)
 				.addAsWebResource(new File(WEBAPP_PATH, "index.xhtml"))
 				.addAsWebResource(new File(WEBAPP_PATH, "server-side.xhtml"))
