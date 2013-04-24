@@ -1,17 +1,16 @@
 package sk.lukasmacko.richfaces.chart;
 
+import static org.jboss.arquillian.graphene.Graphene.waitAjax;
+
 import java.io.File;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
-import org.jboss.arquillian.graphene.condition.element.ElementIsPresent;
 import org.jboss.arquillian.graphene.enricher.findby.FindBy;
-import org.jboss.arquillian.graphene.wait.WebDriverWait;
-
-import static org.jboss.arquillian.graphene.Graphene.*;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -21,24 +20,23 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 
-import com.thoughtworks.selenium.DefaultSelenium;
-
-import sk.lukasmacko.richfaces.chart.MyBean;
-
 @RunWith(Arquillian.class)
 public class FirstTest {
 
 	private static final String WEBAPP_PATH = "src/test/webapp";
-	private static final String SERVER_SIDE = "faces/server-side.xhtml";
+	private static final String SERVER_SIDE_PAGE = "faces/server-side.xhtml";
+	
+	Actions builder;
+	Map<String, Coordinate> firstPoints;
 
 	@Drone
 	WebDriver browser;
@@ -52,11 +50,8 @@ public class FirstTest {
 				.create(WebArchive.class)
 				.addClass(FirstTest.class)
 				.addClass(MyBean.class)
-				.addClass(Charts.class)
 				.addAsWebResource(new File(WEBAPP_PATH, "index.xhtml"))
 				.addAsWebResource(new File(WEBAPP_PATH, "server-side.xhtml"))
-				.addAsWebResource(new File(WEBAPP_PATH, "serverside.xhtml"))
-				.addAsWebResource(new File(WEBAPP_PATH, "features.xhtml"))
 				.addAsWebInfResource(
 						new StringAsset("<faces-config version=\"2.0\"/>"),
 						"faces-config.xml")
@@ -74,7 +69,25 @@ public class FirstTest {
 				.setWebXML(new File(WEBAPP_PATH, "web.xml"));
 
 	}
+	
+	@Before
+	public void intialization(){
+		builder = new Actions(browser);
+		//temporary magic numbers - position at chart canvas until
+		//jqplot testing suite will be done
+		firstPoints = new HashMap<String, Coordinate>();
+		firstPoints.put("pieChart", new Coordinate(341, 174));
+		firstPoints.put("barChart", new Coordinate(87, 202));
+		firstPoints.put("lineChart", new Coordinate(73, 301));
+	}
 
+	
+	public Action createClickFirstPointAction(String chartId,WebElement canvas){
+		Coordinate point = firstPoints.get(chartId);
+		Action click = builder.moveToElement(canvas, point.getX(), point.y).click().build();
+		return click;
+	}
+	
 	@Test
 	@RunAsClient
 	public void chartCreated() {
@@ -103,14 +116,12 @@ public class FirstTest {
 	@RunAsClient
 	public void testPieClick() throws InterruptedException {
 		browser.get(deploymentUrl.toExternalForm());
-		Actions builder = new Actions(browser);
-		
+				
 		Assert.assertNotNull(pieCanvas);
 
-		Action click = builder.moveToElement(pieCanvas, 200, 100).click().build();
-		click.perform();
+		createClickFirstPointAction("pieChart", pieCanvas).perform();
 
-		Assert.assertTrue(pieSpan.getText().equals("clicked1"));
+		Assert.assertTrue(pieSpan.getText().equals("clicked0"));
 
 	}
 
@@ -124,11 +135,8 @@ public class FirstTest {
 	@RunAsClient
 	public void testBarClick() {
 		browser.get(deploymentUrl.toExternalForm());
-		Actions builder = new Actions(browser);
-
-		Action click = builder.moveToElement(barCanvas, 87, 202).click()
-				.build();
-		click.perform();
+		
+		createClickFirstPointAction("barChart", barCanvas).perform();
 
 		Assert.assertTrue(barSpan.getText().equals("clicked0"));
 
@@ -144,11 +152,8 @@ public class FirstTest {
 	@RunAsClient
 	public void testLineClick() {
 		browser.get(deploymentUrl.toExternalForm());
-		Actions builder = new Actions(browser);
-
-		Action click = builder.moveToElement(lineCanvas, 73, 301).click()
-				.build();
-		click.perform();
+		
+		createClickFirstPointAction("lineChart", lineCanvas).perform();
 
 		Assert.assertTrue(lineSpan.getText().equals("clicked0"));
 
@@ -165,27 +170,22 @@ public class FirstTest {
 	@Test
 	@RunAsClient
 	public void testServerSidePieClick() {
-		browser.get(deploymentUrl.toExternalForm() + SERVER_SIDE);
+		browser.get(deploymentUrl.toExternalForm() + SERVER_SIDE_PAGE);
 		
-		Actions builder = new Actions(browser);
-
-		Action click = builder.moveToElement(pieCanvas, 200, 100).click().build();
-		click.perform();
+		createClickFirstPointAction("pieChart", pieCanvas).perform();
         
 		waitAjax().until().element(msgText).is().present();	
 		Assert.assertNotNull(msgText);
 		System.out.println(msgText.getText());
-		Assert.assertTrue(msgText.getText().equals("1"));
+		Assert.assertTrue(msgText.getText().equals("0"));
 	}
 	
 	@Test
 	@RunAsClient
 	public void testServerSideBarClick() {
-		browser.get(deploymentUrl.toExternalForm()+ SERVER_SIDE);
-		Actions builder = new Actions(browser);
-
-		Action click = builder.moveToElement(barCanvas, 87, 202).click().build();
-		click.perform();
+		browser.get(deploymentUrl.toExternalForm()+ SERVER_SIDE_PAGE);
+		
+		createClickFirstPointAction("barChart", barCanvas).perform();
 		
 		waitAjax().until().element(msgText).is().present();	
 		Assert.assertNotNull(msgText);
@@ -197,11 +197,9 @@ public class FirstTest {
 	@Test
 	@RunAsClient
 	public void testServerSideLineClick() {
-		browser.get(deploymentUrl.toExternalForm()+ SERVER_SIDE);
-		Actions builder = new Actions(browser);
-
-		Action click = builder.moveToElement(lineCanvas, 73, 301).click().build();
-		click.perform();
+		browser.get(deploymentUrl.toExternalForm()+ SERVER_SIDE_PAGE);
+		
+		createClickFirstPointAction("lineChart", lineCanvas).perform();
 		
 		waitAjax().until().element(msgText).is().present();	
 		Assert.assertNotNull(msgText);
@@ -211,4 +209,19 @@ public class FirstTest {
 	}
 	/************************************************************************************/
 
+	public class Coordinate{
+		private int x;
+		private int y;
+
+		public Coordinate(int x,int y){
+		   this.x=x;
+		   this.y=y;
+		}
+		public int getX() {
+			return x;
+		}
+		public int getY() {
+			return y;
+		}
+	}
 }

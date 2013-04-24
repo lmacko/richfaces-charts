@@ -6,7 +6,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.inject.Named;
 
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
 import sk.lukasmacko.richfaces.chart.component.model.NumberChartModel;
@@ -24,13 +23,6 @@ public class MyBean{
 	StringChartModel barModel;
 	String msg;
 	
-	public StringChartModel getModel() {
-		return model;
-	}
-	
-	public String getMsg() {
-		return msg;
-	}
 	
 	@PostConstruct
 	public void init(){
@@ -60,10 +52,7 @@ public class MyBean{
 	public void dataClickHandler(DataClickEvent e){
 		msg=""+e.getPointIndex();
 	}
-	public void listner(DataClickEvent event){
-        msg = event.toString();
-    }
-	
+		
 	public List<Point<String>> getPoints() {
 		return points;
 	}
@@ -71,8 +60,17 @@ public class MyBean{
 	public StringChartModel getBarModel() {
 		return barModel;
 	}
+	
 	public NumberChartModel getLineModel() {
 		return lineModel;
+	}
+	
+	public StringChartModel getModel() {
+		return model;
+	}
+	
+	public String getMsg() {
+		return msg;
 	}
 	
 	public class Point<T>{
