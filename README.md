@@ -12,3 +12,4 @@ UseMyChart
 =========
 usage of a component
 [quickstart](https://chartdemo-lukasmacko.rhcloud.com/UseMyChart-1.0-SNAPSHOT/faces/quickstart/simple.xhtml)
+[livedemo - chart configuration](https://chartdemo-lukasmacko.rhcloud.com/UseMyChart-1.0-SNAPSHOT/faces/quickstart/interactive.xhtml)
