@@ -21,6 +21,16 @@
                     </a4j:repeat>
                 </lm:series>
             </lm:chart>
+            
+            
+            <lm:chart id="pieChart" title="Company XY">
+                <lm:series type="pie">
+                    <a4j:repeat value="#{charts.data}" var="p">
+                        <lm:point x="#{p.x}" y="#{p.y}"/>
+                    </a4j:repeat>
+                </lm:series>
+            </lm:chart>
+            
         </ui:define>
         <ui:define name="code">
             <div class="code">
