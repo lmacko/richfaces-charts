@@ -11,16 +11,17 @@
         <ui:define name="javascript">
 
         </ui:define>
-        <ui:define name="title">Attributes</ui:define>
+        <ui:define name="title">Chart customization</ui:define>
 
 
         <ui:define name="content">
             <lm:chart title="Price">
                 <lm:series type="line" dragable="true" dragableConstraint="y"
-                           trendlineVisible="true" value="#{charts.dateModel}"/>
+                           trendlineVisible="true" value="#{charts.dateModel}" 
+                           marker="filledSquare"/>
                 <lm:yaxis format="$%d"/>
-                <lm
                 <lm:xaxis format="%m/%d/%Y" tickRotation="-30" />
+                <lm:cursor tooltipVisible="true"/>
                 <lm:legend position="top"/>
             </lm:chart>
         </ui:define>

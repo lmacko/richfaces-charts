@@ -40,6 +40,21 @@
                 
                 
             }
+            .settings{
+                width: 300px;
+                margin-left: 50px;
+                float:left;
+            }
+            .chartDiv{
+                float: left;
+                margin-left: 20px;
+            }
+            .smaller{
+                width: 75px;
+            }
+            .jqplot-target{
+                font-size: 15px;
+            }
         </style>
     </h:head>
     <h:body>
@@ -60,12 +75,16 @@
             <li>
                 <h:link outcome="data">Passing data</h:link>
             </li>
-            <!--<li>
+            <li>
                 <h:link outcome="attr">Zoom, legend, format and other attributes</h:link>
-            </li>-->
+            </li>
+            <li>
+                <h:link outcome="interactive">Try it yourself</h:link>
+            </li>
         </ul>
         
         <h1><ui:insert name="title"/></h1>
+        
         <ui:insert name="content">
             Chart component features.
         </ui:insert>
