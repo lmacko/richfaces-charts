@@ -32,7 +32,6 @@ import sk.lukasmacko.richfaces.chart.component.model.ChartDataModel;
 import sk.lukasmacko.richfaces.chart.component.model.RawJSONString;
 
 /**
- *
  * @author Macko
  */
 public abstract class ChartRendererBase extends RendererBase {
@@ -70,7 +69,9 @@ public abstract class ChartRendererBase extends RendererBase {
      */
     public static JSONObject addAttribute(JSONObject obj, String key, Object value) throws IOException {
         try {
-            obj.put(key, value);
+            if (value != null && !value.equals("")) {
+                obj.put(key, value);
+            }
         } catch (JSONException ex) {
             throw new IOException("JSONObject put failed.");
         }
@@ -162,29 +163,24 @@ public abstract class ChartRendererBase extends RendererBase {
         //bar chart - category labels(ticks) must be part of xaxis options
         if (chartType == ChartDataModel.ChartType.bar && classType != Number.class) {
 
-            if (axisOptions.has("xaxis")) {
+            JSONObject xaxisOpt;
 
-                try {
-                    ((JSONObject) axisOptions.get("xaxis")).put("ticks", keys);
-                } catch (JSONException e) {
-                    throw new IOException("An error occured during processing options" + e);
+            try {
+                if (axisOptions.has("xaxis")) {
+                    xaxisOpt = ((JSONObject) axisOptions.get("xaxis"));
+                } else {
+                    xaxisOpt = new JSONObject();
+                    addAttribute(axisOptions, "xaxis", xaxisOpt);
                 }
-            } else {
-                JSONObject xaxisOpt = new JSONObject();
-
-
-                JSONArray ticksJSON = new JSONArray();
-
-                for (String key : keys) {
-                    ticksJSON.put(key);
-                }
-
-
-
-                addAttribute(xaxisOpt, "ticks", ticksJSON);
-                addAttribute(xaxisOpt, "renderer", new RawJSONString("$.jqplot.CategoryAxisRenderer"));
-                addAttribute(axisOptions, "xaxis", xaxisOpt);
+                    xaxisOpt.put("ticks", keys);
+                
+            } catch (JSONException e) {
+                throw new IOException("An error occured during processing options" + e);
             }
+
+
+            addAttribute(xaxisOpt, "renderer", new RawJSONString("$.jqplot.CategoryAxisRenderer"));
+
         } else if (chartType == ChartDataModel.ChartType.pie) {
             //if there are more than one series in pie chart
             //change rednerer to donut
@@ -194,7 +190,7 @@ public abstract class ChartRendererBase extends RendererBase {
                         JSONObject s = (JSONObject) seriesOptions.get(i);
                         s.remove("renderer");
                         addAttribute(s, "renderer", new RawJSONString("$.jqplot.DonutRenderer"));
-                        ((JSONObject)s.get("rendererOptions")).put("sliceMargin", 3);
+                        ((JSONObject) s.get("rendererOptions")).put("sliceMargin", 3);
                     } catch (JSONException ex) {
                         throw new IOException("");
                     }
@@ -350,10 +346,29 @@ public abstract class ChartRendererBase extends RendererBase {
     protected JSONObject processAxis(UIComponent ax) throws IOException {
         AxisAttributes axis = (AxisAttributes) ax;
         JSONObject axisOpt = new JSONObject();
-        addAttribute(axisOpt, "min", axis.getMin());
-        addAttribute(axisOpt, "max", axis.getMax());
+        try{
+           if(axis.getMax()!=null){ 
+                double max = Double.parseDouble(axis.getMax());
+                addAttribute(axisOpt, "max", max);
+           }
+        }
+        catch(NumberFormatException e){
+           addAttribute(axisOpt, "max", axis.getMax()); 
+        }
+        
+        try{
+           if(axis.getMin()!=null){
+                double min = Double.parseDouble(axis.getMin());
+                addAttribute(axisOpt, "min", min);
+           }
+        }
+        catch(NumberFormatException e){
+           addAttribute(axisOpt, "min", axis.getMin()); 
+        }
+        
+        
         addAttribute(axisOpt, "pad", axis.getPad());
-        addAttribute(axisOpt, "label", axis.getPad());
+        addAttribute(axisOpt, "label", axis.getLabel());
         JSONObject tickOpt = new JSONObject();
         if (axis.getTickRotation() != null) {
             addAttribute(axisOpt, "tickRenderer", new RawJSONString("$.jqplot.CanvasAxisTickRenderer"));
@@ -478,10 +493,11 @@ public abstract class ChartRendererBase extends RendererBase {
     public String getOptions() {
         return options.toString();
     }
+
     /**
      * Create js var name for chart
      */
-    public String getJsVar(UIComponent component,FacesContext context){
+    public String getJsVar(UIComponent component, FacesContext context) {
         return component.getClientId().replace(":", "_");
     }
 }
