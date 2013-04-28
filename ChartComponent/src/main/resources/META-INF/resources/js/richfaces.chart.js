@@ -24,7 +24,7 @@
         }
         
         var mergedOptions = $.extend({}, defaultOptions, options);
-        
+        mergedOptions.legend.renderer=$.jqplot.TableLegendRenderer;
         this.init(eventHandlers,mergedOptions,data);
         
         // call constructor of parent class
