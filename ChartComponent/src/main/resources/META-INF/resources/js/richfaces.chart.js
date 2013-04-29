@@ -24,7 +24,12 @@
         }
         
         var mergedOptions = $.extend({}, defaultOptions, options);
-        mergedOptions.legend.renderer=$.jqplot.TableLegendRenderer;
+        if(options.chartType!="pie"){
+            mergedOptions.legend.renderer=$.jqplot.TableLegendRenderer;
+        }
+        else{
+            mergedOptions.legend.renderer=$.jqplot.PieLegendRenderer;
+        }
         this.init(eventHandlers,mergedOptions,data);
         
         // call constructor of parent class
