@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="settings" type="sk.lukasmacko.demo.ChartSettings"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+
+        <h:form>
+            <div class="settings">
+                <rich:collapsiblePanel header="chart" >
+                    <h:panelGrid columns="2">
+
+                        <h:outputText value="Title:"/>    
+                        <h:inputText label="title" value="#{cc.attrs.settings.title}"/>
+
+                        <h:commandButton value="Update"/>
+                    </h:panelGrid>
+
+                </rich:collapsiblePanel>
+
+                <rich:collapsiblePanel header="axis" expanded="false">
+                    <h:panelGrid columns="3">
+                        <h:outputText value=""/>
+                        <h:outputText value="X"/>
+                        <h:outputText value="Y"/>
+
+                        <h:outputText value="axis label:"/>
+                        <h:inputText label="x-axis label" value="#{cc.attrs.settings.xlabel}" styleClass="smaller"/>
+                        <h:inputText label="x-axis label" value="#{cc.attrs.settings.ylabel}" styleClass="smaller"/>
+
+                        <h:outputText value="format:"/>
+                        <h:inputText label="x-axis format" value="#{cc.attrs.settings.xformat}" styleClass="smaller"/>
+                        <h:inputText label="y-axis format" value="#{cc.attrs.settings.yformat}" styleClass="smaller"/>
+
+                        <h:outputText value="min:"/>
+                        <h:inputText label="x-axis min" value="#{cc.attrs.settings.xmin}" styleClass="smaller"/>
+                        <h:inputText label="y-axis min" value="#{cc.attrs.settings.ymin}" styleClass="smaller"/>
+
+                        <h:outputText value="max:"/>
+                        <h:inputText label="x-axis max" value="#{cc.attrs.settings.xmax}" styleClass="smaller"/>
+                        <h:inputText label="y-axis max" value="#{cc.attrs.settings.ymax}" styleClass="smaller"/>
+
+                        <h:outputText value="pad:"/>
+                        <h:inputText label="x-axis pad" value="#{cc.attrs.settings.xpad}" styleClass="smaller"/>
+                        <h:inputText label="y-axis pad" value="#{cc.attrs.settings.ypad}" styleClass="smaller"/>
+
+                        <h:outputText value="tick rotation:"/>
+                        <h:inputText label="x-axis rotation" value="#{cc.attrs.settings.xtickRotation}" styleClass="smaller"/>
+                        <h:inputText label="y-axis rotation" value="#{cc.attrs.settings.ytickRotation}" styleClass="smaller"/>
+
+
+                        <h:commandButton value="Update"/>
+                    </h:panelGrid>
+                </rich:collapsiblePanel>
+
+                <rich:collapsiblePanel header="series">
+                    <h:panelGrid columns="2">
+
+                        <h:outputText value="Label:"/>
+                        <h:inputText value="#{cc.attrs.settings.label}"/>
+
+                        <h:outputText value="Color:"/>
+                        <h:inputText value="#{cc.attrs.settings.color}"/>
+
+
+
+                        <h:outputText value="Marker:"/>
+                        <h:selectOneMenu value="#{cc.attrs.settings.marker}">
+                            <f:selectItems value="#{cc.attrs.settings.markers}" var="m" itemValue="#{m}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Show marker:"/>
+                        <h:selectBooleanCheckbox value="#{cc.attrs.settings.showMarker}"/>
+
+                        <h:outputText value="Trendline:"/>
+                        <h:inputText value="#{cc.attrs.settings.trendline}"/>
+
+                        <h:outputText value="Dragable:"/>
+                        <h:selectBooleanCheckbox value="#{cc.attrs.settings.draggable}"/>
+
+                        <h:outputText value="Draggable constraint"/>
+                        <h:selectOneMenu value="#{cc.attrs.settings.draggableConstrain}">
+                            <f:selectItems value="#{cc.attrs.settings.dirConstraintOpt}" var="c" itemValue="#{c}"/>
+                        </h:selectOneMenu>
+
+                        <h:commandButton value="Update"/>
+                    </h:panelGrid>
+                </rich:collapsiblePanel>
+
+                <rich:collapsiblePanel header="legend" expanded="false">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Show:"/>
+                        <h:selectBooleanCheckbox value="#{cc.attrs.settings.showLegend}"/>
+
+                        <h:outputText value="Position:"/>
+                        <h:selectOneMenu value="#{cc.attrs.settings.position}">
+                            <f:selectItems value="#{cc.attrs.settings.positionOpt}" var="p" itemValue="#{p}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Placement:"/>
+                        <h:selectOneMenu value="#{cc.attrs.settings.placement}">
+                            <f:selectItems value="#{cc.attrs.settings.placementOpt}" var="p" itemValue="#{p}"/>
+                        </h:selectOneMenu>
+
+                        <h:commandButton value="Update"/>
+                    </h:panelGrid>
+                </rich:collapsiblePanel> 
+
+                <rich:collapsiblePanel header="Cursor" expanded="false">
+                    <h:panelGrid columns="2">
+
+                        <h:outputText value="Zoom"/>
+                        <h:selectBooleanCheckbox value="#{cc.attrs.settings.zoom}"/>
+
+                        <h:outputText value="Zoom constraint:"/>
+                        <h:selectOneMenu value="#{cc.attrs.settings.zoomConstraint}">
+                            <f:selectItems value="#{cc.attrs.settings.dirConstraintOpt}" var="d" itemValue="#{d}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Tooltip"/>
+                        <h:selectBooleanCheckbox value="#{cc.attrs.settings.tooltip}"/>
+
+                        <h:outputText value="Cursor"/>
+                        <h:selectOneMenu value="#{cc.attrs.settings.cursor}">
+                            <f:selectItems value="#{cc.attrs.settings.cursorOpt}" var="c" itemValue="#{c}"/>
+                        </h:selectOneMenu>
+                        <h:commandButton value="Update"/>
+                    </h:panelGrid>
+                </rich:collapsiblePanel>
+            </div>
+        </h:form>
+    </cc:implementation>
+</html>

@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:lm="http://lukasmacko.sk/test"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ch="http://java.sun.com/jsf/composite/chForm">
+    <ui:composition template="features.xhtml">
+        <ui:define name="javascript">
+
+        </ui:define>
+        <ui:define name="title">Try it yourself</ui:define>
+
+
+        <ui:define name="content">
+            <h:form>
+                <rich:tabPanel switchType="server">
+                    <rich:tab header="Line chart">
+                        <lm:chart title="#{liveBean.lineChart.title}" styleClass="chartDiv">
+                            <lm:series type="line" 
+                                       color="#{liveBean.lineChart.color}"
+                                       dragable="#{liveBean.lineChart.draggable}"
+                                       dragableConstraint="#{liveBean.lineChart.draggableConstrain}"
+                                       trendlineVisible="#{liveBean.lineChart.trendline}"
+                                       label="#{liveBean.lineChart.label}"
+                                       marker="#{liveBean.lineChart.marker}"
+                                       markerVisible="#{liveBean.lineChart.showMarker}"
+                                       value="#{liveBean.dateModel}" 
+                                       />
+                            <lm:yaxis label="#{liveBean.lineChart.ylabel}"
+                                      min="#{liveBean.lineChart.ymin}"
+                                      max="#{liveBean.lineChart.ymax}"
+                                      pad="#{liveBean.lineChart.ypad}"
+                                      tickRotation="#{liveBean.lineChart.ytickRotation}"
+                                      format="#{liveBean.lineChart.yformat}"/>
+                            <lm:xaxis label="#{liveBean.lineChart.xlabel}"
+                                      min="#{liveBean.lineChart.xmin}"
+                                      max="#{liveBean.lineChart.xmax}"                                     
+                                      pad="#{liveBean.lineChart.xpad}"
+                                      tickRotation="#{liveBean.lineChart.xtickRotation}"
+                                      format="#{liveBean.lineChart.xformat}" />
+                            <lm:cursor tooltipVisible="#{liveBean.lineChart.tooltip}"
+                                       zoomEn="#{liveBean.lineChart.zoom}"
+                                       constraintZoom="#{liveBean.lineChart.zoomConstraint}"
+                                       cursorStyle="#{liveBean.lineChart.cursor}"/>
+                            <lm:legend position="#{liveBean.lineChart.position}" 
+                                       placement="#{liveBean.lineChart.placement}" 
+                                       visible="#{liveBean.lineChart.showLegend}"/>
+                        </lm:chart>
+                        <ch:chartSettingForm settings="#{liveBean.lineChart}"/>
+                        
+                        <br style="clear: both"/>
+                    </rich:tab>
+                    <rich:tab header="Bar chart">
+                        <lm:chart title="#{liveBean.barChart.title}" styleClass="chartDiv">
+                            <lm:series type="bar" 
+                                       color="#{liveBean.barChart.color}"
+                                       dragable="#{liveBean.barChart.draggable}"
+                                       dragableConstraint="#{liveBean.barChart.draggableConstrain}"
+                                       trendlineVisible="#{liveBean.barChart.trendline}"
+                                       label="#{liveBean.barChart.label}"
+                                       marker="#{liveBean.barChart.marker}"
+                                       markerVisible="#{liveBean.barChart.showMarker}"
+                                       value="#{liveBean.barModel}" 
+                                       />
+                            <lm:yaxis label="#{liveBean.barChart.ylabel}"
+                                      min="#{liveBean.barChart.ymin}"
+                                      max="#{liveBean.barChart.ymax}"
+                                      pad="#{liveBean.barChart.ypad}"
+                                      tickRotation="#{liveBean.barChart.ytickRotation}"
+                                      format="#{liveBean.barChart.yformat}"/>
+                            <lm:xaxis label="#{liveBean.barChart.xlabel}"
+                                      min="#{liveBean.barChart.xmin}"
+                                      max="#{liveBean.barChart.xmax}"                                     
+                                      pad="#{liveBean.barChart.xpad}"
+                                      tickRotation="#{liveBean.barChart.xtickRotation}"
+                                      format="#{liveBean.barChart.xformat}" />
+                            <lm:cursor tooltipVisible="#{liveBean.barChart.tooltip}"
+                                       zoomEn="#{liveBean.barChart.zoom}"
+                                       constraintZoom="#{liveBean.barChart.zoomConstraint}"
+                                       cursorStyle="#{liveBean.barChart.cursor}"/>
+                            <lm:legend position="#{liveBean.barChart.position}" 
+                                       placement="#{liveBean.barChart.placement}" 
+                                       visible="#{liveBean.barChart.showLegend}"/>
+                        </lm:chart>
+                        <ch:chartSettingForm settings="#{liveBean.barChart}"/>
+                        <br style="clear: both"/>
+                    </rich:tab>
+                    <rich:tab header="Pie chart">
+                        <lm:chart title="#{liveBean.pieChart.title}" styleClass="chartDiv">
+                            <lm:series type="pie" 
+                                      color="#{liveBean.pieChart.color}"
+                                       dragable="#{liveBean.pieChart.draggable}"
+                                       dragableConstraint="#{liveBean.pieChart.draggableConstrain}"
+                                       trendlineVisible="#{liveBean.pieChart.trendline}"
+                                       label="#{liveBean.pieChart.label}"
+                                       marker="#{liveBean.pieChart.marker}"
+                                       markerVisible="#{liveBean.pieChart.showMarker}"
+                                       value="#{liveBean.pieModel}" 
+                                       />
+                            <lm:yaxis label="#{liveBean.pieChart.ylabel}"
+                                      min="#{liveBean.pieChart.ymin}"
+                                      max="#{liveBean.pieChart.ymax}"
+                                      pad="#{liveBean.pieChart.ypad}"
+                                      tickRotation="#{liveBean.pieChart.ytickRotation}"
+                                      format="#{liveBean.pieChart.yformat}"/>
+                            <lm:xaxis label="#{liveBean.pieChart.xlabel}"
+                                      min="#{liveBean.pieChart.xmin}"
+                                      max="#{liveBean.pieChart.xmax}"                                     
+                                      pad="#{liveBean.pieChart.xpad}"
+                                      tickRotation="#{liveBean.pieChart.xtickRotation}"
+                                      format="#{liveBean.pieChart.xformat}" />
+                            <lm:cursor tooltipVisible="#{liveBean.pieChart.tooltip}"
+                                       zoomEn="#{liveBean.pieChart.zoom}"
+                                       constraintZoom="#{liveBean.pieChart.zoomConstraint}"
+                                       cursorStyle="#{liveBean.pieChart.cursor}"/>
+                            <lm:legend position="#{liveBean.pieChart.position}" 
+                                       placement="#{liveBean.pieChart.placement}" 
+                                       visible="#{liveBean.pieChart.showLegend}"/>
+                        </lm:chart>
+                        <ch:chartSettingForm settings="#{liveBean.pieChart}"/>
+                        <br style="clear: both"/>
+                    </rich:tab>
+                </rich:tabPanel>
+            </h:form>
+
+        </ui:define>
+        <ui:define name="code">
+            <!--
+            <div class="code">
+            &lt;<span class="tag">lm:chart</span>&nbsp;<span class="attr">title</span>="#{liveBean.lineChart.title}"&nbsp;<span class="attr">styleClass</span>="chartDiv"&gt;<br/>
+            &nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:series</span>&nbsp;<span class="attr">type</span>="line"&nbsp;<span class="attr">color</span>="#{liveBean.lineChart.color}"&nbsp;<span class="attr">dragable</span>="#{liveBean.lineChart.draggable}"<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">dragableConstraint</span>="#{liveBean.lineChart.draggableConstrain}"<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">trendlineVisible</span>="#{liveBean.lineChart.trendline}"<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">label</span>="#{liveBean.lineChart.label}"&nbsp;<span class="attr">marker</span>="#{liveBean.lineChart.marker}"<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">markerVisible</span>="#{liveBean.lineChart.showMarker}"&nbsp;<span class="attr">value</span>="<span>#</span>{liveBean.dateModel}"/&gt;<br/>
+            &nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:yaxis</span>&nbsp;<span class="attr">label</span>="#{liveBean.lineChart.ylabel}"&nbsp;<span class="attr">min</span>="#{liveBean.lineChart.ymin}"<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">max</span>="#{liveBean.lineChart.ymax}"&nbsp;<span class="attr">pad</span>="#{liveBean.lineChart.ypad}"&nbsp;<span class="attr">tickRotation</span>="#{liveBean.lineChart.ytickRotation}"<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">format</span>="#{liveBean.lineChart.yformat}"/&gt;<br/>
+            &nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:xaxis</span>&nbsp;<span class="attr">label</span>="#{liveBean.lineChart.xlabel}"&nbsp;<span class="attr">min</span>="#{liveBean.lineChart.xmin}"<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">max</span>="#{liveBean.lineChart.xmax}"&nbsp;<span class="attr">pad</span>="#{liveBean.lineChart.xpad}"&nbsp;<span class="attr">tickRotation</span>="#{liveBean.lineChart.xtickRotation}"<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">format</span>="#{liveBean.lineChart.xformat}"&nbsp;/&gt;<br/>
+            &nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:cursor</span>&nbsp;<span class="attr">tooltipVisible</span>="#{liveBean.lineChart.tooltip}"&nbsp;<span class="attr">zoomEn</span>="#{liveBean.lineChart.zoom}"<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="attr">constraintZoom</span>="#{liveBean.lineChart.zoomConstraint}"&nbsp;<span class="attr">cursorStyle</span>="#{liveBean.lineChart.cursor}"/&gt;<br/>
+            &nbsp;&nbsp;&nbsp;&lt;<span class="tag">lm:legend</span>&nbsp;<span class="attr">position</span>="#{liveBean.lineChart.position}"&nbsp;<span class="attr">placement</span>="#{liveBean.lineChart.placement}"&nbsp;<span class="attr">visible</span>="#{liveBean.lineChart.showLegend}"/&gt;<br/>
+            &lt;<span class="tag">/lm:chart</span>&gt;<br/>
+            </div>
+            
+-->
+
+        </ui:define>
+    </ui:composition>
+</html>
+
