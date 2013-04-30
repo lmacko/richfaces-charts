@@ -59,10 +59,10 @@ public class BarStrategy<T> implements ChartStrategy<T> {
             }
         } else {
             if (model.outputKeys == null) {
-                Iterator it = model.data.entrySet().iterator();
+                Iterator it = model.keys.iterator();
                 while (it.hasNext()) {
-                    Map.Entry entry = (Map.Entry) it.next();
-                    collection.put(model.data.get(entry.getKey()));
+                    Object key = it.next();
+                    collection.put(model.data.get(key));
                 }
             } else {
 

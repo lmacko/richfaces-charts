@@ -41,12 +41,12 @@ public class PieStrategy<T> implements ChartStrategy<T> {
         JSONArray collection = new JSONArray();
 
         if (model.outputKeys == null) {
-            Iterator it = model.data.entrySet().iterator();
+            Iterator it = model.keys.iterator();
             while (it.hasNext()) {
-                Map.Entry entry = (Map.Entry) it.next();
+                Object key = it.next();
                 JSONArray point = new JSONArray();
-                point.put(entry.getKey());
-                point.put(entry.getValue());
+                point.put(key);
+                point.put(model.data.get(key));
                 collection.put(point);
             }
         } else {

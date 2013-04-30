@@ -9,7 +9,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import org.ajax4jsf.javascript.JSFunctionDefinition;
 import org.ajax4jsf.javascript.JSReference;
@@ -138,27 +140,37 @@ public abstract class ChartRendererBase extends RendererBase {
     @Override
     public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
         super.encodeChildren(context, component);
+
         AbstractChart chart = (AbstractChart) component;
-        List<UIComponent> children = chart.getChildren();
-        //process children tags
-        for (UIComponent ch : children) {
-            if (ch instanceof AbstractLegend) {
-                JSONObject legendOpt = processLegend(ch);
-                addAttribute(options, "legend", legendOpt);
-            } else if (ch instanceof AbstractSeries) {
-                JSONObject opts = processSeries(ch);
-                seriesOptions.put(opts);
-            } else if (ch instanceof AbstractCursor) {
-                JSONObject cursorOpt = processCursor(ch);
-                addAttribute(options, "cursor", cursorOpt);
-            } else if (ch instanceof AbstractXaxis) {
-                JSONObject xaxisOpt = processAxis(ch);
-                addAttribute(axisOptions, "xaxis", xaxisOpt);
-            } else if (ch instanceof AbstractYaxis) {
-                JSONObject yaxisOpt = processAxis(ch);
-                addAttribute(axisOptions, "yaxis", yaxisOpt);
+        
+        chart.visitTree(VisitContext.createVisitContext(FacesContext.getCurrentInstance()), new VisitCallback() {
+            @Override
+            public VisitResult visit(VisitContext context, UIComponent target) {
+
+                try {
+                    if (target instanceof AbstractLegend) {
+                        JSONObject legendOpt = processLegend(target);
+                        addAttribute(options, "legend", legendOpt);
+                    } else if (target instanceof AbstractSeries) {
+                        JSONObject opts = processSeries(target);
+                        seriesOptions.put(opts);
+                    } else if (target instanceof AbstractCursor) {
+                        JSONObject cursorOpt = processCursor(target);
+                        addAttribute(options, "cursor", cursorOpt);
+                    } else if (target instanceof AbstractXaxis) {
+                        JSONObject xaxisOpt = processAxis(target);
+                        addAttribute(axisOptions, "xaxis", xaxisOpt);
+                    } else if (target instanceof AbstractYaxis) {
+                        JSONObject yaxisOpt = processAxis(target);
+                        addAttribute(axisOptions, "yaxis", yaxisOpt);
+                    }
+                    return VisitResult.ACCEPT;
+                } catch (IOException e) {
+                    throw new FacesException(e);
+                }
+                
             }
-        }
+        });
 
         //bar chart - category labels(ticks) must be part of xaxis options
         if (chartType == ChartDataModel.ChartType.bar && classType != Number.class) {
@@ -172,8 +184,8 @@ public abstract class ChartRendererBase extends RendererBase {
                     xaxisOpt = new JSONObject();
                     addAttribute(axisOptions, "xaxis", xaxisOpt);
                 }
-                    xaxisOpt.put("ticks", keys);
-                
+                xaxisOpt.put("ticks", keys);
+
             } catch (JSONException e) {
                 throw new IOException("An error occured during processing options" + e);
             }
@@ -346,27 +358,25 @@ public abstract class ChartRendererBase extends RendererBase {
     protected JSONObject processAxis(UIComponent ax) throws IOException {
         AxisAttributes axis = (AxisAttributes) ax;
         JSONObject axisOpt = new JSONObject();
-        try{
-           if(axis.getMax()!=null){ 
+        try {
+            if (axis.getMax() != null) {
                 double max = Double.parseDouble(axis.getMax());
                 addAttribute(axisOpt, "max", max);
-           }
+            }
+        } catch (NumberFormatException e) {
+            addAttribute(axisOpt, "max", axis.getMax());
         }
-        catch(NumberFormatException e){
-           addAttribute(axisOpt, "max", axis.getMax()); 
-        }
-        
-        try{
-           if(axis.getMin()!=null){
+
+        try {
+            if (axis.getMin() != null) {
                 double min = Double.parseDouble(axis.getMin());
                 addAttribute(axisOpt, "min", min);
-           }
+            }
+        } catch (NumberFormatException e) {
+            addAttribute(axisOpt, "min", axis.getMin());
         }
-        catch(NumberFormatException e){
-           addAttribute(axisOpt, "min", axis.getMin()); 
-        }
-        
-        
+
+
         addAttribute(axisOpt, "pad", axis.getPad());
         addAttribute(axisOpt, "label", axis.getLabel());
         JSONObject tickOpt = new JSONObject();
@@ -415,8 +425,8 @@ public abstract class ChartRendererBase extends RendererBase {
 
         Map<String, String> requestParameterMap = context.getExternalContext().getRequestParameterMap();
         if (requestParameterMap.get(component.getClientId(context)) != null) {
-            String yParam = requestParameterMap.get(getFieldId(component, X_VALUE));
-            String xParam = requestParameterMap.get(getFieldId(component, Y_VALUE));
+            String xParam = requestParameterMap.get(getFieldId(component, X_VALUE));
+            String yParam = requestParameterMap.get(getFieldId(component, Y_VALUE));
             String pointIndexParam = requestParameterMap.get(getFieldId(component, POINT_INDEX));
             String eventTypeParam = requestParameterMap.get(getFieldId(component, EVENT_TYPE));
             String seriesIndexParam = requestParameterMap.get(getFieldId(component, SERIES_INDEX));
