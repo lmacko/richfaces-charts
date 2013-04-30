@@ -4,17 +4,18 @@
       xmlns:cc="http://java.sun.com/jsf/composite"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:rich="http://richfaces.org/rich"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j">
 
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="settings" type="sk.lukasmacko.demo.ChartSettings"/>
+        <cc:attribute name="renderIDs"/>
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
 
-        <h:form>
             <div class="settings">
                 <rich:collapsiblePanel header="chart" >
                     <h:panelGrid columns="2">
@@ -22,7 +23,9 @@
                         <h:outputText value="Title:"/>    
                         <h:inputText label="title" value="#{cc.attrs.settings.title}"/>
 
-                        <h:commandButton value="Update"/>
+                        <h:commandButton value="Update" >
+                            <a4j:ajax event="click" execute="@form" render="#{cc.attrs.renderIDs}"/>
+                        </h:commandButton>
                     </h:panelGrid>
 
                 </rich:collapsiblePanel>
@@ -137,6 +140,6 @@
                     </h:panelGrid>
                 </rich:collapsiblePanel>
             </div>
-        </h:form>
+        
     </cc:implementation>
 </html>
