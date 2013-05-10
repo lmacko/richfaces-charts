@@ -60,7 +60,7 @@ abstract public class AbstractSeries extends javax.faces.component.UIComponentBa
      * Attribute enables to drag point of this series.
      */
     @Attribute(defaultValue="false")
-    public abstract boolean isDragable();
+    public abstract boolean isDraggable();
     
     /**
      * Show linear trendline.
@@ -72,7 +72,7 @@ abstract public class AbstractSeries extends javax.faces.component.UIComponentBa
      * Restrict point dragging. Allowed values <b>x</b>,<b>y</b><b>none</b>.
      */
     @Attribute(defaultValue="ConstraintType.none",suggestedValue="ConstraintType.x,ConstraintType.y,ConstraintType.none") 
-    public abstract ConstraintType getDragableConstraint();
+    public abstract ConstraintType getDraggableConstraint();
     
     
     

@@ -25,13 +25,13 @@ public interface AxisAttributes {
      * Minimum value of the axis
      */
     @Attribute
-    public abstract Double getMin();
+    public abstract String getMin();
     
     /**
      * Maximum value of the axis
      */
     @Attribute
-    public abstract Double getMax();
+    public abstract String getMax();
     
     /*
      * A factor multiplied by the data range

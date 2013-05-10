@@ -9,7 +9,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.visit.VisitCallback;
 import javax.faces.component.visit.VisitContext;
+import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 import org.ajax4jsf.javascript.JSFunctionDefinition;
 import org.ajax4jsf.javascript.JSReference;
@@ -32,7 +34,6 @@ import sk.lukasmacko.richfaces.chart.component.model.ChartDataModel;
 import sk.lukasmacko.richfaces.chart.component.model.RawJSONString;
 
 /**
- *
  * @author Macko
  */
 public abstract class ChartRendererBase extends RendererBase {
@@ -70,7 +71,9 @@ public abstract class ChartRendererBase extends RendererBase {
      */
     public static JSONObject addAttribute(JSONObject obj, String key, Object value) throws IOException {
         try {
-            obj.put(key, value);
+            if (value != null && !value.equals("")) {
+                obj.put(key, value);
+            }
         } catch (JSONException ex) {
             throw new IOException("JSONObject put failed.");
         }
@@ -137,54 +140,59 @@ public abstract class ChartRendererBase extends RendererBase {
     @Override
     public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
         super.encodeChildren(context, component);
+
         AbstractChart chart = (AbstractChart) component;
-        List<UIComponent> children = chart.getChildren();
-        //process children tags
-        for (UIComponent ch : children) {
-            if (ch instanceof AbstractLegend) {
-                JSONObject legendOpt = processLegend(ch);
-                addAttribute(options, "legend", legendOpt);
-            } else if (ch instanceof AbstractSeries) {
-                JSONObject opts = processSeries(ch);
-                seriesOptions.put(opts);
-            } else if (ch instanceof AbstractCursor) {
-                JSONObject cursorOpt = processCursor(ch);
-                addAttribute(options, "cursor", cursorOpt);
-            } else if (ch instanceof AbstractXaxis) {
-                JSONObject xaxisOpt = processAxis(ch);
-                addAttribute(axisOptions, "xaxis", xaxisOpt);
-            } else if (ch instanceof AbstractYaxis) {
-                JSONObject yaxisOpt = processAxis(ch);
-                addAttribute(axisOptions, "yaxis", yaxisOpt);
+        
+        chart.visitTree(VisitContext.createVisitContext(FacesContext.getCurrentInstance()), new VisitCallback() {
+            @Override
+            public VisitResult visit(VisitContext context, UIComponent target) {
+
+                try {
+                    if (target instanceof AbstractLegend) {
+                        JSONObject legendOpt = processLegend(target);
+                        addAttribute(options, "legend", legendOpt);
+                    } else if (target instanceof AbstractSeries) {
+                        JSONObject opts = processSeries(target);
+                        seriesOptions.put(opts);
+                    } else if (target instanceof AbstractCursor) {
+                        JSONObject cursorOpt = processCursor(target);
+                        addAttribute(options, "cursor", cursorOpt);
+                    } else if (target instanceof AbstractXaxis) {
+                        JSONObject xaxisOpt = processAxis(target);
+                        addAttribute(axisOptions, "xaxis", xaxisOpt);
+                    } else if (target instanceof AbstractYaxis) {
+                        JSONObject yaxisOpt = processAxis(target);
+                        addAttribute(axisOptions, "yaxis", yaxisOpt);
+                    }
+                    return VisitResult.ACCEPT;
+                } catch (IOException e) {
+                    throw new FacesException(e);
+                }
+                
             }
-        }
+        });
 
         //bar chart - category labels(ticks) must be part of xaxis options
         if (chartType == ChartDataModel.ChartType.bar && classType != Number.class) {
 
-            if (axisOptions.has("xaxis")) {
+            JSONObject xaxisOpt;
 
-                try {
-                    ((JSONObject) axisOptions.get("xaxis")).put("ticks", keys);
-                } catch (JSONException e) {
-                    throw new IOException("An error occured during processing options" + e);
+            try {
+                if (axisOptions.has("xaxis")) {
+                    xaxisOpt = ((JSONObject) axisOptions.get("xaxis"));
+                } else {
+                    xaxisOpt = new JSONObject();
+                    addAttribute(axisOptions, "xaxis", xaxisOpt);
                 }
-            } else {
-                JSONObject xaxisOpt = new JSONObject();
+                xaxisOpt.put("ticks", keys);
 
-
-                JSONArray ticksJSON = new JSONArray();
-
-                for (String key : keys) {
-                    ticksJSON.put(key);
-                }
-
-
-
-                addAttribute(xaxisOpt, "ticks", ticksJSON);
-                addAttribute(xaxisOpt, "renderer", new RawJSONString("$.jqplot.CategoryAxisRenderer"));
-                addAttribute(axisOptions, "xaxis", xaxisOpt);
+            } catch (JSONException e) {
+                throw new IOException("An error occured during processing options" + e);
             }
+
+
+            addAttribute(xaxisOpt, "renderer", new RawJSONString("$.jqplot.CategoryAxisRenderer"));
+
         } else if (chartType == ChartDataModel.ChartType.pie) {
             //if there are more than one series in pie chart
             //change rednerer to donut
@@ -194,7 +202,7 @@ public abstract class ChartRendererBase extends RendererBase {
                         JSONObject s = (JSONObject) seriesOptions.get(i);
                         s.remove("renderer");
                         addAttribute(s, "renderer", new RawJSONString("$.jqplot.DonutRenderer"));
-                        ((JSONObject)s.get("rendererOptions")).put("sliceMargin", 3);
+                        ((JSONObject) s.get("rendererOptions")).put("sliceMargin", 3);
                     } catch (JSONException ex) {
                         throw new IOException("");
                     }
@@ -326,8 +334,8 @@ public abstract class ChartRendererBase extends RendererBase {
         //attributes for all chart types
         addAttribute(seriesOpt, "label", s.getLabel());
         addAttribute(seriesOpt, "color", s.getColor());
-        addAttribute(seriesOpt, "isDragable", s.isDragable());
-        addAttribute(dragableOpt, "constrainTo", s.getDragableConstraint());
+        addAttribute(seriesOpt, "isDragable", s.isDraggable());
+        addAttribute(dragableOpt, "constrainTo", s.getDraggableConstraint());
         addAttribute(dragableOpt, "color", new RawJSONString("undefined"));
         addAttribute(seriesOpt, "dragable", dragableOpt);
 
@@ -350,10 +358,27 @@ public abstract class ChartRendererBase extends RendererBase {
     protected JSONObject processAxis(UIComponent ax) throws IOException {
         AxisAttributes axis = (AxisAttributes) ax;
         JSONObject axisOpt = new JSONObject();
-        addAttribute(axisOpt, "min", axis.getMin());
-        addAttribute(axisOpt, "max", axis.getMax());
+        try {
+            if (axis.getMax() != null) {
+                double max = Double.parseDouble(axis.getMax());
+                addAttribute(axisOpt, "max", max);
+            }
+        } catch (NumberFormatException e) {
+            addAttribute(axisOpt, "max", axis.getMax());
+        }
+
+        try {
+            if (axis.getMin() != null) {
+                double min = Double.parseDouble(axis.getMin());
+                addAttribute(axisOpt, "min", min);
+            }
+        } catch (NumberFormatException e) {
+            addAttribute(axisOpt, "min", axis.getMin());
+        }
+
+
         addAttribute(axisOpt, "pad", axis.getPad());
-        addAttribute(axisOpt, "label", axis.getPad());
+        addAttribute(axisOpt, "label", axis.getLabel());
         JSONObject tickOpt = new JSONObject();
         if (axis.getTickRotation() != null) {
             addAttribute(axisOpt, "tickRenderer", new RawJSONString("$.jqplot.CanvasAxisTickRenderer"));
@@ -400,8 +425,8 @@ public abstract class ChartRendererBase extends RendererBase {
 
         Map<String, String> requestParameterMap = context.getExternalContext().getRequestParameterMap();
         if (requestParameterMap.get(component.getClientId(context)) != null) {
-            String yParam = requestParameterMap.get(getFieldId(component, X_VALUE));
-            String xParam = requestParameterMap.get(getFieldId(component, Y_VALUE));
+            String xParam = requestParameterMap.get(getFieldId(component, X_VALUE));
+            String yParam = requestParameterMap.get(getFieldId(component, Y_VALUE));
             String pointIndexParam = requestParameterMap.get(getFieldId(component, POINT_INDEX));
             String eventTypeParam = requestParameterMap.get(getFieldId(component, EVENT_TYPE));
             String seriesIndexParam = requestParameterMap.get(getFieldId(component, SERIES_INDEX));
@@ -478,10 +503,11 @@ public abstract class ChartRendererBase extends RendererBase {
     public String getOptions() {
         return options.toString();
     }
+
     /**
      * Create js var name for chart
      */
-    public String getJsVar(UIComponent component,FacesContext context){
+    public String getJsVar(UIComponent component, FacesContext context) {
         return component.getClientId().replace(":", "_");
     }
 }

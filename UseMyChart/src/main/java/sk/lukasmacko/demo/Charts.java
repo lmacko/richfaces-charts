@@ -1,6 +1,9 @@
+package sk.lukasmacko.demo;
+
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import sk.lukasmacko.richfaces.chart.component.event.DataClickEvent;
@@ -25,6 +28,20 @@ public class Charts {
     private String msg;
     
 
+    private List<Point<String>> data;
+
+    @PostConstruct
+    public void initData(){
+        data = new ArrayList<Point<String>>();
+        data.add(new Point<String>("Departement X", 100));
+        data.add(new Point<String>("Departement Y", 200));
+        data.add(new Point<String>("Departement Z", 300));
+    }
+    
+    public List<Point<String>> getData() {
+        return data;
+    }
+    
     /**
      * Creates a new instance of Charts
      */
