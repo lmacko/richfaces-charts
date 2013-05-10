@@ -1,10 +1,12 @@
- (function ($, rf) {
+(function ($, rf) {
    
     rf.ui = rf.ui || {};
     // Default options definition if needed for the component
     var defaultOptions = {
-        legend : { show:true}
-        /*seriesColors: [
+        legend : {
+            show:true
+        }
+    /*seriesColors: [
            'yellowgreen',
            'steelblue',
            'chocolate',
@@ -70,7 +72,7 @@
             'ondragstart':'jqplotDragStart',
             'ondragstop':'jqplotDragStop',
             'onpointmove':'jqplotSeriesPointChange'
-       },
+        },
         
         __bindEventHandlers:function(){
             for (e in this.__eventMap){
@@ -104,15 +106,25 @@
             }
             else{
                 return function(ev,seriesIndex,pointIndex,data){
-                    ev.data = {
-                        'seriesIndex':seriesIndex,
-                        'pointIndex' :pointIndex,
-                        'y':data[1],
-                        'x':data[0]
-                    };
+                    if(options.chartType=="pie"){
+                        ev.data = {
+                            'seriesIndex':seriesIndex,
+                            'pointIndex' :pointIndex,
+                            'y':data[0],
+                            'x':data[1]
+                        };
+                    }
+                    else{
+                        ev.data = {
+                            'seriesIndex':seriesIndex,
+                            'pointIndex' :pointIndex,
+                            'y':data[1],
+                            'x':data[0]
+                        };
+                    }
                     
                     if(options.chartType=="bar"){//bar chart label are stored in options
-                       ev.data.x = options.axes.xaxis.ticks[data[0]-1];    
+                        ev.data.x = options.axes.xaxis.ticks[data[0]-1];    
                     }
                     //server-side
                     if(eventName=="ondataclick"){
