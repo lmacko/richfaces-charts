@@ -334,8 +334,8 @@ public abstract class ChartRendererBase extends RendererBase {
         //attributes for all chart types
         addAttribute(seriesOpt, "label", s.getLabel());
         addAttribute(seriesOpt, "color", s.getColor());
-        addAttribute(seriesOpt, "isDragable", s.isDragable());
-        addAttribute(dragableOpt, "constrainTo", s.getDragableConstraint());
+        addAttribute(seriesOpt, "isDragable", s.isDraggable());
+        addAttribute(dragableOpt, "constrainTo", s.getDraggableConstraint());
         addAttribute(dragableOpt, "color", new RawJSONString("undefined"));
         addAttribute(seriesOpt, "dragable", dragableOpt);
 
