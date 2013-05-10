@@ -16,10 +16,10 @@
 
 
         <ui:define name="content">
-            <h:form>
-                <rich:tabPanel switchType="server">
+            <h:form id="frm">
+                <rich:tabPanel switchType="ajax">
                     <rich:tab header="Line chart">
-                        <lm:chart title="#{liveBean.lineChart.title}" styleClass="chartDiv">
+                        <lm:chart id="lineChart" title="#{liveBean.lineChart.title}" styleClass="chartDiv">
                             <lm:series type="line" 
                                        color="#{liveBean.lineChart.color}"
                                        dragable="#{liveBean.lineChart.draggable}"
@@ -50,12 +50,12 @@
                                        placement="#{liveBean.lineChart.placement}" 
                                        visible="#{liveBean.lineChart.showLegend}"/>
                         </lm:chart>
-                        <ch:chartSettingForm settings="#{liveBean.lineChart}"/>
+                        <ch:chartSettingForm settings="#{liveBean.lineChart}" renderIDs="frm:lineChart"/>
                         
                         <br style="clear: both"/>
                     </rich:tab>
                     <rich:tab header="Bar chart">
-                        <lm:chart title="#{liveBean.barChart.title}" styleClass="chartDiv">
+                        <lm:chart id="barChart" title="#{liveBean.barChart.title}" styleClass="chartDiv">
                             <lm:series type="bar" 
                                        color="#{liveBean.barChart.color}"
                                        dragable="#{liveBean.barChart.draggable}"
@@ -86,11 +86,11 @@
                                        placement="#{liveBean.barChart.placement}" 
                                        visible="#{liveBean.barChart.showLegend}"/>
                         </lm:chart>
-                        <ch:chartSettingForm settings="#{liveBean.barChart}"/>
+                        <ch:chartSettingForm settings="#{liveBean.barChart}" renderIDs="frm:barChart"/>
                         <br style="clear: both"/>
                     </rich:tab>
                     <rich:tab header="Pie chart">
-                        <lm:chart title="#{liveBean.pieChart.title}" styleClass="chartDiv">
+                        <lm:chart id="pieChart" title="#{liveBean.pieChart.title}" styleClass="chartDiv">
                             <lm:series type="pie" 
                                       color="#{liveBean.pieChart.color}"
                                        dragable="#{liveBean.pieChart.draggable}"
@@ -121,7 +121,7 @@
                                        placement="#{liveBean.pieChart.placement}" 
                                        visible="#{liveBean.pieChart.showLegend}"/>
                         </lm:chart>
-                        <ch:chartSettingForm settings="#{liveBean.pieChart}"/>
+                        <ch:chartSettingForm settings="#{liveBean.pieChart}" renderIDs="frm:pieChart"/>
                         <br style="clear: both"/>
                     </rich:tab>
                 </rich:tabPanel>
