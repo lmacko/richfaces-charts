@@ -128,7 +128,7 @@
                     }
                     //server-side
                     if(eventName=="ondataclick"){
-                        obj.ajaxFunction(ev,"dataClick",seriesIndex,pointIndex,data[1],data[0]);
+                        obj.ajaxFunction(ev,"dataClick",seriesIndex,pointIndex,ev.data.x,ev.data.y);
                     }
                     //client-side
                     obj[eventName].call($('#'+id),ev);
