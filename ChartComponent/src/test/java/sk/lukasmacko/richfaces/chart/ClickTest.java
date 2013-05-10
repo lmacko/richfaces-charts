@@ -93,7 +93,7 @@ public class ClickTest {
 	public void chartCreated() {
 		browser.get(deploymentUrl.toExternalForm());
 		Assert.assertNotNull("The chart should be on the page",
-				browser.findElement(By.id("pieChart")));
+				browser.findElement(By.id("frm:pieChart")));
 	}
 
 	/**********************************************************************************************
@@ -106,7 +106,7 @@ public class ClickTest {
 	 * 
 	 ***********************************************************************************************/
 
-	@FindBy(jquery = "#pieChart>.jqplot-event-canvas")
+	@FindBy(xpath = "//div[@id='frm:pieChart']/canvas[@class='jqplot-event-canvas']")
 	WebElement pieCanvas;
 
 	@FindBy(jquery = "#msg")
@@ -125,7 +125,7 @@ public class ClickTest {
 
 	}
 
-	@FindBy(jquery = "#barChart>.jqplot-event-canvas")
+	@FindBy(xpath = "//div[@id='frm:barChart']/canvas[@class='jqplot-event-canvas']")
 	WebElement barCanvas;
 
 	@FindBy(jquery = "#bar")
@@ -142,7 +142,7 @@ public class ClickTest {
 
 	}
 
-	@FindBy(jquery = "#lineChart>.jqplot-event-canvas")
+	@FindBy(xpath = "//div[@id='frm:lineChart']/canvas[@class='jqplot-event-canvas']")
 	WebElement lineCanvas;
 
 	@FindBy(jquery = "#line")

@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:lm="http://lukasmacko.sk/test"
+	xmlns:lm="http://lukasmacko.sk/chart"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j">
@@ -18,7 +18,7 @@
 </h:head>
 <h:body>
 
-
+<h:form id="frm">
 		<lm:chart id="pieChart" title="My title hey hou!" styleClass="chart"
 			dataClickListener="#{myBean.dataClickHandler}">
 			<lm:series type="pie" value="#{myBean.model}" />
@@ -41,9 +41,7 @@
 		<a4j:ajax event="dataclick" render="frm:msg-text" execute="frm:msg-text" />
 	</lm:chart>
 
-
-
-	<h:form id="frm">
+    
 		<h:outputText value="#{myBean.msg}" id="msg-text" />
 	</h:form>
 	
