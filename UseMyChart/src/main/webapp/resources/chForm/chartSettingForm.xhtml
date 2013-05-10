@@ -61,7 +61,9 @@
                         <h:inputText label="y-axis rotation" value="#{cc.attrs.settings.ytickRotation}" styleClass="smaller"/>
 
 
-                        <h:commandButton value="Update"/>
+                        <h:commandButton value="Update" >
+                            <a4j:ajax event="click" execute="@form" render="#{cc.attrs.renderIDs}"/>
+                        </h:commandButton>
                     </h:panelGrid>
                 </rich:collapsiblePanel>
 
@@ -87,7 +89,7 @@
                         <h:outputText value="Trendline:"/>
                         <h:inputText value="#{cc.attrs.settings.trendline}"/>
 
-                        <h:outputText value="Dragable:"/>
+                        <h:outputText value="Draggable:"/>
                         <h:selectBooleanCheckbox value="#{cc.attrs.settings.draggable}"/>
 
                         <h:outputText value="Draggable constraint"/>
@@ -95,7 +97,9 @@
                             <f:selectItems value="#{cc.attrs.settings.dirConstraintOpt}" var="c" itemValue="#{c}"/>
                         </h:selectOneMenu>
 
-                        <h:commandButton value="Update"/>
+                        <h:commandButton value="Update" >
+                            <a4j:ajax event="click" execute="@form" render="#{cc.attrs.renderIDs}"/>
+                        </h:commandButton>
                     </h:panelGrid>
                 </rich:collapsiblePanel>
 
@@ -114,7 +118,9 @@
                             <f:selectItems value="#{cc.attrs.settings.placementOpt}" var="p" itemValue="#{p}"/>
                         </h:selectOneMenu>
 
-                        <h:commandButton value="Update"/>
+                        <h:commandButton value="Update" >
+                            <a4j:ajax event="click" execute="@form" render="#{cc.attrs.renderIDs}"/>
+                        </h:commandButton>
                     </h:panelGrid>
                 </rich:collapsiblePanel> 
 
@@ -136,7 +142,9 @@
                         <h:selectOneMenu value="#{cc.attrs.settings.cursor}">
                             <f:selectItems value="#{cc.attrs.settings.cursorOpt}" var="c" itemValue="#{c}"/>
                         </h:selectOneMenu>
-                        <h:commandButton value="Update"/>
+                        <h:commandButton value="Update" >
+                            <a4j:ajax event="click" execute="@form" render="#{cc.attrs.renderIDs}"/>
+                        </h:commandButton>
                     </h:panelGrid>
                 </rich:collapsiblePanel>
             </div>
