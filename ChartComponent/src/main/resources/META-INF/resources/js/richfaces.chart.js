@@ -106,25 +106,20 @@
             }
             else{
                 return function(ev,seriesIndex,pointIndex,data){
-                    if(options.chartType=="pie"){
-                        ev.data = {
-                            'seriesIndex':seriesIndex,
-                            'pointIndex' :pointIndex,
-                            'y':data[0],
-                            'x':data[1]
-                        };
-                    }
-                    else{
+                   
                         ev.data = {
                             'seriesIndex':seriesIndex,
                             'pointIndex' :pointIndex,
                             'y':data[1],
                             'x':data[0]
                         };
-                    }
+                   
                     
-                    if(options.chartType=="bar"){//bar chart label are stored in options
-                        ev.data.x = options.axes.xaxis.ticks[data[0]-1];    
+                    if(options.chartType=="bar" && 
+                       options.axes!== undefined &&
+                       options.axes.xaxis!== undefined &&
+                       options.axes.xaxis.ticks!== undefined){//bar chart label are stored in options
+                        ev.data.x = options.axes.xaxis.ticks[ev.data.x-1];    
                     }
                     //server-side
                     if(eventName=="ondataclick"){
