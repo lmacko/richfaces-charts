@@ -1,15 +1,13 @@
 package sk.lukasmacko.richfaces.chart;
 
-import static org.jboss.arquillian.graphene.Graphene.waitAjax;
-
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
+import static org.jboss.arquillian.graphene.Graphene.waitAjax;
 import org.jboss.arquillian.graphene.enricher.findby.FindBy;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
