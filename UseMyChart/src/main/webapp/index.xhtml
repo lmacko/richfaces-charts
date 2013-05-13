@@ -45,9 +45,9 @@
             <h:messages/>
         </a4j:outputPanel>
 
-
-        <lm:chart id="lineChart" title="My title hey hou!" styleClass="chart" >
-            <lm:series value="#{myBean.lineChartModel}" type="line" label="Dragable" color="green" dragable="true" dragableConstraint="y" trendlineVisible="true"/>
+        <h:form>
+        <lm:chart id="lineChart" title="My title hey hou!" styleClass="chart" ondataclick="log(event,'line')">
+            <lm:series value="#{myBean.lineChartModel}" type="line" label="Dragable" color="green" draggable="true" draggableConstraint="y" trendlineVisible="true"/>
             <lm:series type="line" label="a4jrepeat">
                 <a4j:repeat value="#{myBean.points}" var="point">
                     <lm:point x="#{point.x}" y="#{point.y}"/>
@@ -73,13 +73,13 @@
     
 
 
-        <lm:chart id="barChart" title="Bar Chart" styleClass="chart">
+        <lm:chart id="barChart" title="Bar Chart" styleClass="chart" ondataclick="log(event,'bar')">
             <lm:series value ="#{myBean.barChartModel}" type="bar" label="first"/>
             <lm:series value ="#{myBean.barChartModel2}" type="bar" label="second"/>
             <lm:legend/>
         </lm:chart>
         
-        <lm:chart id="barChart2" title="Bar Chart" styleClass="chart">
+        <lm:chart id="barChart2" title="Bar Chart" styleClass="chart" ondataclick="log(event,'bar')">
             <lm:series value ="#{myBean.barChartModel3}" type="bar" label="first"/>
 
             <lm:legend/>
@@ -103,11 +103,11 @@
             <lm:legend/>
         </lm:chart>
         
-        <lm:chart id="pieChart" title="Bar Chart" styleClass="chart">
+        <lm:chart id="pieChart" title="Pie Chart" styleClass="chart" ondataclick="log(event,'pie')">
             <lm:series value ="#{myBean.pieChartModel}" type="pie" label="first"/>
             <lm:legend/>
         </lm:chart>
-        
+        </h:form>
         
     </h:body>
 </html>
