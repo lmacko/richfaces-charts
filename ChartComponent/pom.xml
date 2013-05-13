@@ -13,6 +13,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<skipTests>true</skipTests>
 		<version.org.jboss.arquillian>1.0.3.Final</version.org.jboss.arquillian>
 		<version.org.jboss.arquillian.drone>1.2.0.Alpha1</version.org.jboss.arquillian.drone>
 		<version.org.jboss.arquillian.graphene>1.0.0.Final</version.org.jboss.arquillian.graphene>
@@ -119,6 +120,7 @@
 				</dependency>
 			</dependencies>
 		</profile>
+		
 		<profile>
 			<id>arquillian-jbossas-managed</id>
 			<dependencies>
@@ -203,7 +205,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.14.1</version>
 				<configuration>
-					<skipTests>false</skipTests>
+					<skipTests>${skipTests}</skipTests>
 				</configuration>
 			</plugin>
 		</plugins>
